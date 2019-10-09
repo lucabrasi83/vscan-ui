@@ -1,0 +1,29 @@
+.footer {
+	position: relative;
+	bottom: 0;
+	z-index: 100;
+	background: #011423;
+	padding: 30px;
+	color: white;
+	margin-top: 0;
+	font-size: 14px;
+	font-family: Gotham-Light;
+	font-weight: bold;
+}
+.footer-nav {
+	padding: 0;
+	margin: auto;
+	li {
+		list-style: none;
+		display: inline-block;
+		border-left: 1px solid white;
+		padding: 0 0.75rem;
+		line-height: 1rem;
+		&:first-child {
+			border-left: 0;
+		}
+		a {
+			color: white;
+		}
+	}
+}

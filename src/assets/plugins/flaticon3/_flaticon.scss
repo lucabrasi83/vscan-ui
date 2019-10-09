@@ -1,0 +1,78 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 06/10/2019 10:57
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff2") format("woff2"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-server-traffic:before { content: "\f100"; }
+.flaticon-computer-server:before { content: "\f101"; }
+.flaticon-ddos:before { content: "\f102"; }
+.flaticon-cybercrime:before { content: "\f103"; }
+.flaticon-shield:before { content: "\f104"; }
+.flaticon-cyber-security:before { content: "\f105"; }
+.flaticon-cyber-security-1:before { content: "\f106"; }
+.flaticon-cyber-security-2:before { content: "\f107"; }
+.flaticon-vulnerability:before { content: "\f108"; }
+.flaticon-vulnerability-1:before { content: "\f109"; }
+.flaticon-developer:before { content: "\f10a"; }
+.flaticon-faq:before { content: "\f10b"; }
+.flaticon-archive:before { content: "\f10c"; }
+.flaticon-archive-1:before { content: "\f10d"; }
+.flaticon-ebook:before { content: "\f10e"; }
+.flaticon-technician:before { content: "\f10f"; }
+.flaticon-technician-1:before { content: "\f110"; }
+.flaticon-software-developer:before { content: "\f111"; }
+.flaticon-old-building:before { content: "\f112"; }
+    
+    $font-Flaticon-server-traffic: "\f100";
+    $font-Flaticon-computer-server: "\f101";
+    $font-Flaticon-ddos: "\f102";
+    $font-Flaticon-cybercrime: "\f103";
+    $font-Flaticon-shield: "\f104";
+    $font-Flaticon-cyber-security: "\f105";
+    $font-Flaticon-cyber-security-1: "\f106";
+    $font-Flaticon-cyber-security-2: "\f107";
+    $font-Flaticon-vulnerability: "\f108";
+    $font-Flaticon-vulnerability-1: "\f109";
+    $font-Flaticon-developer: "\f10a";
+    $font-Flaticon-faq: "\f10b";
+    $font-Flaticon-archive: "\f10c";
+    $font-Flaticon-archive-1: "\f10d";
+    $font-Flaticon-ebook: "\f10e";
+    $font-Flaticon-technician: "\f10f";
+    $font-Flaticon-technician-1: "\f110";
+    $font-Flaticon-software-developer: "\f111";
+    $font-Flaticon-old-building: "\f112";
