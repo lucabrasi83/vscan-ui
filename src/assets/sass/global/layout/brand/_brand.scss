@@ -32,7 +32,7 @@
 			padding: 0;
 			@include kt-input-reset();
 
-			span {
+			> span {
 				display: inline-block;
 
 				&:nth-child(2) {
@@ -47,8 +47,6 @@
 			}
 		}
 
-		//@include kt-burger-icon-build(kt-aside__brand-aside-toggler, kt-get($kt-brand-config, aside-toggler));
-		//@include kt-burger-icon-skin(kt-aside__brand-aside-toggler,  kt-get($kt-brand-config, aside-toggler, color));
 	}
 }
 
@@ -67,14 +65,13 @@
 
 		// Aside minimize mode
 		.kt-header--fixed.kt-aside--minimize & {
-			//padding: 0;
 			justify-content: center;
 
 			.kt-aside__brand-tools {
 				justify-content: center;
 
 				.kt-aside__brand-aside-toggler {
-					span {
+					> span {
 						&:nth-child(1) {
 							display: none;
 						}

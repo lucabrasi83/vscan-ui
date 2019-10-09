@@ -33,17 +33,16 @@ $kt-wizard-v1-form-inner-bg: #ffffff;
 			width: 70%;
 			margin: 0 auto;
 
-			.kt-wizard-v1__nav-item{
+			.kt-wizard-v1__nav-item {
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				flex-wrap: wrap;
 				flex: 1;
-				cursor: pointer;
 
 				&:after {
 					@include kt-flaticon2-icon(kt-get($kt-action-bold-icons, right));
-				    font-size: 1.25rem;
+					font-size: 1.25rem;
 					color: $kt-wizard-v1-step-icon;
 					margin-left: 0.5rem;
 					margin-right: 0.5rem;
@@ -99,6 +98,12 @@ $kt-wizard-v1-form-inner-bg: #ffffff;
 				}
 			}
 
+			&.kt-wizard-v1__nav-items--clickable {
+				.kt-wizard-v1__nav-item {
+					cursor: pointer;
+				}
+			}
+
 			@include kt-minimal-desktop-and-below{
 				width: 100%;
 			}
@@ -123,9 +128,9 @@ $kt-wizard-v1-form-inner-bg: #ffffff;
 						&:after{
 							content: "\f105";
 							font-family: "Font Awesome 5 Free";
-						    font-weight: 900;
-						    font-size: 2rem;
-						    color: $kt-wizard-v1-step-icon;
+							font-weight: 900;
+							font-size: 2rem;
+							color: $kt-wizard-v1-step-icon;
 						}
 					}
 
@@ -274,7 +279,7 @@ $kt-wizard-v1-form-inner-bg: #ffffff;
 	}
 
 
- 	// Action buttons states
+	// Action buttons states
 	& {
 		[data-ktwizard-type="action-prev"]{
 			display: none;

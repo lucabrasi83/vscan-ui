@@ -37,7 +37,6 @@ $kt-wizard-v3-form-inner-bg: #ffffff;
 				justify-content: center;
 				flex-wrap: wrap;
 				flex: 0 0 20%;
-				cursor: pointer;
 
 				.kt-wizard-v3__nav-body{
 					flex: 1;
@@ -96,6 +95,8 @@ $kt-wizard-v3-form-inner-bg: #ffffff;
 				}
 			}
 
+			cursor: pointer;
+
 			@include kt-mobile{
 				flex-direction: column;
 				align-items: flex-start;
@@ -116,9 +117,9 @@ $kt-wizard-v3-form-inner-bg: #ffffff;
 						&:after{
 							content: "\f105";
 							font-family: "Font Awesome 5 Free";
-						    font-weight: 900;
-						    font-size: 2rem;
-						    color: $kt-wizard-v3-step-icon;
+							font-weight: 900;
+							font-size: 2rem;
+							color: $kt-wizard-v3-step-icon;
 						}
 					}
 
@@ -128,6 +129,12 @@ $kt-wizard-v3-form-inner-bg: #ffffff;
 						padding: 0.5rem 2rem;
 					}
 				}
+			}
+		}
+
+		&.kt-wizard-v3__nav-items--clickable {
+			.kt-wizard-v3__nav-item {
+				cursor: pointer;
 			}
 		}
 	}
@@ -221,16 +228,13 @@ $kt-wizard-v3-form-inner-bg: #ffffff;
 	}
 
 	&.kt-wizard-v3--white{
-
 		.kt-wizard-v3__wrapper{
 			background-color: $kt-wizard-v3-form-inner-bg;
 		}
 	}
 
-
 	// Step
 	[data-ktwizard-type="step"] {
-
 		&[data-ktwizard-state="current"] {
 
 		}
@@ -263,7 +267,7 @@ $kt-wizard-v3-form-inner-bg: #ffffff;
 	}
 
 
- 	// Action buttons states
+	// Action buttons states
 	& {
 		[data-ktwizard-type="action-prev"]{
 			display: none;
@@ -320,25 +324,3 @@ $kt-wizard-v3-form-inner-bg: #ffffff;
 		}
 	}
 }
-
-/* // Responsive mode(ref $kt-media-breakpoints in framework\_config.scss)
-// Above 1200px
-@include kt-media-above(xl) {
-	.kt-wizard-v3 {
-
-	}
-}
-
-// Above 1024px and below 1200px
-@include kt-media-range(lg, xl) {
-	.kt-wizard-v3 {
-
-	}
-}
-
-// Below 1024px
-@include kt-media-below(lg) {
-	.kt-wizard-v3 {
-
-	}
-} */

@@ -69,16 +69,19 @@
 					> .kt-menu__link {
 						align-items: stretch;
 						background-color: transparent !important;
-						border-radius: 0 !important;
 						padding: 0 !important;
 						border-bottom: 1px solid transparent;
 						margin-bottom: -1px;
+						@include kt-rounded {
+							border-radius: 0 !important;
+						}
 					}
 
 					&:first-child {
 						margin-left: 0 !important;
 					}
 
+					&.kt-menu__item--here,
 					&.kt-menu__item--active {
 						> .kt-menu__link {
 							background-color: transparent !important;

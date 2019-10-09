@@ -46,8 +46,7 @@ $kt-wizard-v2-form-inner-bg: #ffffff;
 					padding: 0.75rem 1.5rem;
 					position: relative;
 					border-radius: 0.5rem;
-					cursor: pointer;
-					
+
 					.kt-wizard-v2__nav-body{
 						display: flex;
 
@@ -93,6 +92,12 @@ $kt-wizard-v2-form-inner-bg: #ffffff;
 							border-left-color: $kt-wizard-v2-nav-bg;
 							border-width: 1rem;
 						}
+					}
+				}
+
+				&.kt-wizard-v2__nav-items--clickable {
+					.kt-wizard-v2__nav-item {
+						cursor: pointer;
 					}
 				}
 			}
@@ -246,7 +251,7 @@ $kt-wizard-v2-form-inner-bg: #ffffff;
 	}
 
 
- 	// Action buttons states
+	// Action buttons states
 	& {
 		[data-ktwizard-type="action-prev"]{
 			display: none;

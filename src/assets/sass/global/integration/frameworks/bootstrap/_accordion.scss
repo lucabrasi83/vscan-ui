@@ -7,6 +7,7 @@
 // Default Accordion
 .accordion {
 	.card {
+		overflow: visible !important;
 		margin: 0;
 
 		.card-header {
@@ -14,12 +15,12 @@
 			margin: 0;
 			padding: 0;
 			border-bottom: 0;
-			
+
 			.card-title {
 				margin: 0;
 				font-size: 1.1rem;
 				font-weight: 500;
-				padding: 1rem 1rem;		
+				padding: 1rem 1rem;
 				color: kt-state-color(brand, base);
 				display: flex;
 				justify-content: flex-start;
@@ -37,12 +38,12 @@
 					> i  {
 						color: kt-base-color(label, 2);
 					}
-				}	
+				}
 
 				&:after {
 					right: 1rem;
 				}
-			}		
+			}
 		}
 
 		.card-body {
@@ -67,7 +68,7 @@
 
 		.card-header {
 			cursor: pointer;
-			padding: 0;			
+			padding: 0;
 			margin: 0;
 			background-color: transparent;
 			border: 0;
@@ -81,16 +82,16 @@
 
 				&.collapsed {
 					color: kt-base-color(label, 2);
-					
+
 					&:after {
 						color: kt-base-color(label, 2);
 					}
-				}	
+				}
 
 				&:after {
 					right: 0;
 				}
-			}					
+			}
 		}
 
 		.card-body {
@@ -116,7 +117,7 @@
 				margin: 0;
 			}
 		}
-	}	
+	}
 }
 
 // Outline Accordion
@@ -133,7 +134,7 @@
 		.card-header{
 			padding:0;
 			background-color: transparent;
-			
+
 			.card-title {
 				font-size: 1.1rem;
 				padding: 1.25rem;
@@ -155,7 +156,7 @@
 					font-weight: bold;
 					color: kt-state-color(brand, base);
 				}
-				
+
 				&.collapsed {
 					color: #464457;
 					border-color: #efeff0;
@@ -191,7 +192,7 @@
 					margin-bottom:0;
 				}
 			}
-		}		
+		}
 
 		// remove margin on last item
 		&:last-child{
@@ -213,34 +214,34 @@
 		.card-header {
 			padding:0;
 			background-color: transparent;
-			
+
 			.card-title {
 				font-size: 1.1rem;
 				padding: 1.25rem;
-				background-color: kt-base-color(grey, 1);
+				background-color: kt-base-color(grey, 2);
 
 				@include kt-rounded {
 					border-radius: $kt-border-radius;
+					border-bottom-left-radius: 0;
+					border-bottom-right-radius: 0;
 				}
-				
+
 				&.collapsed {
 					@include kt-rounded {
-						border-bottom-left-radius: 0;
-						border-bottom-right-radius: 0;
+						border-radius: $kt-border-radius;
 					}
-				}				
+				}
 			}
-			
 		}
 
-		.card-body { 
-			border: 1px solid kt-base-color(grey, 1);
-			
+		.card-body {
+			border: 1px solid kt-base-color(grey, 2);
+
 			@include kt-rounded {
 				border-bottom-left-radius: $kt-border-radius;
 				border-bottom-right-radius: $kt-border-radius;
 			}
-		}		
+		}
 	}
 }
 
@@ -259,17 +260,17 @@
 					color: kt-state-color(brand, base);
 				}
 
-				&.collapsed {					
+				&.collapsed {
 					color: kt-base-color(label, 2);
-					
+
 					&:after {
 						color: kt-base-color(label, 2);
 						content: '#{kt-get($kt-action-icons, right)}';
 					}
-				}	
-			}					
+				}
+			}
 		}
-	}	
+	}
 }
 
 // Custom toggle icon
@@ -287,17 +288,17 @@
 					color: kt-brand-color();
 				}
 
-				&.collapsed {					
+				&.collapsed {
 					color: kt-base-color(label, 2);
-					
+
 					&:after {
 						color: kt-base-color(label, 2);
 						content: '#{kt-get($kt-action-icons, plus)}';
 					}
-				}	
-			}					
+				}
+			}
 		}
-	}	
+	}
 }
 
 // SVG icon
@@ -318,14 +319,14 @@
 					@include kt-transition;
 				}
 
-				&.collapsed {					
+				&.collapsed {
 					color: kt-base-color(label, 4);
 
 					.kt-svg-icon{
 						transform: rotate(0);
 					}
-				}	
-			}					
+				}
+			}
 		}
 
 		.card-body{
@@ -335,15 +336,14 @@
 		&:last-child{
 			.card-body{
 				padding-left: 3.2rem;
-			}	
+			}
 		}
-	}	
+	}
 }
 
 // SVG toggle
 .accordion.accordion-toggle-svg{
 	.card{
-
 		.card-header{
 			.card-title{
 				color: kt-base-color(label, 4);
@@ -356,13 +356,42 @@
 					@include kt-transition;
 				}
 
-				&.collapsed {		
-					color: kt-base-color(label, 4);			
+				&.collapsed {
+					color: kt-base-color(label, 4);
 
 					.kt-svg-icon{
 						transform: rotate(0);
 					}
-				}	
+				}
+			}
+		}
+	}
+}
+
+// Panel
+.accordion.accordion-panel {
+	.card {
+		@include kt-rounded {
+			border-radius: $kt-border-radius !important;
+		}
+
+		.card-header {
+			.card-title {
+				font-size: 1.1rem;
+				padding: 1.25rem;
+				background-color: #fff;
+
+				@include kt-rounded {
+					border-radius: $kt-border-radius !important;
+				}
+			}
+		}
+
+		.card-body {
+			padding-top: 0;
+			border: 0;
+			@include kt-rounded {
+				border-radius: $kt-border-radius !important;
 			}
 		}
 	}

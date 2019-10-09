@@ -42,7 +42,6 @@ $kt-wizard-v4-form-bg: #f9fafc;
 				background-color: $kt-wizard-v4-step-bg;
 				border-top-left-radius: 0.5rem;
 				border-top-right-radius: 0.5rem;
-				cursor: pointer;
 
 				@include kt-minimal-desktop-and-below{
 					flex: 0 0 calc(50% - 0.25rem);
@@ -103,6 +102,12 @@ $kt-wizard-v4-form-bg: #f9fafc;
 							}
 						}
 					}
+				}
+			}
+
+			&.kt-wizard-v4__nav-items--clickable {
+				.kt-wizard-v4__nav-item {
+					cursor: pointer;
 				}
 			}
 
@@ -212,10 +217,8 @@ $kt-wizard-v4-form-bg: #f9fafc;
 		}
 	}
 
-
 	// Step
 	[data-ktwizard-type="step"] {
-
 		&[data-ktwizard-state="current"] {
 
 		}
@@ -247,8 +250,7 @@ $kt-wizard-v4-form-bg: #f9fafc;
 		}
 	}
 
-
- 	// Action buttons states
+	// Action buttons states
 	& {
 		[data-ktwizard-type="action-prev"]{
 			display: none;
@@ -305,25 +307,3 @@ $kt-wizard-v4-form-bg: #f9fafc;
 		}
 	}
 }
-
-/* // Responsive mode(ref $kt-media-breakpoints in framework\_config.scss)
-// Above 1200px
-@include kt-media-above(xl) {
-	.kt-wizard-v4 {
-
-	}
-}
-
-// Above 1024px and below 1200px
-@include kt-media-range(lg, xl) {
-	.kt-wizard-v4 {
-
-	}
-}
-
-// Below 1024px
-@include kt-media-below(lg) {
-	.kt-wizard-v4 {
-
-	}
-} */
