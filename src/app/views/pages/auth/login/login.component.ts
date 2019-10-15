@@ -18,7 +18,6 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../../../core/reducers";
 // Auth
 import { AuthNoticeService, AuthService, Login } from "../../../../core/auth";
-import { ToastrService } from "ngx-toastr";
 import { ToastNotifService } from "../../../../core/_base/layout/services/toast-notif.service";
 
 /**
@@ -159,7 +158,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 				tap(user => {
 					if (user) {
 						this.store.dispatch(
-							new Login({ authToken: user.accessToken })
+							new Login({ authToken: user.token })
 						);
 
 						this.router.navigateByUrl(this.returnUrl); // Main page

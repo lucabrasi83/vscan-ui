@@ -1,13 +1,13 @@
 <!--begin::Head-->
 <div class="kt-login__head">
-	<span class="kt-login__signup-label">Don't have an account yet?</span
-	>&nbsp;&nbsp;
-	<a
-		href="javascript:;"
-		routerLink="/auth/register"
-		class="kt-link kt-login__signup-link"
-		>{{ "AUTH.GENERAL.SIGNUP_BUTTON" | translate }}</a
-	>
+	<!--		<span class="kt-login__signup-label">Don't have an account yet?</span-->
+	<!--		>&nbsp;&nbsp;-->
+	<!--		<a-->
+	<!--			href="javascript:;"-->
+	<!--			routerLink="/auth/register"-->
+	<!--			class="kt-link kt-login__signup-link"-->
+	<!--			>{{ "AUTH.GENERAL.SIGNUP_BUTTON" | translate }}</a-->
+	<!--		>-->
 </div>
 <!--end::Head-->
 
@@ -21,13 +21,20 @@
 			width="598"
 			height="109"
 		/>
+		<div class="kt-login__logo-by-tata">
+			<h5>&nbsp; by &nbsp;</h5>
+			<img
+				src="../assets/media/logos/tata-communication.png"
+				alt="TATA Communications"
+			/>
+		</div>
 	</div>
 	<!--end::Logo-->
 
 	<!--begin::Signin-->
 	<div class="kt-login__form">
 		<div class="kt-login__title">
-			<h3>Sign In</h3>
+			<h4>Sign In</h4>
 		</div>
 
 		<kt-auth-notice></kt-auth-notice>

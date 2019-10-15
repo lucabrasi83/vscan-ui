@@ -1,0 +1,23 @@
+.flaticon3-retinal-scan:before {
+	vertical-align: middle;
+	font-size: 24px;
+}
+.mat-icon-svg {
+	height: 35px !important;
+	width: 35px !important;
+}
+
+.mat-cell:nth-child,
+.mat-header-cell:nth-child {
+	flex: 0 0 5%;
+}
+
+.mat-cell:nth-child(2),
+.mat-header-cell:nth-child(2) {
+	flex: 0 0 30%;
+}
+
+.mat-cell {
+	font-size: 12px;
+	font-weight: 300;
+}

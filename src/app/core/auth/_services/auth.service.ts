@@ -4,17 +4,18 @@ import {
 	HttpErrorResponse,
 	HttpHeaders
 } from "@angular/common/http";
-import { Observable, of, throwError } from "rxjs";
-import { User } from "../_models/user.model";
-import { Permission } from "../_models/permission.model";
-import { Role } from "../_models/role.model";
-import { catchError, map } from "rxjs/operators";
+import { Observable, throwError } from "rxjs";
+import { User } from "..";
+import { Permission } from "..";
+import { Role } from "..";
+import { catchError, map, tap } from "rxjs/operators";
 import { QueryParamsModel, QueryResultsModel } from "../../_base/crud";
 import { environment } from "../../../../environments/environment";
-import { Router } from "@angular/router";
+import { JwtokenModel } from "../_models/jwtoken-model";
+import { JwtHelperService } from "@auth0/angular-jwt";
 
 // const API_USERS_URL = "api/users";
-const API_USERS_URL = "https://vscan.asdlab.net/api/v1/login";
+const API_USERS_URL = environment.vscanAPIURL + "/login";
 const API_PERMISSION_URL = "api/permissions";
 const API_ROLES_URL = "api/roles";
 
@@ -22,20 +23,47 @@ const API_ROLES_URL = "api/roles";
 export class AuthService {
 	constructor(private http: HttpClient) {}
 
-
 	// Authentication/Authorization
-	login(email: string, password: string): Observable<User> {
-		console.log("trying to log");
+	login(email: string, password: string): Observable<JwtokenModel> {
 		return this.http
-			.post<User>(API_USERS_URL, {
+			.post<JwtokenModel>(API_USERS_URL, {
 				username: email,
 				password: password
 			})
-			.pipe(catchError(this.handleError));
+			.pipe(
+				tap((res: JwtokenModel) => {
+					// this.t = localStorage.getItem(environment.vscanJWT);
+					// helper.decodeToken(this.t.role);
+				}),
+				catchError(this.handleError)
+			);
 	}
 
+	isTokenExpired(): boolean {
+		const jwtHelper = new JwtHelperService();
+		const token = localStorage.getItem(environment.vscanJWT);
+		let isExpired: boolean;
+		try {
+			if (token) {
+				isExpired = jwtHelper.isTokenExpired(token);
+				return isExpired;
+			}
+		} catch (e) {
+			return true;
+		}
+		return true;
+	}
+
+	getUserTokenField(field: string): string {
+		const jwtHelper = new JwtHelperService();
+		const token = localStorage.getItem(environment.vscanJWT);
+
+		const val = jwtHelper.decodeToken(token);
+
+		return val[field];
+	}
 	getUserByToken(): Observable<User> {
-		const userToken = localStorage.getItem(environment.authTokenKey);
+		const userToken = localStorage.getItem(environment.vscanJWT);
 		const httpHeaders = new HttpHeaders();
 		httpHeaders.set("Authorization", "Bearer " + userToken);
 		return this.http.get<User>(API_USERS_URL, { headers: httpHeaders });

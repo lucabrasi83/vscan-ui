@@ -405,7 +405,7 @@ export class MenuConfig {
 			self: {},
 
 			items: [
-				{ section: "Home" },
+				// { section: "Home" },
 				{
 					title: "Dashboard",
 					root: true,
@@ -440,44 +440,48 @@ export class MenuConfig {
 					icon: "flaticon3-cyber-security",
 					page: "/ngbootstrap/accordion"
 				},
-				{ section: "Enterprises" },
 
 				{
-					title: "Manage Enterprises",
+					title: "Jobs",
+					root: true,
+					bullet: "dot",
+					icon: "flaticon3-edit-tools",
+					page: "/ngbootstrap/accordion"
+				},
+
+				{ section: "Settings" },
+
+				{
+					title: "Users",
+					root: true,
+					bullet: "dot",
+					icon: "flaticon3-developer",
+					page: "/user-management/users"
+				},
+
+				{
+					title: "Enterprises",
 					root: true,
 					bullet: "dot",
 					icon: "flaticon3-old-building",
 					page: "/user-management/users"
 				},
-
-				{ section: "Users" },
-
 				{
-					title: "Manage Users",
+					title: "SSH Gateways",
 					root: true,
 					bullet: "dot",
-					icon: "flaticon2-user-outline-symbol",
+					icon: "flaticon3-wifi-router",
 					page: "/user-management/users"
 				},
 
-				{ section: "SSH Gateways" },
-
 				{
-					title: "Manage SSH Gateways",
+					title: "Device Credentials",
 					root: true,
 					bullet: "dot",
-					icon: "flaticon3-server-traffic",
+					icon: "flaticon2-shield",
 					page: "/user-management/users"
 				},
-				{ section: "Developers" },
 
-				{
-					title: "API Documentation",
-					root: true,
-					bullet: "dot",
-					icon: "flaticon3-software-developer",
-					page: "/user-management/users"
-				},
 				{ section: "Support" },
 
 				{
@@ -487,39 +491,46 @@ export class MenuConfig {
 					icon: "flaticon3-technician-1",
 					page: "/user-management/users"
 				},
-
 				{
-					title: "Error Pages",
+					title: "API Documentation",
 					root: true,
 					bullet: "dot",
-					icon: "flaticon2-list-2",
-					submenu: [
-						{
-							title: "Error 1",
-							page: "/error/error-v1"
-						},
-						{
-							title: "Error 2",
-							page: "/error/error-v2"
-						},
-						{
-							title: "Error 3",
-							page: "/error/error-v3"
-						},
-						{
-							title: "Error 4",
-							page: "/error/error-v4"
-						},
-						{
-							title: "Error 5",
-							page: "/error/error-v5"
-						},
-						{
-							title: "Error 6",
-							page: "/error/error-v6"
-						}
-					]
+					icon: "flaticon3-software-developer",
+					page: "https://vscan.asdlab.net/api/v1/docs/index.html"
 				},
+
+				// {
+				// 	title: "Error Pages",
+				// 	root: true,
+				// 	bullet: "dot",
+				// 	icon: "flaticon2-list-2",
+				// 	submenu: [
+				// 		{
+				// 			title: "Error 1",
+				// 			page: "/error/error-v1"
+				// 		},
+				// 		{
+				// 			title: "Error 2",
+				// 			page: "/error/error-v2"
+				// 		},
+				// 		{
+				// 			title: "Error 3",
+				// 			page: "/error/error-v3"
+				// 		},
+				// 		{
+				// 			title: "Error 4",
+				// 			page: "/error/error-v4"
+				// 		},
+				// 		{
+				// 			title: "Error 5",
+				// 			page: "/error/error-v5"
+				// 		},
+				// 		{
+				// 			title: "Error 6",
+				// 			page: "/error/error-v6"
+				// 		}
+				// 	]
+				// },
 				{
 					title: "FAQ",
 					root: true,

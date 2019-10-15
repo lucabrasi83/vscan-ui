@@ -20,8 +20,8 @@ export class LayoutConfig {
 		loader: {
 			enabled: true,
 			type: "spinner-logo",
-			logo: "./assets/media/logos/tata-communication.png",
-			message: "Please wait..."
+			logo: "./assets/media/logos/tata-splash-screen-logo.png",
+			message: "Loading..."
 		},
 		// == Colors for javascript
 		colors: {

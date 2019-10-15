@@ -1,4 +1,396 @@
-<p>vscan-devices works!</p>
-<button mat-raised-button color="primary" (click)="showSuccess()">
-	Primary
-</button>
+<kt-portlet>
+	<div style="position: relative">
+		<ng-template #customLoadingTemplate>
+			<div class="mat-table__loading-spinner">
+				<h3>
+					Fetching Data...
+				</h3>
+			</div>
+		</ng-template>
+		<ngx-loading
+			[show]="loading$ | async"
+			[template]="customLoadingTemplate"
+		></ngx-loading>
+		<!-- See prop => '../../_core/models/data-sources/_base.datasource.ts' (loading$) -->
+		<kt-portlet-header [class]="'kt-portlet__head--lg'">
+			<!-- PORTLET LOADING | Binded to TABLE Datasource -->
+
+			<ng-container ktPortletTitle>
+				<h3 class="kt-portlet__head-title">
+					<span translate="ECOMMERCE.CUSTOMERS.CUSTOMERS_LIST"
+						>Inventory Devices</span
+					>
+				</h3>
+				<!-- For localisations we use @ngx-translate | See off. documentations => https://github.com/ngx-translate/core -->
+				<!-- Localization libraries (en/fr) are here => '../../../.././config/i18n/en.ts|fr.ts' -->
+			</ng-container>
+
+			<ng-container ktPortletTools>
+				<button
+					(click)="onClickSubject()"
+					mat-raised-button
+					matTooltip="Scan a new inventory device"
+					color="primary"
+					type="button"
+				>
+					<i class="flaticon3-retinal-scan"></i>
+					<span translate="ECOMMERCE.CUSTOMERS.NEW_CUSTOMER"
+						>&nbsp;&nbsp;&nbsp;Scan New Device</span
+					>
+				</button>
+				<!-- Buttons (Material Angular) | See off.documenations 'https://material.angular.io/components/button/overview' -->
+				<!-- mat-raised-button | Rectangular contained button w/ elevation  -->
+			</ng-container>
+		</kt-portlet-header>
+		<!-- end::Header -->
+
+		<kt-portlet-body>
+			<!-- start::FILTERS & GROUP ACTIONS -->
+			<div class="kt-form kt-margin-b-30">
+				<!-- start::FILTERS -->
+				<div class="kt-form__filtration">
+					<div class="row align-items-center">
+						<div class="col-md-2 kt-margin-bottom-10-mobile">
+							<!-- 'm  margin-bottom-10-mobile' for adaptive make-up  -->
+							<div class="kt-form__control">
+								<mat-form-field class="mat-form-field-fluid">
+									<mat-select
+										[(value)]="filterStatus"
+										(selectionChange)="loadCustomersList()"
+									>
+										<mat-option value="">All</mat-option>
+										<mat-option value="0"
+											>Suspended</mat-option
+										>
+										<mat-option value="1"
+											>Active</mat-option
+										>
+										<mat-option value="Pending"
+											>Pending</mat-option
+										>
+									</mat-select>
+									<mat-hint align="start">
+										<strong>Filter</strong> by Status
+									</mat-hint>
+								</mat-form-field>
+							</div>
+						</div>
+
+						<div class="col-md-2 kt-margin-bottom-10-mobile">
+							<div class="kt-form__control">
+								<mat-form-field class="mat-form-field-fluid">
+									<mat-select
+										[(value)]="filterType"
+										(selectionChange)="loadCustomersList()"
+									>
+										<mat-option value="">All</mat-option>
+										<mat-option value="0"
+											>Business</mat-option
+										>
+										<mat-option value="1"
+											>Individual</mat-option
+										>
+									</mat-select>
+									<mat-hint align="start">
+										<strong>Filter</strong> by Type
+									</mat-hint>
+								</mat-form-field>
+							</div>
+						</div>
+
+						<div class="col-md-2 kt-margin-bottom-10-mobile">
+							<mat-form-field class="mat-form-field-fluid">
+								<input
+									matInput
+									placeholder="Search customer"
+									#searchInput
+								/>
+								<mat-hint align="start">
+									<strong>Search</strong> in all fields
+								</mat-hint>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<!-- end::FILTERS -->
+
+				<!-- start::GROUP ACTIONS -->
+				<!-- Group actions list: 'Delete selected' | 'Fetch selected' | 'Update status for selected' -->
+				<!-- Group actions are shared for all LISTS | See '../../_shared' folder -->
+				<div
+					class="row align-items-center collapse kt-form__group-actions kt-margin-top-20 kt-margin-bottom-20"
+					[ngClass]="{ show: selection.selected.length > 0 }"
+				>
+					<!-- We show 'Group Actions' div if smth are selected -->
+					<div class="col-xl-12">
+						<div class="kt-form__group kt-form__group--inline">
+							<div class="kt-form__label kt-form__label-no-wrap">
+								<label class="kt--font-bold kt-font-danger-">
+									<!--									<span-->
+									<!--										translate="ECOMMERCE.COMMON.SELECTED_RECORDS_COUNT"-->
+									<!--									></span>-->
+									Records Selected:
+									{{ selection.selected.length }}
+								</label>
+								<!-- selectedCountsTitle => function from codeBehind (customer-list.component.ts file) -->
+								<!-- selectedCountsTitle => just returns title of selected items count -->
+								<!-- for example: Selected records count: 4 -->
+							</div>
+							<div
+								class="kt-form__control kt-form__group--inline"
+							>
+								<button
+									(click)="deleteCustomers()"
+									mat-raised-button
+									color="warn"
+									matTooltip="Delete selected devices"
+									class="mat-button-mt-4"
+								>
+									<mat-icon>delete</mat-icon>
+									Delete Selected</button
+								>&nbsp;<!-- Call 'delete-entity-dialog' from _shared folder -->
+
+								<button
+									(click)="fetchCustomers()"
+									mat-raised-button
+									matTooltip="Scan selected devices"
+									class="mat-button-mt-4"
+								>
+									<i class="flaticon3-retinal-scan"></i>
+									&nbsp;&nbsp;Scan Selected</button
+								>&nbsp;<!-- Call 'fetch-entity-dialog' from _shared folder -->
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- end::GROUP ACTIONS -->
+			</div>
+			<!-- end::FILTERS & GROUP ACTIONS -->
+
+			<!-- MATERIAL TABLE | Binded to datasources -->
+			<!-- See off.documentations 'https://material.angular.io/components/table/overview' -->
+			<div class="mat-table__wrapper">
+				<mat-table
+					class="lmat-elevation-z8"
+					#table
+					[dataSource]="dataSource"
+					matSort
+					#sort1="matSort"
+					matSortActive="deviceID"
+					matSortDirection="asc"
+					matSortDisableClear
+				>
+					<!-- Checkbox Column -->
+
+					<!-- Table with selection -->
+					<!-- https://run.stackblitz.com/api/angular/v1?file=app%2Ftable-selection-example.ts -->
+					<ng-container matColumnDef="select">
+						<mat-header-cell
+							*matHeaderCellDef
+							class="mat-column-checkbox"
+						>
+							<mat-checkbox
+								(change)="$event ? masterToggle() : null"
+								[checked]="
+									selection.hasValue() && isAllSelected()
+								"
+								[indeterminate]="
+									selection.hasValue() && !isAllSelected()
+								"
+								[color]="'primary'"
+							>
+							</mat-checkbox>
+						</mat-header-cell>
+						<mat-cell
+							*matCellDef="let row"
+							class="mat-column-checkbox"
+						>
+							<mat-checkbox
+								(click)="$event.stopPropagation()"
+								(change)="$event ? selection.toggle(row) : null"
+								[checked]="selection.isSelected(row)"
+								[color]="'primary'"
+							>
+							</mat-checkbox>
+						</mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="deviceID">
+						<!-- ATTRIBUTE mat-sort-header  for sorting | https://material.angular.io/components/sort/overview -->
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>Device ID</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device">{{
+							device.deviceID
+						}}</mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="enterprise">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>Enterprise</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device">{{
+							device.enterprise
+						}}</mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="osVersion">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>OS Version</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device">{{
+							device.osVersion
+						}}</mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="mgmtIP">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>Mgmt IP</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device">{{
+							device.mgmtIP
+						}}</mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="model">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>Model</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device">{{
+							device.model
+						}}</mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="vulnerabilityStatus">
+						<mat-header-cell *matHeaderCellDef
+							>Status</mat-header-cell
+						>
+						<!--						<mat-cell *matCellDef="let customer">-->
+						<!--							<span-->
+						<!--								class="kt-badge kt-badge&#45;&#45;{{-->
+						<!--									getItemCssClassByType(customer.type)-->
+						<!--								}} kt-badge&#45;&#45;dot"-->
+						<!--							></span-->
+						<!--							>&nbsp;-->
+						<!--							<span-->
+						<!--								class="kt&#45;&#45;font-bold kt-font-{{-->
+						<!--									getItemCssClassByType(customer.type)-->
+						<!--								}}"-->
+						<!--								>{{ getItemTypeString(customer.type) }}</span-->
+						<!--							>-->
+						<!--						</mat-cell>-->
+
+						<mat-cell *matCellDef="let device">
+							<button
+								mat-icon-button
+								color="primary"
+								matTooltip="View Details"
+							>
+								<mat-icon
+									*ngIf="
+										device.vulnerabilityStatus ===
+										'critical'
+									"
+									class="mat-icon-svg"
+									svgIcon="shield-failed"
+								></mat-icon>
+								<mat-icon
+									*ngIf="device.vulnerabilityStatus === 'ok'"
+									class="mat-icon-svg"
+									svgIcon="shield-success"
+								></mat-icon>
+							</button>
+						</mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="lastScanDate">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>Last Scan Date</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device">{{
+							device.lastScanDate | date: "short"
+						}}</mat-cell>
+					</ng-container>
+
+					<!--					<ng-container matColumnDef="actions">-->
+					<!--						<mat-header-cell *matHeaderCellDef-->
+					<!--							>Actions</mat-header-cell-->
+					<!--						>-->
+					<!--						<mat-cell *matCellDef="let device">-->
+					<!--							<button-->
+					<!--								mat-icon-button-->
+					<!--								color="primary"-->
+					<!--								matTooltip="Edit customer"-->
+					<!--								(click)="editCustomer(device)"-->
+					<!--							>-->
+					<!--								<mat-icon>create</mat-icon></button-->
+					<!--							>&nbsp;-->
+					<!--							&lt;!&ndash;							<button&ndash;&gt;-->
+					<!--							&lt;!&ndash;								mat-icon-button&ndash;&gt;-->
+					<!--							&lt;!&ndash;								[matMenuTriggerFor]="menu"&ndash;&gt;-->
+					<!--							&lt;!&ndash;								matTooltip="More actions"&ndash;&gt;-->
+					<!--							&lt;!&ndash;							>&ndash;&gt;-->
+					<!--							&lt;!&ndash;								<mat-icon>more_vert</mat-icon>&ndash;&gt;-->
+					<!--							&lt;!&ndash;							</button>&ndash;&gt;-->
+					<!--							&lt;!&ndash;							<mat-menu #menu="matMenu">&ndash;&gt;-->
+					<!--							&lt;!&ndash;								<button mat-menu-item>&ndash;&gt;-->
+					<!--							&lt;!&ndash;									<mat-icon>dialpad</mat-icon>&ndash;&gt;-->
+					<!--							&lt;!&ndash;									<span>Redial</span>&ndash;&gt;-->
+					<!--							&lt;!&ndash;								</button>&ndash;&gt;-->
+					<!--							&lt;!&ndash;								<button mat-menu-item disabled>&ndash;&gt;-->
+					<!--							&lt;!&ndash;									<mat-icon>voicemail</mat-icon>&ndash;&gt;-->
+					<!--							&lt;!&ndash;									<span>Check voicemail</span>&ndash;&gt;-->
+					<!--							&lt;!&ndash;								</button>&ndash;&gt;-->
+					<!--							&lt;!&ndash;								<button mat-menu-item>&ndash;&gt;-->
+					<!--							&lt;!&ndash;									<mat-icon>notifications_off</mat-icon>&ndash;&gt;-->
+					<!--							&lt;!&ndash;									<span>Disable alerts</span>&ndash;&gt;-->
+					<!--							&lt;!&ndash;								</button>&ndash;&gt;-->
+					<!--							&lt;!&ndash;							</mat-menu>&ndash;&gt;-->
+					<!--						</mat-cell>-->
+					<!--					</ng-container>-->
+
+					<mat-header-row
+						*matHeaderRowDef="displayedColumns"
+					></mat-header-row>
+
+					<mat-row
+						*matRowDef="let row; columns: displayedColumns"
+					></mat-row>
+				</mat-table>
+				<!-- Message for empty data  -->
+				<!--			<div class="mat-table__message" *ngIf="!dataSource.hasItems">-->
+				<div
+					class="mat-table__message"
+					*ngIf="dataSource.length === 0 && !(loading$ | async)"
+				>
+					No records found
+				</div>
+				<!--				<div-->
+				<!--					class="mat-table__message"-->
+				<!--					*ngIf="isPreloadTextViewed$ | async"-->
+				<!--				>-->
+				<!--					Fetching Data....-->
+				<!--				</div>-->
+			</div>
+
+			<!-- start: BOTTOM -->
+			<div class="mat-table__bottom">
+				<!-- MATERIAL SPINNER | Url: 'https://material.angular.io/components/progress-spinner/overview' -->
+				<!--				<mat-spinner-->
+				<!--					[diameter]="20"-->
+				<!--					*ngIf="loading$ | async"-->
+				<!--				></mat-spinner>-->
+				<!-- MATERIAL PAGINATOR | Binded to dasources -->
+				<!-- See off.documentations 'https://material.angular.io/components/paginator/overview' -->
+				<mat-paginator
+					[pageSize]="10"
+					[pageSizeOptions]="[3, 5, 10, 20]"
+					[length]="dataSource.length"
+					[showFirstLastButtons]="true"
+				></mat-paginator>
+			</div>
+			<!-- end: BOTTOM -->
+		</kt-portlet-body>
+		<!-- end::Body -->
+	</div>
+</kt-portlet>

@@ -1,78 +1,99 @@
-    /*
-    Flaticon icon font: Flaticon
-    Creation date: 06/10/2019 10:57
-    */
+/*
+Flaticon3 icon font: Flaticon3
+Creation date: 14/10/2019 13:12
+*/
 
-    @font-face {
-  font-family: "Flaticon";
-  src: url("./Flaticon.eot");
-  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
-       url("./Flaticon.woff2") format("woff2"),
-       url("./Flaticon.woff") format("woff"),
-       url("./Flaticon.ttf") format("truetype"),
-       url("./Flaticon.svg#Flaticon") format("svg");
-  font-weight: normal;
-  font-style: normal;
+@font-face {
+	font-family: "Flaticon3";
+	src: url("./Flaticon3.eot");
+	src: url("./Flaticon3.eot?#iefix") format("embedded-opentype"),
+	url("./Flaticon3.woff2") format("woff2"),
+	url("./Flaticon3.woff") format("woff"),
+	url("./Flaticon3.ttf") format("truetype"),
+	url("./Flaticon3.svg#Flaticon3") format("svg");
+	font-weight: normal;
+	font-style: normal;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-  @font-face {
-    font-family: "Flaticon";
-    src: url("./Flaticon.svg#Flaticon") format("svg");
-  }
+	@font-face {
+		font-family: "Flaticon3";
+		src: url("./Flaticon3.svg#Flaticon3") format("svg");
+	}
 }
 
-    .fi:before{
-        display: inline-block;
-  font-family: "Flaticon";
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  line-height: 1;
-  text-decoration: inherit;
-  text-rendering: optimizeLegibility;
-  text-transform: none;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  font-smoothing: antialiased;
-    }
+.fi:before{
+	display: inline-block;
+	font-family: "Flaticon3";
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	line-height: 1;
+	text-decoration: inherit;
+	font-size: 18px;
+	text-rendering: optimizeLegibility;
+	text-transform: none;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+}
 
-    .flaticon-server-traffic:before { content: "\f100"; }
-.flaticon-computer-server:before { content: "\f101"; }
-.flaticon-ddos:before { content: "\f102"; }
-.flaticon-cybercrime:before { content: "\f103"; }
-.flaticon-shield:before { content: "\f104"; }
-.flaticon-cyber-security:before { content: "\f105"; }
-.flaticon-cyber-security-1:before { content: "\f106"; }
-.flaticon-cyber-security-2:before { content: "\f107"; }
-.flaticon-vulnerability:before { content: "\f108"; }
-.flaticon-vulnerability-1:before { content: "\f109"; }
-.flaticon-developer:before { content: "\f10a"; }
-.flaticon-faq:before { content: "\f10b"; }
-.flaticon-archive:before { content: "\f10c"; }
-.flaticon-archive-1:before { content: "\f10d"; }
-.flaticon-ebook:before { content: "\f10e"; }
-.flaticon-technician:before { content: "\f10f"; }
-.flaticon-technician-1:before { content: "\f110"; }
-.flaticon-software-developer:before { content: "\f111"; }
-.flaticon-old-building:before { content: "\f112"; }
-    
-    $font-Flaticon-server-traffic: "\f100";
-    $font-Flaticon-computer-server: "\f101";
-    $font-Flaticon-ddos: "\f102";
-    $font-Flaticon-cybercrime: "\f103";
-    $font-Flaticon-shield: "\f104";
-    $font-Flaticon-cyber-security: "\f105";
-    $font-Flaticon-cyber-security-1: "\f106";
-    $font-Flaticon-cyber-security-2: "\f107";
-    $font-Flaticon-vulnerability: "\f108";
-    $font-Flaticon-vulnerability-1: "\f109";
-    $font-Flaticon-developer: "\f10a";
-    $font-Flaticon-faq: "\f10b";
-    $font-Flaticon-archive: "\f10c";
-    $font-Flaticon-archive-1: "\f10d";
-    $font-Flaticon-ebook: "\f10e";
-    $font-Flaticon-technician: "\f10f";
-    $font-Flaticon-technician-1: "\f110";
-    $font-Flaticon-software-developer: "\f111";
-    $font-Flaticon-old-building: "\f112";
+.flaticon3-server-traffic:before { content: "\f100"; }
+.flaticon3-computer-server:before { content: "\f101"; }
+.flaticon3-ddos:before { content: "\f102"; }
+.flaticon3-cybercrime:before { content: "\f103"; }
+.flaticon3-shield:before { content: "\f104"; }
+.flaticon3-cyber-security:before { content: "\f105"; }
+.flaticon3-cyber-security-1:before { content: "\f106"; }
+.flaticon3-cyber-security-2:before { content: "\f107"; }
+.flaticon3-developer:before { content: "\f108"; }
+.flaticon3-faq:before { content: "\f109"; }
+.flaticon3-archive:before { content: "\f10a"; }
+.flaticon3-archive-1:before { content: "\f10b"; }
+.flaticon3-ebook:before { content: "\f10c"; }
+.flaticon3-technician:before { content: "\f10d"; }
+.flaticon3-technician-1:before { content: "\f10e"; }
+.flaticon3-software-developer:before { content: "\f10f"; }
+.flaticon3-old-building:before { content: "\f110"; }
+.flaticon3-unlocked:before { content: "\f111"; }
+.flaticon3-global:before { content: "\f112"; }
+.flaticon3-edit-tools:before { content: "\f113"; }
+.flaticon3-wifi-router:before { content: "\f114"; }
+.flaticon3-wifi-router-1:before { content: "\f115"; }
+.flaticon3-clipboard:before { content: "\f116"; }
+.flaticon3-ui:before { content: "\f117"; }
+.flaticon3-project:before { content: "\f118"; }
+.flaticon3-verification-of-delivery-list-clipboard-symbol:before { content: "\f119"; }
+.flaticon3-retinal-scan:before { content: "\f11a"; }
+.flaticon3-server:before { content: "\f11b"; }
+.flaticon3-scan:before { content: "\f11c"; }
+
+$font-Flaticon3-server-traffic: "\f100";
+$font-Flaticon3-computer-server: "\f101";
+$font-Flaticon3-ddos: "\f102";
+$font-Flaticon3-cybercrime: "\f103";
+$font-Flaticon3-shield: "\f104";
+$font-Flaticon3-cyber-security: "\f105";
+$font-Flaticon3-cyber-security-1: "\f106";
+$font-Flaticon3-cyber-security-2: "\f107";
+$font-Flaticon3-developer: "\f108";
+$font-Flaticon3-faq: "\f109";
+$font-Flaticon3-archive: "\f10a";
+$font-Flaticon3-archive-1: "\f10b";
+$font-Flaticon3-ebook: "\f10c";
+$font-Flaticon3-technician: "\f10d";
+$font-Flaticon3-technician-1: "\f10e";
+$font-Flaticon3-software-developer: "\f10f";
+$font-Flaticon3-old-building: "\f110";
+$font-Flaticon3-unlocked: "\f111";
+$font-Flaticon3-global: "\f112";
+$font-Flaticon3-edit-tools: "\f113";
+$font-Flaticon3-wifi-router: "\f114";
+$font-Flaticon3-wifi-router-1: "\f115";
+$font-Flaticon3-clipboard: "\f116";
+$font-Flaticon3-ui: "\f117";
+$font-Flaticon3-project: "\f118";
+$font-Flaticon3-verification-of-delivery-list-clipboard-symbol: "\f119";
+$font-Flaticon3-retinal-scan: "\f11a";
+$font-Flaticon3-server: "\f11b";
+$font-Flaticon3-scan: "\f11c";

@@ -1,36 +1,36 @@
-	/*
-  	Flaticon icon font: Flaticon
-  	Creation date: 06/10/2019 10:57
-  	*/
+/*
+  Flaticon3 icon font: Flaticon3
+  Creation date: 14/10/2019 13:12
+  */
 
 @font-face {
-  font-family: "Flaticon3";
-  src: url("./Flaticon3.eot");
-  src: url("./Flaticon3.eot?#iefix") format("embedded-opentype"),
-       url("./Flaticon3.woff2") format("woff2"),
-       url("./Flaticon3.woff") format("woff"),
-       url("./Flaticon3.ttf") format("truetype"),
-       url("./Flaticon3.svg#Flaticon3") format("svg");
-  font-weight: normal;
-  font-style: normal;
+	font-family: "Flaticon3";
+	src: url("./Flaticon3.eot");
+	src: url("./Flaticon3.eot?#iefix") format("embedded-opentype"),
+	url("./Flaticon3.woff2") format("woff2"),
+	url("./Flaticon3.woff") format("woff"),
+	url("./Flaticon3.ttf") format("truetype"),
+	url("./Flaticon3.svg#Flaticon3") format("svg");
+	font-weight: normal;
+	font-style: normal;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-  @font-face {
-    font-family: "Flaticon3";
-    src: url("./Flaticon3.svg#Flaticon3") format("svg");
-  }
+	@font-face {
+		font-family: "Flaticon3";
+		src: url("./Flaticon3.svg#Flaticon3") format("svg");
+	}
 }
 
-[class*=" flaticon3-"]:before,
-[class*=" flaticon3-"]:after {
-  font-family: Flaticon3;
+[class^="flaticon3-"]:before, [class*=" flaticon3-"]:before,
+[class^="flaticon3-"]:after, [class*=" flaticon3-"]:after {
+	font-family: "Flaticon3";
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
 	line-height: 1;
 	text-decoration: inherit;
-	font-size: 22px;
+	font-size: 18px;
 	text-rendering: optimizeLegibility;
 	text-transform: none;
 	-moz-osx-font-smoothing: grayscale;
@@ -46,14 +46,24 @@
 .flaticon3-cyber-security:before { content: "\f105"; }
 .flaticon3-cyber-security-1:before { content: "\f106"; }
 .flaticon3-cyber-security-2:before { content: "\f107"; }
-.flaticon3-vulnerability:before { content: "\f108"; }
-.flaticon3-vulnerability-1:before { content: "\f109"; }
-.flaticon3-developer:before { content: "\f10a"; }
-.flaticon3-faq:before { content: "\f10b"; }
-.flaticon3-archive:before { content: "\f10c"; }
-.flaticon3-archive-1:before { content: "\f10d"; }
-.flaticon3-ebook:before { content: "\f10e"; }
-.flaticon3-technician:before { content: "\f10f"; }
-.flaticon3-technician-1:before { content: "\f110"; }
-.flaticon3-software-developer:before { content: "\f111"; }
-.flaticon3-old-building:before { content: "\f112"; }
+.flaticon3-developer:before { content: "\f108"; }
+.flaticon3-faq:before { content: "\f109"; }
+.flaticon3-archive:before { content: "\f10a"; }
+.flaticon3-archive-1:before { content: "\f10b"; }
+.flaticon3-ebook:before { content: "\f10c"; }
+.flaticon3-technician:before { content: "\f10d"; }
+.flaticon3-technician-1:before { content: "\f10e"; }
+.flaticon3-software-developer:before { content: "\f10f"; }
+.flaticon3-old-building:before { content: "\f110"; }
+.flaticon3-unlocked:before { content: "\f111"; }
+.flaticon3-global:before { content: "\f112"; }
+.flaticon3-edit-tools:before { content: "\f113"; }
+.flaticon3-wifi-router:before { content: "\f114"; }
+.flaticon3-wifi-router-1:before { content: "\f115"; }
+.flaticon3-clipboard:before { content: "\f116"; }
+.flaticon3-ui:before { content: "\f117"; }
+.flaticon3-project:before { content: "\f118"; }
+.flaticon3-verification-of-delivery-list-clipboard-symbol:before { content: "\f119"; }
+.flaticon3-retinal-scan:before { content: "\f11a"; }
+.flaticon3-server:before { content: "\f11b"; }
+.flaticon3-scan:before { content: "\f11c"; }

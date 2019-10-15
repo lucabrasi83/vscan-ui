@@ -123,23 +123,23 @@
 	}
 
 	// Fixed & Minimize Aside hover
-	//.kt-aside--fixed.kt-aside--minimize-hover {
-	//	.kt-aside {
-	//		width: kt-get($kt-aside-config, base, default, width);
-	//		transition: kt-get($kt-aside-config, base, minimize, transition);
-	//
-	//	}
-	//
-	//	.kt-header {
-	//		transition: kt-get($kt-aside-config, base, minimize, transition);
-	//		left: kt-get($kt-aside-config, base, minimize, width);
-	//	}
-	//
-	//	.kt-wrapper {
-	//		transition: kt-get($kt-aside-config, base, minimize, transition);
-	//		padding-left: kt-get($kt-aside-config, base, minimize, width);
-	//	}
-	//}
+	.kt-aside--fixed.kt-aside--minimize-hover {
+		//.kt-aside {
+		//	width: kt-get($kt-aside-config, base, default, width);
+		//	transition: kt-get($kt-aside-config, base, minimize, transition);
+		//
+		//}
+		//
+		//.kt-header {
+		//	transition: kt-get($kt-aside-config, base, minimize, transition);
+		//	left: kt-get($kt-aside-config, base, minimize, width);
+		//}
+		//
+		//.kt-wrapper {
+		//	transition: kt-get($kt-aside-config, base, minimize, transition);
+		//	padding-left: kt-get($kt-aside-config, base, minimize, width);
+		//}
+	}
 }
 
 /* Push mobile aside down the mobile header when it's toggled

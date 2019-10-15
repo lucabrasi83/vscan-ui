@@ -9,22 +9,24 @@
     text-decoration: none;
   	position: relative;
   	display: inline-block;
+	border-bottom: 2px solid transparent;
 
     &:after {
     	display: block;
     	content: '';
 		position: absolute;
 		bottom: 0;
-        top: 1rem;  
+        top: 1rem;
 		left: 0;
 		width: 0%;
-		transition: width 0.3s ease;
+		transition: all 0.3s ease;
     }
 
     &:hover {
     	text-decoration: none !important;
+		border-bottom: 2px solid;
 
-    	&:after {				
+    	&:after {
     		width: 100%;
     	}
     }

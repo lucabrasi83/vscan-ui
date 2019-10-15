@@ -89,8 +89,9 @@
 		data-placement="right"
 	>
 		<!-- if menu item hasn't submenu -->
+
 		<a
-			*ngIf="!item.submenu"
+			*ngIf="!item.submenu && item.title !== 'API Documentation'"
 			[routerLink]="item.page"
 			class="kt-menu__link kt-menu__toggle"
 		>
@@ -102,6 +103,22 @@
 				}"
 			></ng-container>
 		</a>
+
+		<a
+			*ngIf="!item.submenu && item.title === 'API Documentation'"
+			[href]="item.page"
+			target="_blank"
+			class="kt-menu__link kt-menu__toggle"
+		>
+			<ng-container
+				[ngTemplateOutlet]="menuItemTextTemplate"
+				[ngTemplateOutletContext]="{
+					item: item,
+					parentItem: parentItem
+				}"
+			></ng-container>
+		</a>
+
 		<!-- if menu item has sumnenu child  -->
 		<a *ngIf="item.submenu" class="kt-menu__link kt-menu__toggle">
 			<ng-container

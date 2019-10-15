@@ -1,11 +1,11 @@
 // Angular
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
+import { CommonModule } from "@angular/common";
 // Core Module
-import { CoreModule } from '../../../core/core.module';
-import { PartialsModule } from '../../partials/partials.module';
-import { DashboardComponent } from './dashboard.component';
+import { CoreModule } from "../../../core/core.module";
+import { PartialsModule } from "../../partials/partials.module";
+import { DashboardComponent } from "./dashboard.component";
 
 @NgModule({
 	imports: [
@@ -14,15 +14,12 @@ import { DashboardComponent } from './dashboard.component';
 		CoreModule,
 		RouterModule.forChild([
 			{
-				path: '',
+				path: "",
 				component: DashboardComponent
-			},
-		]),
+			}
+		])
 	],
 	providers: [],
-	declarations: [
-		DashboardComponent,
-	]
+	declarations: [DashboardComponent]
 })
-export class DashboardModule {
-}
+export class DashboardModule {}

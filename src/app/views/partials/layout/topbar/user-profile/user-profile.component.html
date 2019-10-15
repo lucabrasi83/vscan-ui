@@ -1,7 +1,7 @@
 <div
 	ngbDropdown
 	placement="bottom-right"
-	*ngIf="user$ | async as _user"
+	*ngIf="!(user$ | async) as _user"
 	class="kt-header__topbar-item kt-header__topbar-item--user"
 >
 	<div ngbDropdownToggle class="kt-header__topbar-wrapper">

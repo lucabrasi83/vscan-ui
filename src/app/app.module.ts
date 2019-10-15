@@ -71,6 +71,7 @@ import * as scss from "highlight.js/lib/languages/scss";
 import * as xml from "highlight.js/lib/languages/xml";
 import * as json from "highlight.js/lib/languages/json";
 import { ToastrModule } from "ngx-toastr";
+import { JwtModule } from "@auth0/angular-jwt";
 
 // tslint:disable-next-line:class-name
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -98,6 +99,7 @@ export function hljsLanguages(): HighlightLanguage[] {
 	];
 }
 
+// @ts-ignore
 @NgModule({
 	declarations: [AppComponent],
 	imports: [
@@ -124,7 +126,19 @@ export function hljsLanguages(): HighlightLanguage[] {
 		MatProgressSpinnerModule,
 		InlineSVGModule.forRoot(),
 		ThemeModule,
-		ToastrModule.forRoot() // ToastrModule added
+		ToastrModule.forRoot(), // ToastrModule added,
+		JwtModule.forRoot({
+			config: {
+				tokenGetter: () => {
+					return localStorage.getItem(environment.vscanJWT);
+				},
+				whitelistedDomains: ["localhost:4200", "vscan.asdlab.net"],
+				blacklistedRoutes: [
+					"http://localhost:4200/auth/login",
+					"https://vscan.asdlab.net/api/v1/login"
+				]
+			}
+		})
 	],
 	exports: [],
 	providers: [

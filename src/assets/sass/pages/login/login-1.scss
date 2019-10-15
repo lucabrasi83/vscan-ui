@@ -86,9 +86,10 @@
 
         // Head
         .kt-login__head {
-            font-size: 1rem;
-            font-weight: 500;
-            text-align: right;
+            //font-size: 1rem;
+            //font-weight: 500;
+            text-align: left;
+
 
             .kt-login__signup-label {
                 color: kt-base-color(label, 2);
@@ -110,8 +111,49 @@
 			// Login Logo
 			.kt-login__logo {
 				// margin: auto;
-				padding: 5% 0;
-				height: auto;
+				padding: 2% 0;
+				//height: 25%;
+				margin-bottom: 1%;
+
+				// Added VSCAN by TATA Communications Element
+				.kt-login__logo-by-tata {
+					display: block;
+					color: white;
+					margin-top: 2%;
+					text-align: center;
+					animation-name: opacityOn;
+					animation-iteration-count: 1;
+					animation-timing-function: ease-in-out;
+					animation-duration: 3s;
+
+
+
+					> h5 {
+						display: inline-block;
+						vertical-align: text-top;
+					}
+					> img {
+						display: inline-block;
+						vertical-align: middle;
+
+
+					}
+					@keyframes opacityOn {
+						0% {opacity: 0;}
+						20% {opacity: 0.1;}
+						30% {opacity: 0.2;}
+						40% {opacity: 0.3;}
+						50% {opacity: 0.4;}
+						60% {opacity: 0.5;}
+						70% {opacity: 0.6;}
+						80% {opacity: 0.7;}
+						90% {opacity: 0.8;}
+						95% {opacity: 0.9;}
+						100% {opacity: 1;}
+					}
+
+				}
+
 			}
 
             // Form Wrapper
@@ -125,8 +167,8 @@
                     margin-bottom: 5rem;
                     text-decoration: none;
 
-                    > h3 {
-                        font-size: 4rem;
+                    > h4 {
+                        font-size: 3rem;
                         color: white;
                     }
                 }
@@ -162,12 +204,12 @@
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin: auto;
+                    margin: 30px auto;
 
                     .kt-login__link-forgot {
                         font-weight: 400;
 						margin: auto;
-                       // @include kt-link-color(kt-base-color(label, 2), kt-brand-color());
+                       //@include kt-link-color(kt-base-color(label, 2), kt-brand-color());
                     }
 
                     .kt-login__btn-secondary,

@@ -25,7 +25,8 @@ const routes: Routes = [
 				loadChildren: () =>
 					import("./views/pages/dashboard/dashboard.module").then(
 						m => m.DashboardModule
-					)
+					),
+				canActivate: [AuthGuard]
 			},
 
 			{
@@ -37,7 +38,8 @@ const routes: Routes = [
 			},
 			{
 				path: "devices",
-				component: VscanDevicesComponent
+				component: VscanDevicesComponent,
+				canActivate: [AuthGuard]
 			},
 			{
 				path: "error/403",

@@ -1,3 +1,24 @@
+// Table Loading Spinner
+.mat-table__loading-spinner {
+	top: 0;
+	z-index: 2002;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	border-radius: 3px;
+}
+
+.mat-table__loading-spinner h3 {
+	color: white;
+	margin-top: 10%;
+}
+
+
 // Tables
 .mat-table__wrapper {
     width: 100%;
@@ -11,18 +32,18 @@
     .mat-table {
         min-width: 1000px;
 
-        .mat-cell, 
-        .mat-footer-cell, 
+        .mat-cell,
+        .mat-footer-cell,
         .mat-header-cell {
             padding-right: 10px;
         }
-        
-        .mat-cell:last-child, 
-        .mat-footer-cell:last-child, 
+
+        .mat-cell:last-child,
+        .mat-footer-cell:last-child,
         .mat-header-cell:last-child {
             padding-right: 0;
         }
-            
+
         .mat-row {
             transition: padding 0.3s ease;
         }
@@ -52,6 +73,8 @@
         padding: 30px !important;
         text-align: center;
         font-weight: 500;
+		font-size: 20px;
+		color: black;
     }
 
     .mat-column-checkbox {
