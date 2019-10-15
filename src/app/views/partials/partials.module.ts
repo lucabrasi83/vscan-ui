@@ -1,8 +1,8 @@
 // Angular
-import { RouterModule } from '@angular/router';
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from "@angular/router";
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
 	MatAutocompleteModule,
 	MatButtonModule,
@@ -23,22 +23,26 @@ import {
 	MatSortModule,
 	MatTableModule,
 	MatTabsModule,
-	MatTooltipModule,
-} from '@angular/material';
+	MatTooltipModule
+} from "@angular/material";
 // NgBootstrap
-import {NgbDropdownModule, NgbTabsetModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
+import {
+	NgbDropdownModule,
+	NgbTabsetModule,
+	NgbTooltipModule
+} from "@ng-bootstrap/ng-bootstrap";
 // Perfect Scrollbar
-import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
 // Core module
-import {CoreModule} from '../../core/core.module';
+import { CoreModule } from "../../core/core.module";
 // CRUD Partials
 import {
 	ActionNotificationComponent,
 	AlertComponent,
 	DeleteEntityDialogComponent,
 	FetchEntityDialogComponent,
-	UpdateStatusDialogComponent,
-} from './content/crud';
+	UpdateStatusDialogComponent
+} from "./content/crud";
 // Layout partials
 import {
 	ContextMenu2Component,
@@ -61,18 +65,20 @@ import {
 	SubheaderSearchComponent,
 	UserProfile2Component,
 	UserProfile3Component,
-	UserProfileComponent,
-} from './layout';
+	UserProfileComponent
+} from "./layout";
 // General
-import {NoticeComponent} from './content/general/notice/notice.component';
-import {PortletModule} from './content/general/portlet/portlet.module';
+import { NoticeComponent } from "./content/general/notice/notice.component";
+import { PortletModule } from "./content/general/portlet/portlet.module";
 // Errpr
-import {ErrorComponent} from './content/general/error/error.component';
+import { ErrorComponent } from "./content/general/error/error.component";
 // Extra module
-import {WidgetModule} from './content/widgets/widget.module';
+import { WidgetModule } from "./content/widgets/widget.module";
 // SVG inline
-import {InlineSVGModule} from 'ng-inline-svg';
-import {CartComponent} from './layout/topbar/cart/cart.component';
+import { InlineSVGModule } from "ng-inline-svg";
+import { CartComponent } from "./layout/topbar/cart/cart.component";
+import { AvatarModule } from "ngx-avatar";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
 	declarations: [
@@ -108,7 +114,7 @@ import {CartComponent} from './layout/topbar/cart/cart.component';
 		UserProfile3Component,
 		CartComponent,
 
-		ErrorComponent,
+		ErrorComponent
 	],
 	exports: [
 		WidgetModule,
@@ -146,7 +152,7 @@ import {CartComponent} from './layout/topbar/cart/cart.component';
 		UserProfile3Component,
 		CartComponent,
 
-		ErrorComponent,
+		ErrorComponent
 	],
 	imports: [
 		CommonModule,
@@ -158,7 +164,8 @@ import {CartComponent} from './layout/topbar/cart/cart.component';
 		CoreModule,
 		PortletModule,
 		WidgetModule,
-
+		AvatarModule,
+		HttpClientModule,
 		// angular material modules
 		MatButtonModule,
 		MatMenuModule,
@@ -184,8 +191,7 @@ import {CartComponent} from './layout/topbar/cart/cart.component';
 		// ng-bootstrap modules
 		NgbDropdownModule,
 		NgbTabsetModule,
-		NgbTooltipModule,
-	],
+		NgbTooltipModule
+	]
 })
-export class PartialsModule {
-}
+export class PartialsModule {}

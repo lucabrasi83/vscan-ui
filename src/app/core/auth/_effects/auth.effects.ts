@@ -58,20 +58,20 @@ export class AuthEffects {
 		})
 	);
 
-	@Effect({ dispatch: false })
-	loadUser$ = this.actions$.pipe(
-		ofType<UserRequested>(AuthActionTypes.UserRequested),
-		withLatestFrom(this.store.pipe(select(isUserLoaded))),
-		filter(([action, _isUserLoaded]) => !_isUserLoaded),
-		mergeMap(([action, _isUserLoaded]) => this.auth.getUserByToken()),
-		tap(_user => {
-			if (_user) {
-				this.store.dispatch(new UserLoaded({ user: _user }));
-			} else {
-				this.store.dispatch(new Logout());
-			}
-		})
-	);
+	// @Effect({ dispatch: false })
+	// loadUser$ = this.actions$.pipe(
+	// 	ofType<UserRequested>(AuthActionTypes.UserRequested),
+	// 	withLatestFrom(this.store.pipe(select(isUserLoaded))),
+	// 	filter(([action, _isUserLoaded]) => !_isUserLoaded),
+	// 	mergeMap(([action, _isUserLoaded]) => this.auth.getUserByToken()),
+	// 	tap(_user => {
+	// 		if (_user) {
+	// 			this.store.dispatch(new UserLoaded({ user: _user }));
+	// 		} else {
+	// 			this.store.dispatch(new Logout());
+	// 		}
+	// 	})
+	// );
 
 	@Effect()
 	init$: Observable<Action> = defer(() => {
