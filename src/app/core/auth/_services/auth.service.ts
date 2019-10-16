@@ -5,10 +5,9 @@ import {
 	HttpHeaders
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import { User } from "..";
-import { Permission } from "..";
-import { Role } from "..";
-import { catchError, map, tap } from "rxjs/operators";
+import { User } from "../_models/user.model";
+import { Permission, Role } from "..";
+import { catchError, map } from "rxjs/operators";
 import { QueryParamsModel, QueryResultsModel } from "../../_base/crud";
 import { environment } from "../../../../environments/environment";
 import { JwtokenModel } from "../_models/jwtoken-model";
@@ -30,25 +29,21 @@ export class AuthService {
 				username: email,
 				password: password
 			})
-			.pipe(
-				tap((res: JwtokenModel) => {
-					// this.t = localStorage.getItem(environment.vscanJWT);
-					// helper.decodeToken(this.t.role);
-				}),
-				catchError(this.handleError)
-			);
+			.pipe(catchError(this.handleError));
 	}
 
-	isTokenExpired(): boolean {
+	isTokenInvalid(): boolean {
 		const jwtHelper = new JwtHelperService();
-		const token = localStorage.getItem(environment.vscanJWT);
+		const userToken = localStorage.getItem(environment.vscanJWT);
 		let isExpired: boolean;
+
 		try {
-			if (token) {
-				isExpired = jwtHelper.isTokenExpired(token);
+			if (userToken) {
+				isExpired = jwtHelper.isTokenExpired(userToken);
 				return isExpired;
 			}
 		} catch (e) {
+			console.log(e);
 			return true;
 		}
 		return true;

@@ -31,11 +31,11 @@ export class AuthGuard implements CanActivate {
 		return this.store.pipe(
 			select(isLoggedIn),
 			tap(loggedIn => {
-				const isTokenExpired = this.auth.isTokenExpired();
+				const isTokenInvalid = this.auth.isTokenInvalid();
 
 				if (!loggedIn) {
 					this.router.navigateByUrl("/auth/login");
-				} else if (isTokenExpired) {
+				} else if (isTokenInvalid) {
 					this.router.navigateByUrl("/auth/login");
 					return false;
 				}

@@ -78,7 +78,6 @@ import { WidgetModule } from "./content/widgets/widget.module";
 import { InlineSVGModule } from "ng-inline-svg";
 import { CartComponent } from "./layout/topbar/cart/cart.component";
 import { AvatarModule } from "ngx-avatar";
-import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
 	declarations: [
@@ -165,7 +164,6 @@ import { HttpClientModule } from "@angular/common/http";
 		PortletModule,
 		WidgetModule,
 		AvatarModule,
-		HttpClientModule,
 		// angular material modules
 		MatButtonModule,
 		MatMenuModule,

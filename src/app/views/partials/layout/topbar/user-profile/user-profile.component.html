@@ -19,12 +19,15 @@
 				*ngIf="greeting"
 				>{{ userEmail }}</span
 			>
-			<i *ngIf="icon" class="flaticon2-user-outline-symbol"></i>
+			<!--			<i *ngIf="icon" class="flaticon2-user-outline-symbol"></i>-->
 			<ngx-avatar
 				name="{{ userName }}"
 				size="40"
 				gravatarId="s{{ userEmail }}"
 			></ngx-avatar>
+			<mat-icon style="color: white;padding-left: 3px;"
+				>arrow_drop_down</mat-icon
+			>
 			<!--			<img *ngIf="avatar" alt="Pic" [attr.src]="_user.pic" />-->
 			<!--			<span-->
 			<!--				*ngIf="badge"-->

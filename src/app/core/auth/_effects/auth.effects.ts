@@ -2,24 +2,22 @@
 import { Injectable } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
 // RxJS
-import { filter, mergeMap, tap, withLatestFrom } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { defer, Observable, of } from "rxjs";
 // NGRX
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { Action, select, Store } from "@ngrx/store";
+import { Action, Store } from "@ngrx/store";
 // Auth actions
 import {
 	AuthActionTypes,
 	Login,
 	Logout,
 	Register,
-	UserLoaded,
 	UserRequested
 } from "../_actions/auth.actions";
-import { AuthService } from "../_services/index";
+import { AuthService } from "../_services/auth.service";
 import { AppState } from "../../reducers";
 import { environment } from "../../../../environments/environment";
-import { isUserLoaded } from "../_selectors/auth.selectors";
 
 @Injectable()
 export class AuthEffects {
@@ -76,7 +74,7 @@ export class AuthEffects {
 	@Effect()
 	init$: Observable<Action> = defer(() => {
 		const userToken = localStorage.getItem(environment.vscanJWT);
-		const isTokenExpired = this.auth.isTokenExpired();
+		const isTokenExpired = this.auth.isTokenInvalid();
 
 		let observableResult = of({ type: "NO_ACTION" });
 		if (userToken && !isTokenExpired) {
