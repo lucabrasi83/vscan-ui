@@ -25,10 +25,10 @@ import { ngxLoadingAnimationTypes, NgxLoadingModule } from "ngx-loading";
 import { MatChipsModule } from "@angular/material/chips";
 import { RouterModule } from "@angular/router";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { SelectAutocompleteModule } from "mat-select-autocomplete";
+import { DeviceVulnDetailsComponent } from "./vscan-devices/device-vuln-details/device-vuln-details.component";
 
 @NgModule({
-	declarations: [VscanDevicesComponent],
+	declarations: [VscanDevicesComponent, DeviceVulnDetailsComponent],
 	exports: [],
 	imports: [
 		CommonModule,
@@ -59,8 +59,7 @@ import { SelectAutocompleteModule } from "mat-select-autocomplete";
 		MatChipsModule,
 		RouterModule.forChild([]),
 		MatAutocompleteModule,
-		ReactiveFormsModule,
-		SelectAutocompleteModule
+		ReactiveFormsModule
 	],
 	providers: []
 })
