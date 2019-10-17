@@ -1,0 +1,59 @@
+.flaticon3-retinal-scan:before {
+	vertical-align: middle;
+	font-size: 24px;
+}
+.enterprise-button:hover {
+	box-shadow: 0px 4px 8px #ee6214;
+}
+.mat-icon-svg {
+	height: 35px !important;
+	width: 35px !important;
+}
+
+.mat-option {
+	&.mat-active {
+		background: rgba(234, 121, 38, 0.15) !important;
+	}
+}
+
+.mat-cell:nth-child,
+.mat-header-cell:nth-child {
+	flex: 0 0 10%;
+}
+
+.mat-option {
+	font-size: 12px !important;
+	font-family: Gotham-Light !important;
+	font-weight: normal !important;
+}
+
+//.mat-select {
+//	font-size: 12px !important;
+//	font-family: Gotham-Light !important;
+//	font-weight: normal !important;
+//}
+
+.mat-cell:nth-child(2),
+.mat-header-cell:nth-child(2) {
+	flex: 0 0 30%;
+}
+
+.mat-cell:nth-child(3),
+.mat-header-cell:nth-child(3) {
+	flex: 0 0 10%;
+}
+
+.mat-cell:nth-child(4),
+.mat-header-cell:nth-child(4) {
+	flex: 0 0 8%;
+}
+
+.mat-cell:nth-child(8),
+.mat-header-cell:nth-child(8) {
+	flex: 0 0 15%;
+}
+
+.mat-cell {
+	font-size: 12px;
+	font-weight: 300;
+}

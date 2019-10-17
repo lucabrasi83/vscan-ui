@@ -6,7 +6,7 @@ import { BaseComponent } from "./views/theme/base/base.component";
 import { ErrorPageComponent } from "./views/theme/content/error-page/error-page.component";
 // Auth
 import { AuthGuard } from "./core/auth";
-import { VscanDevicesComponent } from "./views/pages/vscan-devices/vscan-devices.component";
+import { VscanDevicesComponent } from "./views/pages/vscan-devices/inventory-list/vscan-devices.component";
 
 const routes: Routes = [
 	{

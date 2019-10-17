@@ -132,10 +132,15 @@ export function hljsLanguages(): HighlightLanguage[] {
 				tokenGetter: () => {
 					return localStorage.getItem(environment.vscanJWT);
 				},
-				whitelistedDomains: ["localhost:4200", "vscan.asdlab.net"],
+				whitelistedDomains: [
+					"localhost:4200",
+					"vscan.asdlab.net",
+					"vulscano.vsnl.co.in:8443"
+				],
 				blacklistedRoutes: [
 					"http://localhost:4200/auth/login",
-					"https://vscan.asdlab.net/api/v1/login"
+					"https://vscan.asdlab.net/api/v1/login",
+					"https://vulscano.vsnl.co.in:8443/api/v1/login"
 				]
 			}
 		})

@@ -1,13 +1,13 @@
 // Angular
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 // Partials
 import { PartialsModule } from "../partials/partials.module";
 // Pages
 import { CoreModule } from "../../core/core.module";
-import { VscanDevicesComponent } from "./vscan-devices/vscan-devices.component";
+import { VscanDevicesComponent } from "./vscan-devices/inventory-list/vscan-devices.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTableModule } from "@angular/material/table";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -22,6 +22,10 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ngxLoadingAnimationTypes, NgxLoadingModule } from "ngx-loading";
+import { MatChipsModule } from "@angular/material/chips";
+import { RouterModule } from "@angular/router";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { SelectAutocompleteModule } from "mat-select-autocomplete";
 
 @NgModule({
 	declarations: [VscanDevicesComponent],
@@ -51,7 +55,12 @@ import { ngxLoadingAnimationTypes, NgxLoadingModule } from "ngx-loading";
 			secondaryColour: "#ea7926",
 			tertiaryColour: "#ea7926",
 			animationType: ngxLoadingAnimationTypes.threeBounce
-		})
+		}),
+		MatChipsModule,
+		RouterModule.forChild([]),
+		MatAutocompleteModule,
+		ReactiveFormsModule,
+		SelectAutocompleteModule
 	],
 	providers: []
 })

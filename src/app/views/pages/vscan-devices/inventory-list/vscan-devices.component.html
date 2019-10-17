@@ -27,6 +27,24 @@
 
 			<ng-container ktPortletTools>
 				<button
+					(click)="onClearFilters()"
+					style="margin-right: 20px;background-color: #5d78ff;"
+					mat-raised-button
+					matTooltip="Clear Dropdown Filters"
+					color="warn"
+					type="button"
+				>
+					<i class="flaticon2-rubbish-bin"></i>
+					<span translate="ECOMMERCE.CUSTOMERS.NEW_CUSTOMER"
+						>&nbsp;&nbsp;&nbsp;Clear Filters</span
+					>
+				</button>
+				<!-- Buttons (Material Angular) | See off.documenations 'https://material.angular.io/components/button/overview' -->
+				<!-- mat-raised-button | Rectangular contained button w/ elevation  -->
+			</ng-container>
+
+			<ng-container ktPortletTools>
+				<button
 					(click)="onClickSubject()"
 					mat-raised-button
 					matTooltip="Scan a new inventory device"
@@ -55,55 +73,96 @@
 							<div class="kt-form__control">
 								<mat-form-field class="mat-form-field-fluid">
 									<mat-select
-										[(value)]="filterStatus"
-										(selectionChange)="loadCustomersList()"
+										[(value)]="filterEnterprise"
+										(selectionChange)="
+											doDropdownEnterpriseFilters(
+												$event.value
+											)
+										"
+										multiple
+										#filterEnterpriseDropdown
 									>
-										<mat-option value="">All</mat-option>
-										<mat-option value="0"
-											>Suspended</mat-option
-										>
-										<mat-option value="1"
-											>Active</mat-option
-										>
-										<mat-option value="Pending"
-											>Pending</mat-option
+										<mat-option
+											*ngFor="
+												let elem of enterpriseIDArray
+											"
+											[value]="elem"
+											>{{ elem }}</mat-option
 										>
 									</mat-select>
 									<mat-hint align="start">
-										<strong>Filter</strong> by Status
+										<strong>Filter</strong> by Enterprise
+										Name
 									</mat-hint>
 								</mat-form-field>
 							</div>
 						</div>
 
+						<!--						<div class="col-md-2 kt-margin-bottom-10-mobile">-->
+						<!--							<div class="kt-form__control">-->
+						<!--								<mat-form-field class="mat-form-field-fluid">-->
+						<!--									<mat-select-->
+						<!--										[(value)]="filterProductID"-->
+						<!--										(selectionChange)="-->
+						<!--											doDropdownFilters($event.value)-->
+						<!--										"-->
+						<!--										#filterProductIDDropdown-->
+						<!--										multiple-->
+						<!--									>-->
+						<!--										<mat-option-->
+						<!--											*ngFor="let elem of productIDArray"-->
+						<!--											[value]="elem"-->
+						<!--											>{{ elem }}</mat-option-->
+						<!--										>-->
+						<!--									</mat-select>-->
+						<!--									<mat-hint align="start">-->
+						<!--										<strong>Filter</strong> by Product ID-->
+						<!--									</mat-hint>-->
+						<!--								</mat-form-field>-->
+						<!--							</div>-->
+						<!--						</div>-->
+
 						<div class="col-md-2 kt-margin-bottom-10-mobile">
+							<!-- 'm  margin-bottom-10-mobile' for adaptive make-up  -->
 							<div class="kt-form__control">
 								<mat-form-field class="mat-form-field-fluid">
 									<mat-select
-										[(value)]="filterType"
-										(selectionChange)="loadCustomersList()"
+										[(value)]="filterVulnerabilityStatus"
+										(selectionChange)="
+											doDropdownStatusFilters(
+												$event.value
+											)
+										"
+										#filterVulnerabilityStatusDropdown
 									>
-										<mat-option value="">All</mat-option>
-										<mat-option value="0"
-											>Business</mat-option
+										<mat-option value="AFFECTED"
+											>Affected</mat-option
 										>
-										<mat-option value="1"
-											>Individual</mat-option
+										<mat-option value="SAFE"
+											>Safe</mat-option
 										>
 									</mat-select>
 									<mat-hint align="start">
-										<strong>Filter</strong> by Type
+										<strong>Filter</strong> by Vulnerability
+										Status
 									</mat-hint>
 								</mat-form-field>
 							</div>
 						</div>
 
-						<div class="col-md-2 kt-margin-bottom-10-mobile">
-							<mat-form-field class="mat-form-field-fluid">
+						<div class="col-md-4 kt-margin-bottom-10-mobile">
+							<mat-form-field
+								class="mat-form-field-fluid"
+								style="color: black;"
+							>
 								<input
 									matInput
 									placeholder="Search"
-									#searchInput
+									(keyup)="doFilterText($event.target.value)"
+									[disabled]="
+										filterEnterprise.length > 0 ||
+										filterVulnerabilityStatus.length > 0
+									"
 								/>
 								<mat-hint align="start">
 									<strong>Search</strong> in all fields
@@ -225,13 +284,19 @@
 						}}</mat-cell>
 					</ng-container>
 
-					<ng-container matColumnDef="enterprise">
+					<ng-container matColumnDef="enterpriseID">
 						<mat-header-cell *matHeaderCellDef mat-sort-header
 							>Enterprise</mat-header-cell
 						>
-						<mat-cell *matCellDef="let device">{{
-							device.enterprise
-						}}</mat-cell>
+						<mat-cell *matCellDef="let device">
+							<a
+								mat-raised-button
+								routerLink="/dashboard"
+								color="accent"
+								class="enterprise-button"
+								>{{ device.enterpriseID }}</a
+							></mat-cell
+						>
 					</ng-container>
 
 					<ng-container matColumnDef="osVersion">
@@ -252,12 +317,12 @@
 						}}</mat-cell>
 					</ng-container>
 
-					<ng-container matColumnDef="model">
+					<ng-container matColumnDef="productID">
 						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>Model</mat-header-cell
+							>Product ID</mat-header-cell
 						>
 						<mat-cell *matCellDef="let device">{{
-							device.model
+							device.productID
 						}}</mat-cell>
 					</ng-container>
 
@@ -288,14 +353,17 @@
 							>
 								<mat-icon
 									*ngIf="
-										device.vulnerabilityStatus ===
-										'critical'
+										device.vulnerabilitiesFound &&
+										device.vulnerabilitiesFound.length >= 1
 									"
 									class="mat-icon-svg"
 									svgIcon="shield-failed"
 								></mat-icon>
 								<mat-icon
-									*ngIf="device.vulnerabilityStatus === 'ok'"
+									*ngIf="
+										device.vulnerabilitiesFound &&
+										device.vulnerabilitiesFound.length === 0
+									"
 									class="mat-icon-svg"
 									svgIcon="shield-success"
 								></mat-icon>
@@ -303,12 +371,12 @@
 						</mat-cell>
 					</ng-container>
 
-					<ng-container matColumnDef="lastScanDate">
+					<ng-container matColumnDef="lastScan">
 						<mat-header-cell *matHeaderCellDef mat-sort-header
 							>Last Scan Date</mat-header-cell
 						>
 						<mat-cell *matCellDef="let device">{{
-							device.lastScanDate | date: "short"
+							device.lastScan | date: "medium"
 						}}</mat-cell>
 					</ng-container>
 
@@ -361,7 +429,7 @@
 				<!--			<div class="mat-table__message" *ngIf="!dataSource.hasItems">-->
 				<div
 					class="mat-table__message"
-					*ngIf="dataSource.length === 0 && !(loading$ | async)"
+					*ngIf="dataSource.data.length === 0 && !(loading$ | async)"
 				>
 					No records found
 				</div>
@@ -384,8 +452,8 @@
 				<!-- See off.documentations 'https://material.angular.io/components/paginator/overview' -->
 				<mat-paginator
 					[pageSize]="10"
-					[pageSizeOptions]="[3, 5, 10, 20]"
-					[length]="dataSource.length"
+					[pageSizeOptions]="[5, 10, 20, 50, 100]"
+					[length]="dataSource.data.length"
 					[showFirstLastButtons]="true"
 				></mat-paginator>
 			</div>

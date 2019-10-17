@@ -15,6 +15,7 @@ import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../core/reducers/";
 import { isLoggedIn } from "../_selectors/auth.selectors";
 import { AuthService } from "../_services";
+import { environment } from "../../../../environments/environment";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -34,8 +35,10 @@ export class AuthGuard implements CanActivate {
 				const isTokenInvalid = this.auth.isTokenInvalid();
 
 				if (!loggedIn) {
+					localStorage.removeItem(environment.vscanJWT);
 					this.router.navigateByUrl("/auth/login");
 				} else if (isTokenInvalid) {
+					localStorage.removeItem(environment.vscanJWT);
 					this.router.navigateByUrl("/auth/login");
 					return false;
 				}
