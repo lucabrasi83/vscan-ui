@@ -56,7 +56,7 @@
     "ngx-loading": "^8.0.0",
     "ngx-perfect-scrollbar": "^8.0.0",
     "ngx-permissions": "^7.0.3",
-    "ngx-toastr": "^11.1.0",
+    "ngx-toastr": "^11.1.2",
     "object-path": "^0.11.4",
     "perfect-scrollbar": "^1.4.0",
     "popper.js": "^1.15.0",
