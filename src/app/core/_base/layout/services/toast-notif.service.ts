@@ -6,6 +6,7 @@ export class ToastNotifService {
 	toasterDefaults: Partial<IndividualConfig> = {
 		progressBar: true,
 		closeButton: true,
+		timeOut: 10000,
 		extendedTimeOut: 3000,
 		positionClass: "toast-top-center"
 	};

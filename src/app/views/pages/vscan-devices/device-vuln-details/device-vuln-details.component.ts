@@ -1,4 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+
+export interface DialogData {
+	animal: string;
+	name: string;
+}
 
 @Component({
 	selector: "vscan-device-vuln-details",
@@ -6,7 +12,20 @@ import { Component, OnInit } from "@angular/core";
 	styleUrls: ["./device-vuln-details.component.scss"]
 })
 export class DeviceVulnDetailsComponent implements OnInit {
-	constructor() {}
+	loading = true;
 
-	ngOnInit() {}
+	constructor(
+		public dialogRef: MatDialogRef<DeviceVulnDetailsComponent>,
+		@Inject(MAT_DIALOG_DATA) public data: DialogData
+	) {}
+
+	onNoClick(): void {
+		this.dialogRef.close();
+	}
+
+	ngOnInit() {
+		setTimeout(() => {
+			this.loading = false;
+		}, 3000);
+	}
 }

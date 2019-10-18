@@ -4,7 +4,7 @@ import {
 	HttpErrorResponse,
 	HttpHeaders
 } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
+import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { User } from "../_models/user.model";
 import { Permission, Role } from "..";
 import { catchError, map } from "rxjs/operators";
@@ -52,10 +52,12 @@ export class AuthService {
 	getUserTokenField(field: string): string {
 		const jwtHelper = new JwtHelperService();
 		const token = localStorage.getItem(environment.vscanJWT);
-
 		const val = jwtHelper.decodeToken(token);
 
 		return val[field];
+	}
+	isUserRoot(): boolean {
+		return this.getUserTokenField("role") === "vulscanoroot";
 	}
 	getUserByToken(): Observable<User> {
 		const userToken = localStorage.getItem(environment.vscanJWT);

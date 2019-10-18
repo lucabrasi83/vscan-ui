@@ -23,15 +23,18 @@
 
 .mat-option {
 	font-size: 12px !important;
-	font-family: Gotham-Light !important;
+	font-family: Gotham !important;
 	font-weight: normal !important;
 }
 
-//.mat-select {
-//	font-size: 12px !important;
-//	font-family: Gotham-Light !important;
-//	font-weight: normal !important;
-//}
+::ng-deep.mat-form-field-disabled .mat-form-field-underline {
+	background-image: linear-gradient(
+		to right,
+		rgba(216, 220, 230, 0.42)
+	) !important;
+	background-size: 1px 100% !important;
+	background-repeat: repeat-x !important;
+}
 
 .mat-cell:nth-child(2),
 .mat-header-cell:nth-child(2) {

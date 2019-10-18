@@ -45,7 +45,7 @@
 
 			<ng-container ktPortletTools>
 				<button
-					(click)="onClickSubject()"
+					(click)="openScanFlowDialog()"
 					mat-raised-button
 					matTooltip="Scan a new inventory device"
 					color="primary"
@@ -157,7 +157,12 @@
 							>
 								<input
 									matInput
-									placeholder="Search"
+									[placeholder]="
+										filterEnterprise.length > 0 ||
+										filterVulnerabilityStatus.length > 0
+											? 'Search Disabled'
+											: ''
+									"
 									(keyup)="doFilterText($event.target.value)"
 									[disabled]="
 										filterEnterprise.length > 0 ||
@@ -350,6 +355,7 @@
 								mat-icon-button
 								color="primary"
 								matTooltip="View Details"
+								(click)="openVulnDetailsDialog()"
 							>
 								<mat-icon
 									*ngIf="

@@ -16,13 +16,15 @@ import { AppState } from "../../../core/reducers/";
 import { isLoggedIn } from "../_selectors/auth.selectors";
 import { AuthService } from "../_services";
 import { environment } from "../../../../environments/environment";
+import { AuthNoticeService } from "../auth-notice/auth-notice.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 	constructor(
 		private store: Store<AppState>,
 		private router: Router,
-		private auth: AuthService
+		private auth: AuthService,
+		private notice: AuthNoticeService
 	) {}
 
 	canActivate(
@@ -36,9 +38,19 @@ export class AuthGuard implements CanActivate {
 
 				if (!loggedIn) {
 					localStorage.removeItem(environment.vscanJWT);
+					// Set Session Expired Flag
+					this.notice.setNotice(
+						"Session has expired. Please login again.",
+						"info"
+					);
 					this.router.navigateByUrl("/auth/login");
 				} else if (isTokenInvalid) {
 					localStorage.removeItem(environment.vscanJWT);
+					// Set Session Expired Flag
+					this.notice.setNotice(
+						"Session has expired. Please login again.",
+						"info"
+					);
 					this.router.navigateByUrl("/auth/login");
 					return false;
 				}

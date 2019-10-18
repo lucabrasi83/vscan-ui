@@ -26,9 +26,15 @@ import { MatChipsModule } from "@angular/material/chips";
 import { RouterModule } from "@angular/router";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { DeviceVulnDetailsComponent } from "./vscan-devices/device-vuln-details/device-vuln-details.component";
+import { MatDialogModule } from "@angular/material/dialog";
+import { VscanScanComponent } from "./vscan-devices/vscan-scan/vscan-scan.component";
 
 @NgModule({
-	declarations: [VscanDevicesComponent, DeviceVulnDetailsComponent],
+	declarations: [
+		VscanDevicesComponent,
+		DeviceVulnDetailsComponent,
+		VscanScanComponent
+	],
 	exports: [],
 	imports: [
 		CommonModule,
@@ -59,8 +65,10 @@ import { DeviceVulnDetailsComponent } from "./vscan-devices/device-vuln-details/
 		MatChipsModule,
 		RouterModule.forChild([]),
 		MatAutocompleteModule,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		MatDialogModule
 	],
+	entryComponents: [DeviceVulnDetailsComponent, VscanScanComponent],
 	providers: []
 })
 export class PagesModule {}

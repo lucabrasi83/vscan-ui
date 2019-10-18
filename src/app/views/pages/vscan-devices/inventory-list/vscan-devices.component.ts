@@ -18,6 +18,10 @@ import { catchError, map } from "rxjs/operators";
 import { MatTableDataSource } from "@angular/material/table";
 import { ToastNotifService } from "../../../../core/_base/layout/services/toast-notif.service";
 import { MatSelect } from "@angular/material/select";
+import { MatDialog } from "@angular/material/dialog";
+import { DeviceVulnDetailsComponent } from "../device-vuln-details/device-vuln-details.component";
+import { AuthService } from "../../../../core/auth/_services";
+import { VscanScanComponent } from "../vscan-scan/vscan-scan.component";
 
 @Component({
 	selector: "vscan-devices",
@@ -72,7 +76,9 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		private matIconRegistry: MatIconRegistry,
 		private domSanitizer: DomSanitizer,
 		private vscanAPI: VscanApiService,
-		private toastNotif: ToastNotifService
+		private toastNotif: ToastNotifService,
+		public dialog: MatDialog,
+		private auth: AuthService
 	) {
 		this.matIconRegistry.addSvgIcon(
 			"shield-success",
@@ -263,5 +269,29 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		this.filterVulnerabilityStatus = "";
 		this.dataSource.filter = "";
 		this.selection.clear();
+	}
+
+	openVulnDetailsDialog(): void {
+		const dialogRef = this.dialog.open(DeviceVulnDetailsComponent, {
+			width: "70%",
+			height: "60%",
+			data: { name: "hello" }
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			console.log("The dialog was closed " + result);
+		});
+	}
+
+	openScanFlowDialog(): void {
+		const dialogRef = this.dialog.open(VscanScanComponent, {
+			width: "70%",
+			height: "60%",
+			data: { name: "hello" }
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			console.log("The dialog was closed " + result);
+		});
 	}
 }

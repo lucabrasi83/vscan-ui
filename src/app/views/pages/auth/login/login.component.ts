@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 	// Public params
 	loginForm: FormGroup;
 	loading = false;
-	isLoggedIn$: Observable<boolean>;
 	errors: any = [];
 
 	private unsubscribe: Subject<any>;
@@ -160,7 +159,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 						this.store.dispatch(
 							new Login({ authToken: user.token })
 						);
-
 						this.router.navigateByUrl(this.returnUrl); // Main page
 
 						// Set Error Toast

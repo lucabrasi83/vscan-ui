@@ -48,3 +48,10 @@
 .position-static {
 	position: static;
 }
+
+// NGX Toastr
+.toast-container.toast-top-center .ngx-toastr {
+	width: 500px !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
