@@ -1,0 +1,25 @@
+<div
+	class="kt-portlet kt-portlet--body-progress kt-portlet--body-progress-overlay"
+>
+	<div class="kt-portlet__head kt-portlet__head__custom">
+		<div class="kt-portlet__head-label">
+			<h3 class="kt-portlet__head-title">Hello</h3>
+		</div>
+	</div>
+	<div class="kt-portlet__body">
+		<!--		<div class="kt-portlet__body-progress" *ngIf="!loading">-->
+		<!--			<mat-spinner [diameter]="40"></mat-spinner>-->
+		<!--		</div>-->
+		<div mat-dialog-content>
+			<pre
+				style="background-color: black;color: white;height:500px;font-size: 14px;padding:20px;"
+			><strong>Scan Job Logs</strong><br><br>{{ subject | async }}</pre>
+			<mat-form-field>
+				<input matInput [(ngModel)]="data.animal" />
+			</mat-form-field>
+		</div>
+		<div mat-dialog-actions>
+			<button mat-button (click)="onNoClick()">No Thanks</button>
+		</div>
+	</div>
+</div>
