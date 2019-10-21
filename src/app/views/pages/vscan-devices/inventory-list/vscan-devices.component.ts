@@ -271,11 +271,16 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		this.selection.clear();
 	}
 
+	scanSelectedDevices() {
+		this.openScanFlowDialog(this.selection.selected);
+	}
+
 	openVulnDetailsDialog(): void {
 		const dialogRef = this.dialog.open(DeviceVulnDetailsComponent, {
-			width: "70%",
-			height: "60%",
-			data: { name: "hello" }
+			width: "80%",
+			height: "70%",
+			data: { windowTitle: "Inventory Vulnerability Scan Workflow" },
+			autoFocus: false
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
@@ -283,11 +288,15 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		});
 	}
 
-	openScanFlowDialog(): void {
+	openScanFlowDialog(devices: any[]): void {
 		const dialogRef = this.dialog.open(VscanScanComponent, {
-			width: "70%",
-			height: "60%",
-			data: { name: "hello" }
+			width: "80%",
+			height: "70%",
+			data: {
+				windowTitle: "Inventory Vulnerability Scan Workflow",
+				selectedDevices: devices
+			},
+			autoFocus: false
 		});
 
 		dialogRef.afterClosed().subscribe(result => {

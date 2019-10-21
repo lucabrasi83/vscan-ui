@@ -1,25 +1,230 @@
 <div
 	class="kt-portlet kt-portlet--body-progress kt-portlet--body-progress-overlay"
 >
+	<ng-template #customLoadingTemplate>
+		<div class="mat-table__loading-spinner">
+			<h3>
+				Fetching Data...
+			</h3>
+		</div>
+	</ng-template>
+	<ngx-loading
+		[show]="loadingDialog"
+		[template]="customLoadingTemplate"
+	></ngx-loading>
 	<div class="kt-portlet__head kt-portlet__head__custom">
 		<div class="kt-portlet__head-label">
-			<h3 class="kt-portlet__head-title">Hello</h3>
+			<h3 class="kt-portlet__head-title">{{ data.windowTitle }}</h3>
+			<div class="dialog-close-button">
+				<button
+					class="close-icon"
+					mat-icon-button
+					color="warn"
+					(click)="onCloseDialog()"
+				>
+					<mat-icon>close</mat-icon>
+				</button>
+			</div>
 		</div>
 	</div>
 	<div class="kt-portlet__body">
-		<!--		<div class="kt-portlet__body-progress" *ngIf="!loading">-->
-		<!--			<mat-spinner [diameter]="40"></mat-spinner>-->
-		<!--		</div>-->
-		<div mat-dialog-content>
-			<pre
-				style="background-color: black;color: white;height:500px;font-size: 14px;padding:20px;"
-			><strong>Scan Job Logs</strong><br><br>{{ subject | async }}</pre>
-			<mat-form-field>
-				<input matInput [(ngModel)]="data.animal" />
-			</mat-form-field>
-		</div>
-		<div mat-dialog-actions>
-			<button mat-button (click)="onNoClick()">No Thanks</button>
+		<div mat-dialog-content style="overflow: hidden;">
+			<mat-horizontal-stepper [linear]="true" #stepper>
+				<mat-step [stepControl]="devicesFormGroup" [editable]="false">
+					<form [formGroup]="devicesFormGroup">
+						<ng-template matStepLabel
+							>Enter the devices ID's</ng-template
+						>
+						<div
+							style="flex-direction: column; display:flex;width:150px;margin-bottom: 10px;"
+						>
+							<mat-form-field style="width:800px;">
+								<mat-chip-list
+									#chipList
+									aria-label="Devices Selection"
+									formControlName="devicesCtrl"
+									required
+								>
+									<mat-chip
+										*ngFor="let dev of deviceSelectionChip"
+										[selectable]="true"
+										[removable]="true"
+										(removed)="onRemoveDeviceToScan(dev)"
+										>{{ dev }}
+										<mat-icon matChipRemove
+											>cancel</mat-icon
+										>
+									</mat-chip>
+									<input
+										matInput
+										placeholder="Device ID"
+										formControlName="devicesCtrl"
+										[matChipInputFor]="chipList"
+										[matChipInputSeparatorKeyCodes]="
+											separatorKeysCodes
+										"
+										[matChipInputAddOnBlur]="true"
+										(matChipInputTokenEnd)="
+											addDeviceToScan($event)
+										"
+										required
+										[matAutocomplete]="auto"
+										style="margin-top: 15px;"
+										#deviceInput
+									/>
+
+									<mat-autocomplete
+										#auto="matAutocomplete"
+										(optionSelected)="
+											onSelectDevice($event)
+										"
+									>
+										<mat-progress-bar
+											*ngIf="isSearching"
+											class="kt-loading"
+											mode="indeterminate"
+										></mat-progress-bar>
+										<mat-option *ngIf="isSearching"
+											>Loading...</mat-option
+										>
+										<ng-container *ngIf="!isSearching">
+											<mat-option
+												*ngFor="
+													let device of filteredDevices
+												"
+												[value]="device"
+											>
+												<span>{{ device }}</span>
+											</mat-option>
+										</ng-container>
+									</mat-autocomplete>
+								</mat-chip-list>
+								<mat-error
+									*ngIf="
+										deviceSelectionChip.length === 0 ||
+										devicesFormGroup.get('devicesCtrl')
+											.invalid
+									"
+									>Select at least one device</mat-error
+								>
+								<mat-error
+									*ngIf="
+										deviceSelectionChip.length > MAX_DEVICES
+									"
+									>A Maximum of {{ MAX_DEVICES }} devices can
+									be selected</mat-error
+								>
+							</mat-form-field>
+							<mat-form-field
+								style="margin-top:15px;width:220px;"
+							>
+								<mat-label>Target OS Type</mat-label>
+								<mat-select
+									formControlName="osTypeCtrl"
+									name="Target OS Type"
+									required
+								>
+									<mat-option
+										*ngFor="let os of supportedOS"
+										[value]="os"
+										>{{ os }}</mat-option
+									>
+								</mat-select>
+								<mat-error>Select the Target OS</mat-error>
+							</mat-form-field>
+							<mat-form-field
+								style="margin-top:15px;width:220px;"
+							>
+								<mat-label>Device Credentials</mat-label>
+								<mat-select
+									formControlName="credentialsCtrl"
+									name="Device Credentials"
+									required
+								>
+									<mat-option
+										*ngFor="
+											let cred of userDeviceCredentials
+										"
+										[value]="cred.credentialsName"
+										>{{ cred.credentialsName }}</mat-option
+									>
+								</mat-select>
+								<mat-error>Select device credentials</mat-error>
+							</mat-form-field>
+							<mat-form-field style="margin-top:15px;width:220px">
+								<mat-label>SSH Gateway</mat-label>
+								<mat-select
+									formControlName="sshGatewayCtrl"
+									name="SSH Gateway"
+								>
+									<mat-option
+										*ngFor="
+											let sshgw of enterpriseSSHGateway
+										"
+										[value]="sshgw.gatewayName"
+										>{{ sshgw.gatewayName }}</mat-option
+									>
+								</mat-select>
+							</mat-form-field>
+							<button
+								mat-raised-button
+								color="primary"
+								matStepperNext
+								(click)="onSubmitScan()"
+								style="margin-top: 20px;"
+							>
+								Launch Scan
+							</button>
+						</div>
+					</form>
+				</mat-step>
+				<mat-step [stepControl]="logStreamFormGroup">
+					<form [formGroup]="logStreamFormGroup">
+						<ng-template matStepLabel
+							>View Scan Job logs</ng-template
+						>
+						<!--						<mat-form-field>-->
+						<!--							<input-->
+						<!--								matInput-->
+						<!--								placeholder="Address"-->
+						<!--								formControlName="logStreamCtrl"-->
+						<!--								required-->
+						<!--							/>-->
+						<!--						</mat-form-field>-->
+						<pre
+							style="background-color: black;color: white;height:700px;font-size: 14px;padding:20px;overflow: scroll;"
+						><strong>Scan Job Logs</strong><br><br>{{ webSocketSubject | async }}</pre>
+						<div style="flex-direction: row">
+							<button
+								mat-raised-button
+								color="accent"
+								matStepperPrevious
+								style="margin-right: 10px;"
+							>
+								Back
+							</button>
+							<mat-bar-button
+								[options]="barButtonOptions"
+								style="margin-right: 10px;"
+								(btnClick)="stepper.next()"
+							>
+							</mat-bar-button>
+						</div>
+					</form>
+				</mat-step>
+				<mat-step>
+					<ng-template matStepLabel>Results</ng-template>
+					You are now done.
+					<div>
+						<button mat-raised-button matStepperPrevious>
+							Back
+						</button>
+						<button mat-raised-button (click)="stepper.reset()">
+							Reset
+						</button>
+					</div>
+				</mat-step>
+			</mat-horizontal-stepper>
 		</div>
 	</div>
 </div>

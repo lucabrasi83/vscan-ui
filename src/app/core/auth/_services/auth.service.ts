@@ -4,14 +4,18 @@ import {
 	HttpErrorResponse,
 	HttpHeaders
 } from "@angular/common/http";
-import { BehaviorSubject, Observable, throwError } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { User } from "../_models/user.model";
-import { Permission, Role } from "..";
+import { Permission } from "../_models/permission.model";
+import { Role } from "../_models/role.model";
 import { catchError, map } from "rxjs/operators";
 import { QueryParamsModel, QueryResultsModel } from "../../_base/crud";
 import { environment } from "../../../../environments/environment";
 import { JwtokenModel } from "../_models/jwtoken-model";
 import { JwtHelperService } from "@auth0/angular-jwt";
+import { AppState } from "../../reducers";
+import { select, Store } from "@ngrx/store";
+import { currentAuthToken } from "../_selectors/auth.selectors";
 
 // const API_USERS_URL = "api/users";
 const API_USERS_URL = environment.vscanAPIURL + "/login";
@@ -20,7 +24,7 @@ const API_ROLES_URL = "api/roles";
 
 @Injectable()
 export class AuthService {
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient, private store: Store<AppState>) {}
 
 	// Authentication/Authorization
 	login(email: string, password: string): Observable<JwtokenModel> {
@@ -51,14 +55,38 @@ export class AuthService {
 
 	getUserTokenField(field: string): string {
 		const jwtHelper = new JwtHelperService();
-		const token = localStorage.getItem(environment.vscanJWT);
-		const val = jwtHelper.decodeToken(token);
+		// const token = localStorage.getItem(environment.vscanJWT);
+		let userToken: string;
 
-		return val[field];
+		// Get Token from NGRX Store
+		this.store
+			.pipe(select(currentAuthToken))
+			.subscribe(token => (userToken = token));
+
+		try {
+			if (userToken) {
+				const val = jwtHelper.decodeToken(userToken);
+				return val[field];
+			}
+			return "unknown";
+		} catch (e) {
+			console.log(e);
+			return "unknown";
+		}
 	}
 	isUserRoot(): boolean {
 		return this.getUserTokenField("role") === "vulscanoroot";
 	}
+
+	getStoreToken(): string {
+		let currentToken: string = "";
+		this.store.pipe(select(currentAuthToken)).subscribe(token => {
+			currentToken = token;
+		});
+
+		return currentToken;
+	}
+
 	getUserByToken(): Observable<User> {
 		const userToken = localStorage.getItem(environment.vscanJWT);
 		const httpHeaders = new HttpHeaders();

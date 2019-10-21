@@ -28,6 +28,10 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { DeviceVulnDetailsComponent } from "./vscan-devices/device-vuln-details/device-vuln-details.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { VscanScanComponent } from "./vscan-devices/vscan-scan/vscan-scan.component";
+import { MatStepperModule } from "@angular/material/stepper";
+import { MatProgressButtonsModule } from "mat-progress-buttons";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
 
 @NgModule({
 	declarations: [
@@ -66,7 +70,11 @@ import { VscanScanComponent } from "./vscan-devices/vscan-scan/vscan-scan.compon
 		RouterModule.forChild([]),
 		MatAutocompleteModule,
 		ReactiveFormsModule,
-		MatDialogModule
+		MatDialogModule,
+		MatStepperModule,
+		MatProgressButtonsModule,
+		MatProgressBarModule,
+		PerfectScrollbarModule
 	],
 	entryComponents: [DeviceVulnDetailsComponent, VscanScanComponent],
 	providers: []
