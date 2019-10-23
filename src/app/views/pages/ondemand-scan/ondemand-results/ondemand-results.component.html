@@ -1,0 +1,223 @@
+<mat-card>
+	<mat-card-header>
+		<mat-card-title>Scan Job Summary</mat-card-title>
+		<mat-card-subtitle
+			>Job ID {{ scanResults.results.scanJobID }}</mat-card-subtitle
+		>
+	</mat-card-header>
+	<mat-card-content>
+		<mat-list>
+			<mat-list-item style="font-size: 14px;"
+				><u>Job Start Time:</u>&nbsp;&nbsp;{{
+					scanResults.results.scanJobStartTime | date: "medium"
+				}}</mat-list-item
+			>
+			<mat-list-item style="font-size: 14px;"
+				><u>Job End Time:</u>&nbsp;&nbsp;{{
+					scanResults.results.scanJobEndTime | date: "medium"
+				}}</mat-list-item
+			>
+
+			<mat-list-item style="font-size: 14px;"
+				><u>Job Agent:</u>&nbsp;&nbsp;{{
+					scanResults.results.scanJobAgent
+				}}</mat-list-item
+			>
+
+			<mat-list-item style="font-size: 14px;"
+				><u>Devices scanned:</u>&nbsp;&nbsp;
+
+				<span
+					style="margin-right:5px;font-size: 14px;"
+					class="kt-badge kt-badge--inline kt-badge--pill kt-badge--success kt-badge--wide kt-badge--elevate"
+					matTooltip="{{
+						scanResults.results.devicesScannedSuccess | join
+					}}"
+					>{{
+						scanResults.results.devicesScannedSuccess
+							? scanResults.results.devicesScannedSuccess.length
+							: 0
+					}}</span
+				>
+			</mat-list-item>
+			<mat-list-item style="font-size: 14px;"
+				><u>Devices failed:</u>&nbsp;&nbsp;
+
+				<span
+					style="margin-right:5px;font-size: 14px;"
+					class="kt-badge kt-badge--inline kt-badge--pill kt-badge--danger kt-badge--wide kt-badge--elevate"
+					matTooltip="{{
+						scanResults.results.devicesScannedFailure | join
+					}}"
+					>{{
+						scanResults.results.devicesScannedFailure
+							? scanResults.results.devicesScannedFailure.length
+							: 0
+					}}</span
+				>
+			</mat-list-item>
+			<mat-list-item style="font-size: 14px;"
+				><u>Devices skipped:</u>&nbsp;&nbsp;
+
+				<span
+					style="margin-right:5px;font-size: 14px;"
+					class="kt-badge kt-badge--inline kt-badge--pill kt-badge--info kt-badge--wide kt-badge--elevate"
+					matTooltip="{{
+						scanResults.results.devicesScannedSkipped | join
+					}}"
+					>{{
+						scanResults.results.devicesScannedSkipped
+							? scanResults.results.devicesScannedSkipped.length
+							: 0
+					}}</span
+				>
+			</mat-list-item>
+		</mat-list>
+	</mat-card-content>
+</mat-card>
+<div class="kt-separator"></div>
+<div class="kt-section">
+	<mat-accordion class="result-headers-align">
+		<div *ngFor="let scanRes of scanResults.results.vulnFoundDetails">
+			<mat-expansion-panel>
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						{{ scanRes.deviceName }}
+					</mat-panel-title>
+					<mat-panel-description>
+						Vulnerabilities Found
+						{{ scanRes.totalVulnerabilitiesFound }}
+					</mat-panel-description>
+				</mat-expansion-panel-header>
+
+				<div style="font-family:'Gotham-Light', sans-serif;">
+					<ngx-datatable
+						class="material"
+						rowHeight="auto"
+						[rows]="scanRes.vulnerabilitiesFoundDetails"
+						[sortType]="SortType.multi"
+						[columnMode]="ColumnMode.force"
+					>
+						<ngx-datatable-column
+							name="Advisory ID"
+							prop="advisoryId"
+							[width]="350"
+						>
+							<ng-template
+								let-value="value"
+								let-row="row"
+								ngx-datatable-cell-template
+							>
+								<a
+									href="{{ row.publicationUrl }}"
+									target="_blank"
+									class="kt-link"
+									><strong>{{ value }}</strong></a
+								>
+							</ng-template>
+						</ngx-datatable-column>
+						<ngx-datatable-column
+							name="Advisory Title"
+							prop="advisoryTitle"
+							[width]="600"
+						>
+							<ng-template
+								let-value="value"
+								ngx-datatable-cell-template
+							>
+								{{ value }}
+							</ng-template>
+						</ngx-datatable-column>
+						<ngx-datatable-column
+							name="Publication Date"
+							prop="firstPublished"
+							[width]="120"
+						>
+							<ng-template
+								let-value="value"
+								ngx-datatable-cell-template
+							>
+								{{ value | date: "mediumDate" }}
+							</ng-template>
+						</ngx-datatable-column>
+						<ngx-datatable-column
+							name="CVE"
+							prop="cves"
+							[width]="200"
+						>
+							<ng-template
+								let-value="value"
+								ngx-datatable-cell-template
+							>
+								<div style="white-space: pre-line">
+									<div *ngFor="let val of value">
+										<a
+											class="kt-link"
+											href="https://nvd.nist.gov/vuln/detail/{{
+												val
+											}}"
+											target="_blank"
+											>{{ val }}</a
+										>
+									</div>
+								</div>
+							</ng-template>
+						</ngx-datatable-column>
+						<ngx-datatable-column
+							name="Security Impact"
+							prop="sir"
+							[width]="150"
+						>
+							<ng-template
+								let-value="value"
+								let-row="row"
+								ngx-datatable-cell-template
+							>
+								<mat-chip-list>
+									<mat-chip
+										color="accent"
+										[ngClass]="{
+											'sir-medium': row.sir === 'Medium',
+											'sir-high': row.sir === 'High',
+											'sir-critical':
+												row.sir === 'Critical'
+										}"
+										>{{ value }}</mat-chip
+									>
+								</mat-chip-list>
+							</ng-template>
+						</ngx-datatable-column>
+						<ngx-datatable-column
+							name="CVSS Score"
+							prop="cvssBaseScore"
+							[width]="150"
+						>
+							<ng-template
+								let-value="value"
+								let-row="row"
+								ngx-datatable-cell-template
+							>
+								<mat-chip-list>
+									<mat-chip
+										color="accent"
+										[ngClass]="{
+											'sir-medium':
+												+row.cvssBaseScore >= 4 &&
+												+row.cvssBaseScore <= 7,
+											'sir-high':
+												+row.cvssBaseScore > 7 &&
+												+row.cvssBaseScore < 9,
+											'sir-critical':
+												+row.cvssBaseScore >= 9
+										}"
+										>{{ value | number }}</mat-chip
+									>
+								</mat-chip-list>
+							</ng-template>
+						</ngx-datatable-column>
+					</ngx-datatable>
+				</div>
+			</mat-expansion-panel>
+		</div>
+	</mat-accordion>
+</div>

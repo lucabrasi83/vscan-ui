@@ -1,0 +1,271 @@
+<kt-portlet>
+	<div style="position: relative">
+		<ng-template #customLoadingTemplate>
+			<div class="mat-table__loading-spinner">
+				<h3>
+					Fetching Data...
+				</h3>
+			</div>
+		</ng-template>
+		<ngx-loading
+			[show]="loadingDialog"
+			[template]="customLoadingTemplate"
+		></ngx-loading>
+		<kt-portlet-header [class]="'kt-portlet__head--lg'">
+			<ng-container ktPortletTitle>
+				<h3 class="kt-portlet__head-title">
+					<span translate="ECOMMERCE.CUSTOMERS.CUSTOMERS_LIST"
+						>On Demand Scan</span
+					>
+				</h3>
+				<!-- For localisations we use @ngx-translate | See off. documentations => https://github.com/ngx-translate/core -->
+				<!-- Localization libraries (en/fr) are here => '../../../.././config/i18n/en.ts|fr.ts' -->
+			</ng-container>
+		</kt-portlet-header>
+		<kt-portlet-body>
+			<!--		<div class="row align-items-center">-->
+			<mat-horizontal-stepper [linear]="true" #stepper>
+				<mat-step
+					[stepControl]="deviceDetailsFormGroup"
+					[editable]="false"
+				>
+					<form [formGroup]="deviceDetailsFormGroup">
+						<ng-template matStepLabel
+							>Enter Device Details</ng-template
+						>
+						<div style="display: flex; flex-direction: column;">
+							<div formArrayName="deviceDetails">
+								<div
+									*ngFor="
+										let device of deviceDetailsFormGroup.get(
+											'deviceDetails'
+										).controls;
+										let i = index
+									"
+									[formGroupName]="i"
+								>
+									<div
+										style="display: flex;flex-direction: row;"
+									>
+										<div
+											class="col-md-4 kt-margin-bottom-10-mobile"
+										>
+											<mat-form-field
+												class="mat-form-field-fluid"
+												style="color:black;"
+											>
+												<input
+													matInput
+													placeholder="Device Name"
+													required
+													formControlName="hostnameCtrl"
+												/>
+												<mat-error
+													>Enter a device
+													hostname</mat-error
+												>
+											</mat-form-field>
+										</div>
+										<div class="kt-margin-right-30"></div>
+										<div
+											class="col-md-2 kt-margin-bottom-10-mobile"
+										>
+											<mat-form-field
+												class="mat-form-field-fluid"
+												style="color:black;"
+											>
+												<input
+													matInput
+													placeholder="IP Address"
+													required
+													formControlName="ipAddressCtrl"
+												/>
+												<mat-error
+													>Enter a valid IP
+													Address</mat-error
+												>
+											</mat-form-field>
+										</div>
+										<div class="kt-margin-right-30"></div>
+										<button
+											*ngIf="i === 0"
+											mat-icon-button
+											color="primary"
+											matTooltip="Add row"
+											(click)="addNewDevice()"
+											[disabled]="
+												deviceDetailsFormGroup.get(
+													'deviceDetails'
+												).invalid
+											"
+										>
+											<mat-icon class="add-device-icon"
+												>add</mat-icon
+											>
+										</button>
+										<button
+											*ngIf="i === 0"
+											mat-icon-button
+											color="warn"
+											matTooltip="Delete row"
+											(click)="removeDevice()"
+											[disabled]="
+												deviceDetailsFormGroup.get(
+													'deviceDetails'
+												).value.length < 2
+											"
+										>
+											<mat-icon class="add-device-icon"
+												>clear</mat-icon
+											>
+										</button>
+									</div>
+								</div>
+							</div>
+
+							<div>
+								<button
+									mat-raised-button
+									color="primary"
+									matStepperNext
+									style="margin-top: 25px;"
+								>
+									Next
+								</button>
+							</div>
+						</div>
+					</form>
+				</mat-step>
+				<mat-step
+					[stepControl]="scanSettingDetailsFormGroup"
+					[editable]="false"
+				>
+					<form [formGroup]="scanSettingDetailsFormGroup">
+						<ng-template matStepLabel
+							>Enter connection details</ng-template
+						>
+						<div style="display: flex;flex-direction: column;">
+							<div
+								class="mat-form-field-fluid kt-margin-bottom-20"
+							>
+								<mat-form-field style="width:250px;">
+									<mat-label>Select Target OS</mat-label>
+									<mat-select
+										formControlName="osTypeCtrl"
+										required
+									>
+										<mat-option
+											*ngFor="let os of supportedOS"
+											[value]="os"
+											>{{ os }}</mat-option
+										>
+									</mat-select>
+									<mat-error
+										>Select device target OS</mat-error
+									>
+								</mat-form-field>
+							</div>
+							<div
+								class="mat-form-field-fluid kt-margin-bottom-20"
+							>
+								<mat-form-field style="width:250px;">
+									<mat-label>Select Credentials</mat-label>
+									<mat-select
+										formControlName="credentialsCtrl"
+										required
+									>
+										<mat-option
+											*ngFor="
+												let cred of userDeviceCredentials
+											"
+											[value]="cred.credentialsName"
+											>{{
+												cred.credentialsName
+											}}</mat-option
+										>
+									</mat-select>
+									<mat-error
+										>Select device credentials</mat-error
+									>
+								</mat-form-field>
+							</div>
+							<div
+								class="mat-form-field-fluid kt-margin-bottom-20"
+							>
+								<mat-form-field style="width:250px;">
+									<mat-label>SSH Gateway</mat-label>
+									<mat-select
+										formControlName="sshGatewayCtrl"
+										name="SSH Gateway"
+									>
+										<mat-option
+											*ngFor="
+												let sshgw of enterpriseSSHGateway
+											"
+											[value]="sshgw.gatewayName"
+											>{{ sshgw.gatewayName }}</mat-option
+										>
+									</mat-select>
+								</mat-form-field>
+							</div>
+						</div>
+						<div>
+							<button
+								mat-raised-button
+								color="accent"
+								matStepperPrevious
+								style="margin-right: 15px;margin-top: 25px;"
+							>
+								Back
+							</button>
+							<button
+								mat-raised-button
+								color="primary"
+								matStepperNext
+								(click)="onSubmitScan()"
+								style="margin-top: 25px;"
+							>
+								Launch Scan
+							</button>
+						</div>
+					</form>
+				</mat-step>
+				<mat-step [stepControl]="logStreamFormGroup">
+					<form [formGroup]="logStreamFormGroup">
+						<ng-template matStepLabel
+							>View Scan Job logs</ng-template
+						>
+
+						<pre
+							#logStreamContent
+							style="background-color: black;color: white;height:700px;font-size: 14px;padding:20px;"
+						><strong>Scan Job Logs</strong><br><br>{{ webSocketSubject | async }}</pre>
+						<div style="flex-direction: row">
+							<button
+								mat-raised-button
+								color="primary"
+								(click)="onCopyLogContent()"
+								style="margin-right: 10px;"
+							>
+								Copy Logs
+							</button>
+							<mat-bar-button
+								[options]="barButtonOptions"
+								style="margin-right: 10px;"
+								(btnClick)="stepper.next()"
+							>
+							</mat-bar-button>
+						</div>
+					</form>
+				</mat-step>
+				<mat-step>
+					<ng-template matStepLabel>Scan Results</ng-template>
+					<vscan-ondemand-results
+						*ngIf="scanResults"
+						[scanResults]="scanResults"
+					></vscan-ondemand-results>
+				</mat-step>
+			</mat-horizontal-stepper>
+		</kt-portlet-body>
+	</div>
+</kt-portlet>
