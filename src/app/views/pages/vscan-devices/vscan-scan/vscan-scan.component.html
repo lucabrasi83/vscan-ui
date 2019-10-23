@@ -1,6 +1,4 @@
-<div
-	class="kt-portlet kt-portlet--body-progress kt-portlet--body-progress-overlay"
->
+<div class="kt-portlet">
 	<ng-template #customLoadingTemplate>
 		<div class="mat-table__loading-spinner">
 			<h3>
@@ -28,7 +26,7 @@
 		</div>
 	</div>
 	<div class="kt-portlet__body">
-		<div mat-dialog-content style="overflow: hidden;">
+		<div mat-dialog-content style="overflow: hidden;max-height:100%;">
 			<mat-horizontal-stepper [linear]="true" #stepper>
 				<mat-step [stepControl]="devicesFormGroup" [editable]="false">
 					<form [formGroup]="devicesFormGroup">
@@ -109,10 +107,11 @@
 								>
 								<mat-error
 									*ngIf="
-										deviceSelectionChip.length > MAX_DEVICES
+										deviceSelectionChip.length >
+										maxDevicesScan
 									"
-									>A Maximum of {{ MAX_DEVICES }} devices can
-									be selected</mat-error
+									>A Maximum of {{ maxDevicesScan }} devices
+									can be selected</mat-error
 								>
 							</mat-form-field>
 							<mat-form-field
@@ -183,25 +182,19 @@
 						<ng-template matStepLabel
 							>View Scan Job logs</ng-template
 						>
-						<!--						<mat-form-field>-->
-						<!--							<input-->
-						<!--								matInput-->
-						<!--								placeholder="Address"-->
-						<!--								formControlName="logStreamCtrl"-->
-						<!--								required-->
-						<!--							/>-->
-						<!--						</mat-form-field>-->
+
 						<pre
-							style="background-color: black;color: white;height:700px;font-size: 14px;padding:20px;overflow: scroll;"
+							#logStreamContent
+							style="background-color: black;color: white;height:700px;font-size: 14px;padding:20px;"
 						><strong>Scan Job Logs</strong><br><br>{{ webSocketSubject | async }}</pre>
 						<div style="flex-direction: row">
 							<button
 								mat-raised-button
-								color="accent"
-								matStepperPrevious
+								color="primary"
+								(click)="onCopyLogContent()"
 								style="margin-right: 10px;"
 							>
-								Back
+								Copy Logs
 							</button>
 							<mat-bar-button
 								[options]="barButtonOptions"
@@ -213,16 +206,11 @@
 					</form>
 				</mat-step>
 				<mat-step>
-					<ng-template matStepLabel>Results</ng-template>
-					You are now done.
-					<div>
-						<button mat-raised-button matStepperPrevious>
-							Back
-						</button>
-						<button mat-raised-button (click)="stepper.reset()">
-							Reset
-						</button>
-					</div>
+					<ng-template matStepLabel>Scan Results</ng-template>
+					<vscan-scan-results
+						*ngIf="scanResults"
+						[scanResults]="scanResults"
+					></vscan-scan-results>
 				</mat-step>
 			</mat-horizontal-stepper>
 		</div>

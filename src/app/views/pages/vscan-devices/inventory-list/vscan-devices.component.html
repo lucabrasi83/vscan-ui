@@ -304,6 +304,22 @@
 						>
 					</ng-container>
 
+					<ng-container matColumnDef="osType">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>OS Type</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device">
+							<span
+								class="kt-badge kt-badge--inline kt-badge--pill kt-badge--{{
+									device.osType
+								}} kt-badge--{{
+									device.osType
+								}} kt-badge--wide kt-badge--elevate"
+								>{{ device.osType }}</span
+							>
+						</mat-cell>
+					</ng-container>
+
 					<ng-container matColumnDef="osVersion">
 						<mat-header-cell *matHeaderCellDef mat-sort-header
 							>OS Version</mat-header-cell

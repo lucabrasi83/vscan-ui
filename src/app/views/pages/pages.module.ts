@@ -32,12 +32,22 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { MatProgressButtonsModule } from "mat-progress-buttons";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
+import { ScanResultsComponent } from "./vscan-devices/vscan-scan/scan-results/scan-results.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatListModule } from "@angular/material/list";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { NgxDatatableModule } from "@swimlane/ngx-datatable";
+import { OndemandScanComponent } from "./ondemand-scan/ondemand-scan.component";
+import { OndemandResultsComponent } from "./ondemand-scan/ondemand-results/ondemand-results.component";
 
 @NgModule({
 	declarations: [
 		VscanDevicesComponent,
 		DeviceVulnDetailsComponent,
-		VscanScanComponent
+		VscanScanComponent,
+		ScanResultsComponent,
+		OndemandScanComponent,
+		OndemandResultsComponent
 	],
 	exports: [],
 	imports: [
@@ -74,7 +84,11 @@ import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
 		MatStepperModule,
 		MatProgressButtonsModule,
 		MatProgressBarModule,
-		PerfectScrollbarModule
+		PerfectScrollbarModule,
+		MatCardModule,
+		MatListModule,
+		MatExpansionModule,
+		NgxDatatableModule
 	],
 	entryComponents: [DeviceVulnDetailsComponent, VscanScanComponent],
 	providers: []

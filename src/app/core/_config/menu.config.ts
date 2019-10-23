@@ -420,25 +420,14 @@ export class MenuConfig {
 					root: true,
 					bullet: "dot",
 					icon: "flaticon-security",
-					submenu: [
-						{
-							title: "View Devices",
-							page: "/devices",
-							bullet: "dot"
-						},
-						{
-							title: "View Inventories",
-							bullet: "dot",
-							page: "/material/navigation/menu"
-						}
-					]
+					page: "/scan/devices"
 				},
 				{
 					title: "On Demand Scan",
 					root: true,
 					bullet: "dot",
 					icon: "flaticon3-cyber-security",
-					page: "/ngbootstrap/accordion"
+					page: "/scan/ondemand"
 				},
 
 				{

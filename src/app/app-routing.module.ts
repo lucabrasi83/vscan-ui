@@ -7,6 +7,7 @@ import { ErrorPageComponent } from "./views/theme/content/error-page/error-page.
 // Auth
 import { AuthGuard } from "./core/auth";
 import { VscanDevicesComponent } from "./views/pages/vscan-devices/inventory-list/vscan-devices.component";
+import { OndemandScanComponent } from "./views/pages/ondemand-scan/ondemand-scan.component";
 
 const routes: Routes = [
 	{
@@ -37,8 +38,13 @@ const routes: Routes = [
 					)
 			},
 			{
-				path: "devices",
+				path: "scan/devices",
 				component: VscanDevicesComponent,
+				canActivate: [AuthGuard]
+			},
+			{
+				path: "scan/ondemand",
+				component: OndemandScanComponent,
 				canActivate: [AuthGuard]
 			},
 			{

@@ -1,17 +1,15 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import {
-	InventoryDeviceModel,
-	InventoryDevices
-} from "./device.inventory.model";
+import { InventoryDevices } from "./device.inventory.model";
 import { Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { catchError } from "rxjs/operators";
 import { AuthService } from "../auth/_services";
 import { DeviceUserCredentials } from "./device.credentials.model";
-import { getIndexHtmlPath } from "@angular/material/schematics/ng-add/fonts/project-index-html";
 import { SSHGateways } from "./ssh.gateway.model";
 import { InventoryScanRequest } from "./inventory.scan.model";
+import { InventoryScanResultsModel } from "./inventory.scan.results.model";
+import { OndemandScanResultsModel } from "./ondemand.scan.results.model";
 
 const ADHOC_SCAN_URL = environment.vscanAPIURL + "/admin/on-demand-scan";
 const DEVICES_API_URL = environment.vscanAPIURL + "/devices/all";
@@ -23,6 +21,9 @@ const ALL_ENTERPRISE_SSH_GATEWAYS =
 
 const INVENTORY_SCAN_URL =
 	environment.vscanAPIURL + "/scan/bulk-anuta-inventory";
+
+const ON_DEMAND_SCAN_URL =
+	environment.vscanAPIURL + "/admin/bulk-on-demand-scan";
 
 @Injectable({
 	providedIn: "root"
@@ -82,12 +83,29 @@ export class VscanApiService {
 			.pipe(catchError(this.auth.handleError));
 	}
 
-	launchInventoryScan(req: InventoryScanRequest): Observable<any> {
+	launchInventoryScan(
+		req: InventoryScanRequest
+	): Observable<InventoryScanResultsModel> {
 		const httpHeaders = new HttpHeaders();
 		httpHeaders.set("Content-Type", "application/json");
 
 		return this.http
-			.post<any>(INVENTORY_SCAN_URL, req, { headers: httpHeaders })
+			.post<InventoryScanResultsModel>(INVENTORY_SCAN_URL, req, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	launchOnDemandScan(
+		req: InventoryScanRequest
+	): Observable<OndemandScanResultsModel> {
+		const httpHeaders = new HttpHeaders();
+		httpHeaders.set("Content-Type", "application/json");
+
+		return this.http
+			.post<OndemandScanResultsModel>(ON_DEMAND_SCAN_URL, req, {
+				headers: httpHeaders
+			})
 			.pipe(catchError(this.auth.handleError));
 	}
 }

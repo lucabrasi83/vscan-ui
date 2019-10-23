@@ -21,7 +21,10 @@ import { MatSelect } from "@angular/material/select";
 import { MatDialog } from "@angular/material/dialog";
 import { DeviceVulnDetailsComponent } from "../device-vuln-details/device-vuln-details.component";
 import { AuthService } from "../../../../core/auth/_services";
-import { VscanScanComponent } from "../vscan-scan/vscan-scan.component";
+import {
+	MAX_DEVICES,
+	VscanScanComponent
+} from "../vscan-scan/vscan-scan.component";
 
 @Component({
 	selector: "vscan-devices",
@@ -40,6 +43,7 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		"vulnerabilityStatus",
 		"productID",
 		"mgmtIP",
+		"osType",
 		"osVersion",
 		"lastScan"
 	];
@@ -154,10 +158,16 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 	 * Toggle all selections
 	 */
 	masterToggle() {
-		if (this.selection.selected.length === this.deviceResults.length) {
+		if (
+			this.selection.selected.length ===
+			this.dataSource.filteredData.length
+		) {
 			this.selection.clear();
 		} else {
-			this.deviceResults.forEach(row => this.selection.select(row));
+			// this.deviceResults.forEach(row => this.selection.select(row));
+			this.dataSource.filteredData.forEach(row =>
+				this.selection.select(row)
+			);
 		}
 	}
 
@@ -228,6 +238,7 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 				data.deviceID.trim().toLocaleLowerCase() +
 				data.productID.trim().toLocaleLowerCase() +
 				data.mgmtIP.trim().toLocaleLowerCase() +
+				data.osType.trim().toLocaleLowerCase() +
 				data.osVersion.trim().toLocaleLowerCase();
 
 			return (
@@ -272,6 +283,13 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 	}
 
 	scanSelectedDevices() {
+		if (this.selection.selected.length > MAX_DEVICES) {
+			this.toastNotif.errorToastNotif(
+				`A maximum of ${MAX_DEVICES} devices can be selected for a single job scan`,
+				"Too many devices selected"
+			);
+			return;
+		}
 		this.openScanFlowDialog(this.selection.selected);
 	}
 

@@ -16,6 +16,7 @@ import { VscanApiService } from "../../../../core/vscan-api/vscan-api.service";
 import {
 	catchError,
 	debounceTime,
+	distinctUntilChanged,
 	finalize,
 	switchMap,
 	tap
@@ -32,6 +33,10 @@ import { InventoryDeviceModel } from "../../../../core/vscan-api/device.inventor
 import { DeviceCredential } from "../../../../core/vscan-api/device.credentials.model";
 import { EnterpriseSSHGateway } from "../../../../core/vscan-api/ssh.gateway.model";
 import { InventoryScanRequest } from "../../../../core/vscan-api/inventory.scan.model";
+import { ClipboardService } from "ngx-clipboard";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { InventoryScanResultsModel } from "../../../../core/vscan-api/inventory.scan.results.model";
+import { VscanSupportedOS } from "../../../../core/vscan-api/supported.os.model";
 
 const DEVICE_SEARCH_API_URL =
 	environment.vscanAPIURL + "/devices/search?pattern=";
@@ -40,6 +45,8 @@ export interface ScanSelectedDevicesData {
 	windowTitle: string;
 	selectedDevices: InventoryDeviceModel[];
 }
+// Maximum Devices supported in one scan job
+export const MAX_DEVICES = 20;
 
 @Component({
 	selector: "vscan-vscan-scan",
@@ -47,9 +54,6 @@ export interface ScanSelectedDevicesData {
 	styleUrls: ["./vscan-scan.component.scss"]
 })
 export class VscanScanComponent implements OnInit, OnDestroy {
-	// Maximum Devices supported in one scan job
-	MAX_DEVICES = 20;
-
 	// Unique Hash to generate for log file stream request
 	hash: string | Int32Array = this.generateLogStreamHash();
 
@@ -69,6 +73,9 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 	// Chip separators
 	readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
+	// Max Devices Allowed to scan in same job
+	maxDevicesScan = MAX_DEVICES;
+
 	// Device Selection Chip
 	deviceSelectionChip: string[] = [];
 
@@ -84,13 +91,20 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 	loadingDialog = true;
 
 	// Supported OS for OVAL scans
-	supportedOS = ["IOS", "IOS-XE"];
+	supportedOS = VscanSupportedOS;
 
 	// User Device Credentials
 	userDeviceCredentials: DeviceCredential[] = [];
 
 	// Enterprise SSH Gateway
 	enterpriseSSHGateway: EnterpriseSSHGateway[] = [];
+
+	// Log Stream View
+	@ViewChild("logStreamContent", { static: false })
+	logStreamContent: ElementRef;
+
+	// Scan Results
+	scanResults: InventoryScanResultsModel;
 
 	constructor(
 		public dialogRef: MatDialogRef<VscanScanComponent>,
@@ -99,6 +113,8 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 		private toastNotif: ToastNotifService,
 		private _formBuilder: FormBuilder,
 		private http: HttpClient,
+		private _clipboardService: ClipboardService,
+		private _snackBar: MatSnackBar,
 		@Inject(MAT_DIALOG_DATA) public data: ScanSelectedDevicesData
 	) {}
 
@@ -131,7 +147,7 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 			sshGatewayCtrl: [""]
 		});
 		this.logStreamFormGroup = this._formBuilder.group({
-			logStreamCtrl: ["", Validators.required]
+			logStreamCtrl: [""]
 		});
 
 		// Devices Search
@@ -139,6 +155,7 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 			.get("devicesCtrl")
 			.valueChanges.pipe(
 				debounceTime(500),
+				distinctUntilChanged(),
 				tap(() => {
 					this.filteredDevices = [];
 					this.isSearching = true;
@@ -173,7 +190,7 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 			this.devicesFormGroup.get("osTypeCtrl").setValue("IOS-XE");
 		}
 
-		// Fetch User Data from VSCAN API
+		// Fetch SSH Gateway and Credential in parallel from VSCAN API
 		let deviceCredentials = this.vscan.getAllUserDeviceCredentials();
 		let enterpriseSSHGWS = this.vscan.getAllEnterpriseSSHGateways();
 
@@ -215,9 +232,10 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 		const input = event.input;
 		const value = event.value;
 
-		// if ((value || "").trim()) {
-		// 	this.deviceSelectionChip.push(value.trim());
-		// }
+		// Fallback to manual entry if no devices found in the backend
+		if ((value || "").trim() && this.filteredDevices.length === 0) {
+			this.deviceSelectionChip.push(value.trim());
+		}
 
 		// Reset the input value
 		if (input) {
@@ -226,7 +244,7 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 
 		this.chipList.errorState =
 			this.deviceSelectionChip.length === 0 ||
-			this.deviceSelectionChip.length > this.MAX_DEVICES;
+			this.deviceSelectionChip.length > MAX_DEVICES;
 
 		if (this.chipList.errorState) {
 			this.devicesFormGroup.controls.devicesCtrl.setValue(null);
@@ -244,7 +262,7 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 		}
 		this.chipList.errorState =
 			this.deviceSelectionChip.length === 0 ||
-			this.deviceSelectionChip.length > this.MAX_DEVICES;
+			this.deviceSelectionChip.length > MAX_DEVICES;
 
 		if (this.chipList.errorState) {
 			this.devicesFormGroup.controls.devicesCtrl.setValue(null);
@@ -256,13 +274,21 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 	}
 
 	onSelectDevice(event: MatAutocompleteSelectedEvent): void {
-		this.deviceSelectionChip.push(event.option.value);
+		// Verify the device does not already exist in the array
+		const idx = this.deviceSelectionChip.indexOf(event.option.value);
+
+		idx === -1
+			? this.deviceSelectionChip.push(event.option.value)
+			: this.toastNotif.warningToastNotif(
+					`You have already selected device ${event.option.value}`,
+					"Duplicate device selected"
+			  );
 
 		this.deviceInput.nativeElement.value = "";
 
 		this.chipList.errorState =
 			this.deviceSelectionChip.length === 0 ||
-			this.deviceSelectionChip.length > this.MAX_DEVICES;
+			this.deviceSelectionChip.length > MAX_DEVICES;
 
 		if (this.chipList.errorState) {
 			this.devicesFormGroup.controls.devicesCtrl.setValue(null);
@@ -292,9 +318,16 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 		this.vscan
 			.launchInventoryScan(body)
 			.pipe(
-				tap(() => {
+				tap((res: InventoryScanResultsModel) => {
 					this.barButtonOptions.active = false;
 					this.barButtonOptions.text = "View Results";
+
+					this.toastNotif.successToastNotif(
+						`Scan Job ${res["results"]["scanJobID"]} successfully executed.`,
+						"Scan Job" + " Completed"
+					);
+
+					this.scanResults = res;
 				}),
 
 				catchError(err => {
@@ -302,16 +335,14 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 					this.barButtonOptions.active = false;
 					this.barButtonOptions.disabled = true;
 					this.barButtonOptions.text = "No Results";
+
+					this.logStreamFormGroup
+						.get("logStreamCtrl")
+						.setErrors({ incorrect: true });
 					return of(err);
 				})
 			)
-			.subscribe(res => {
-				console.log(res);
-				this.toastNotif.successToastNotif(
-					`Scan Job ${res["results"]["scanJobID"]} successfully executed.`,
-					"Scan Job" + " Completed"
-				);
-			});
+			.subscribe();
 	}
 
 	buildScanRequest(): InventoryScanRequest {
@@ -337,5 +368,14 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 		);
 
 		return requestObj;
+	}
+
+	onCopyLogContent() {
+		this._clipboardService.copyFromContent(
+			this.logStreamContent.nativeElement.textContent
+		);
+		this._snackBar.open("Logs copied to clipboard", "Dismiss", {
+			duration: 3000
+		});
 	}
 }

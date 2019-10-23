@@ -16,6 +16,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 import { AppState } from "../../reducers";
 import { select, Store } from "@ngrx/store";
 import { currentAuthToken } from "../_selectors/auth.selectors";
+import { AuthNoticeService } from "../auth-notice/auth-notice.service";
 
 // const API_USERS_URL = "api/users";
 const API_USERS_URL = environment.vscanAPIURL + "/login";
@@ -24,7 +25,11 @@ const API_ROLES_URL = "api/roles";
 
 @Injectable()
 export class AuthService {
-	constructor(private http: HttpClient, private store: Store<AppState>) {}
+	constructor(
+		private http: HttpClient,
+		private store: Store<AppState>,
+		private notice: AuthNoticeService
+	) {}
 
 	// Authentication/Authorization
 	login(email: string, password: string): Observable<JwtokenModel> {
@@ -44,6 +49,15 @@ export class AuthService {
 		try {
 			if (userToken) {
 				isExpired = jwtHelper.isTokenExpired(userToken);
+
+				if (isExpired) {
+					// Set Session Expired Flag
+					this.notice.setNotice(
+						"Your session has expired. Please login again.",
+						"info"
+					);
+				}
+
 				return isExpired;
 			}
 		} catch (e) {
