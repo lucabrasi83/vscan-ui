@@ -99,6 +99,10 @@ export function hljsLanguages(): HighlightLanguage[] {
 	];
 }
 
+export function jwtTokenGetter() {
+	return localStorage.getItem(environment.vscanJWT);
+}
+
 // @ts-ignore
 @NgModule({
 	declarations: [AppComponent],
@@ -129,9 +133,8 @@ export function hljsLanguages(): HighlightLanguage[] {
 		ToastrModule.forRoot(), // ToastrModule added,
 		JwtModule.forRoot({
 			config: {
-				tokenGetter: () => {
-					return localStorage.getItem(environment.vscanJWT);
-				},
+				tokenGetter: jwtTokenGetter,
+
 				whitelistedDomains: [
 					"localhost:4200",
 					"vscan.asdlab.net",

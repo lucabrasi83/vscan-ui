@@ -1,10 +1,10 @@
 // Angular
-import { Component, HostBinding, OnInit, Input } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { Component, HostBinding, OnInit, Input } from "@angular/core";
+import { NavigationStart, Router } from "@angular/router";
 // RxJS
-import { filter } from 'rxjs/operators';
+import { filter } from "rxjs/operators";
 // Translate
-import { TranslationService } from '../../../../../core/_base/layout';
+import { TranslationService } from "../../../../../core/_base/layout";
 
 interface LanguageFlag {
 	lang: string;
@@ -14,46 +14,46 @@ interface LanguageFlag {
 }
 
 @Component({
-	selector: 'kt-language-selector',
-	templateUrl: './language-selector.component.html',
+	selector: "kt-language-selector",
+	templateUrl: "./language-selector.component.html"
 })
 export class LanguageSelectorComponent implements OnInit {
 	// Public properties
-	@HostBinding('class') classes = '';
-	@Input() iconType: '' | 'brand';
+	@HostBinding("class") classes = "";
+	@Input() iconType: "" | "brand";
 
 	language: LanguageFlag;
 	languages: LanguageFlag[] = [
 		{
-			lang: 'en',
-			name: 'English',
-			flag: './assets/media/flags/012-uk.svg'
-		},
-		{
-			lang: 'ch',
-			name: 'Mandarin',
-			flag: './assets/media/flags/015-china.svg'
-		},
-		{
-			lang: 'es',
-			name: 'Spanish',
-			flag: './assets/media/flags/016-spain.svg'
-		},
-		{
-			lang: 'jp',
-			name: 'Japanese',
-			flag: './assets/media/flags/014-japan.svg'
-		},
-		{
-			lang: 'de',
-			name: 'German',
-			flag: './assets/media/flags/017-germany.svg'
-		},
-		{
-			lang: 'fr',
-			name: 'French',
-			flag: './assets/media/flags/019-france.svg'
-		},
+			lang: "en",
+			name: "English",
+			flag: "./assets/media/flags/012-uk.svg"
+		}
+		// {
+		// 	lang: 'ch',
+		// 	name: 'Mandarin',
+		// 	flag: './assets/media/flags/015-china.svg'
+		// },
+		// {
+		// 	lang: 'es',
+		// 	name: 'Spanish',
+		// 	flag: './assets/media/flags/016-spain.svg'
+		// },
+		// {
+		// 	lang: 'jp',
+		// 	name: 'Japanese',
+		// 	flag: './assets/media/flags/014-japan.svg'
+		// },
+		// {
+		// 	lang: 'de',
+		// 	name: 'German',
+		// 	flag: './assets/media/flags/017-germany.svg'
+		// },
+		// {
+		// 	lang: 'fr',
+		// 	name: 'French',
+		// 	flag: './assets/media/flags/019-france.svg'
+		// },
 	];
 
 	/**
@@ -62,8 +62,10 @@ export class LanguageSelectorComponent implements OnInit {
 	 * @param translationService: TranslationService
 	 * @param router: Router
 	 */
-	constructor(private translationService: TranslationService, private router: Router) {
-	}
+	constructor(
+		private translationService: TranslationService,
+		private router: Router
+	) {}
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
