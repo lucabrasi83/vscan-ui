@@ -1,26 +1,292 @@
-<div
-	class="kt-portlet kt-portlet--body-progress kt-portlet--body-progress-overlay"
->
+<div class="mat-table__loading-spinner" *ngIf="loadingDialog">
+	<mat-spinner diameter="60"></mat-spinner>
+</div>
+<div class="kt-portlet" *ngIf="!loadingDialog">
 	<div class="kt-portlet__head kt-portlet__head__custom">
 		<div class="kt-portlet__head-label">
-			<h3 class="kt-portlet__head-title">Hello</h3>
+			<h3 class="kt-portlet__head-title">Vulnerability Details</h3>
+			<div class="dialog-close-button">
+				<button
+					class="close-icon"
+					mat-icon-button
+					color="warn"
+					(click)="onCloseDialog()"
+				>
+					<mat-icon>close</mat-icon>
+				</button>
+			</div>
 		</div>
 	</div>
+
 	<div class="kt-portlet__body">
-		<div class="kt-portlet__body-progress" *ngIf="loading">
-			<mat-spinner
-				[diameter]="40"
-				style="align-items: center;justify-content: center;"
-			></mat-spinner>
+		<div mat-dialog-content style="overflow: hidden;max-height:100%;">
+			<mat-card style="margin-bottom: 5px;">
+				<mat-card-header>
+					<mat-card-title>{{ data.windowTitle }}</mat-card-title>
+					<mat-card-subtitle>Inventory Information</mat-card-subtitle>
+				</mat-card-header>
+				<mat-card-content>
+					<mat-list>
+						<mat-list-item style="font-size: 14px;"
+							><u>Hostname:</u>&nbsp;&nbsp;
+							<mat-chip-list>
+								<mat-chip
+									style="background-color: #ea7926;color: white;"
+								>
+									{{ data.details[0].deviceHostname }}
+								</mat-chip>
+							</mat-chip-list>
+						</mat-list-item>
+						<mat-list-item style="font-size: 14px;"
+							><u>Mgmt IP:</u>&nbsp;&nbsp;
+							<mat-chip-list>
+								<mat-chip>
+									{{ data.details[0].mgmtIP }}
+								</mat-chip>
+							</mat-chip-list>
+						</mat-list-item>
+
+						<mat-list-item style="font-size: 14px;"
+							><u>OS Type:</u>&nbsp;&nbsp;
+
+							<mat-chip-list>
+								<mat-chip
+									style="background-color: rgba(48,70,223,0.82);color: white;"
+								>
+									{{ data.details[0].osType }}
+								</mat-chip>
+							</mat-chip-list>
+						</mat-list-item>
+
+						<mat-list-item style="font-size: 14px;"
+							><u>OS Version:</u>&nbsp;&nbsp;
+							<mat-chip-list>
+								<mat-chip>
+									{{ data.details[0].osVersion }}
+								</mat-chip>
+							</mat-chip-list>
+						</mat-list-item>
+
+						<mat-list-item style="font-size: 14px;"
+							><u>Product ID:</u>&nbsp;&nbsp;
+
+							<mat-chip-list>
+								<mat-chip>
+									{{ data.details[0].productID }}
+								</mat-chip>
+							</mat-chip-list>
+						</mat-list-item>
+						<mat-list-item style="font-size: 14px;"
+							><u>Serial Number:</u>&nbsp;&nbsp;
+
+							<mat-chip-list>
+								<mat-chip>
+									{{ data.details[0].serialNumber }}
+								</mat-chip>
+							</mat-chip-list>
+						</mat-list-item>
+						<mat-list-item style="font-size: 14px;"
+							><u>Suggested Software:</u>&nbsp;&nbsp;
+							<mat-chip-list>
+								<mat-chip
+									style="background-color: #31bb77; color: white;"
+								>
+									{{ data.details[0].suggestedSW }}
+								</mat-chip>
+							</mat-chip-list>
+						</mat-list-item>
+					</mat-list>
+				</mat-card-content>
+			</mat-card>
 		</div>
-		<div mat-dialog-content>
-			<p>What's your favorite animal?</p>
-			<mat-form-field>
-				<input matInput [(ngModel)]="data.animal" />
-			</mat-form-field>
-		</div>
-		<div mat-dialog-actions>
-			<button mat-button (click)="onNoClick()">No Thanks</button>
+		<div style="margin-bottom: 20px;"></div>
+		<div class="kt-section">
+			<mat-accordion class="result-headers-align">
+				<mat-expansion-panel>
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							Last Scan:&nbsp;&nbsp;{{
+								data.details[0].lastScan | date: "medium"
+							}}
+						</mat-panel-title>
+						<mat-panel-description>
+							Vulnerabilities Found
+							{{ data.details[0].vulnerabilitiesFound.length }}
+						</mat-panel-description>
+					</mat-expansion-panel-header>
+
+					<div
+						style="font-family:'Gotham-Light', sans-serif;"
+						*ngIf="
+							deviceVulnerabilities &&
+							deviceVulnerabilities.results !==
+								'no vulnerability found for this device'
+						"
+					>
+						<ngx-datatable
+							class="material"
+							rowHeight="auto"
+							[rows]="deviceVulnerabilities.results"
+							[sortType]="SortType.multi"
+							[columnMode]="ColumnMode.force"
+						>
+							<ngx-datatable-column
+								name="Advisory ID"
+								prop="advisoryID"
+								[width]="350"
+							>
+								<ng-template
+									let-value="value"
+									let-row="row"
+									ngx-datatable-cell-template
+								>
+									<a
+										href="{{ row.publicationURL }}"
+										target="_blank"
+										class="kt-link"
+										><strong>{{ value }}</strong></a
+									>
+								</ng-template>
+							</ngx-datatable-column>
+							<ngx-datatable-column
+								name="Advisory Title"
+								prop="advisoryTitle"
+								[width]="600"
+							>
+								<ng-template
+									let-value="value"
+									ngx-datatable-cell-template
+								>
+									{{ value }}
+								</ng-template>
+							</ngx-datatable-column>
+							<ngx-datatable-column
+								name="Publication Date"
+								prop="publicationDate"
+								[width]="150"
+							>
+								<ng-template
+									let-value="value"
+									ngx-datatable-cell-template
+								>
+									{{ value | date: "mediumDate" }}
+								</ng-template>
+							</ngx-datatable-column>
+							<ngx-datatable-column
+								name="CVE"
+								prop="cve"
+								[width]="200"
+							>
+								<ng-template
+									let-value="value"
+									ngx-datatable-cell-template
+								>
+									<div style="white-space: pre-line">
+										<div *ngFor="let val of value">
+											<a
+												class="kt-link"
+												href="https://nvd.nist.gov/vuln/detail/{{
+													val
+												}}"
+												target="_blank"
+												>{{ val }}</a
+											>
+										</div>
+									</div>
+								</ng-template>
+							</ngx-datatable-column>
+							<ngx-datatable-column
+								name="Security Impact"
+								prop="sir"
+								[width]="150"
+							>
+								<ng-template
+									let-value="value"
+									let-row="row"
+									ngx-datatable-cell-template
+								>
+									<mat-chip-list>
+										<mat-chip
+											color="accent"
+											[ngClass]="{
+												'sir-medium':
+													row.sir === 'Medium',
+												'sir-high': row.sir === 'High',
+												'sir-critical':
+													row.sir === 'Critical'
+											}"
+											>{{ value }}</mat-chip
+										>
+									</mat-chip-list>
+								</ng-template>
+							</ngx-datatable-column>
+							<ngx-datatable-column
+								name="CVSS Score"
+								prop="cvss"
+								[width]="150"
+							>
+								<ng-template
+									let-value="value"
+									let-row="row"
+									ngx-datatable-cell-template
+								>
+									<mat-chip-list>
+										<mat-chip
+											color="accent"
+											[ngClass]="{
+												'sir-medium':
+													+row.cvss >= 4 &&
+													+row.cvss <= 7,
+												'sir-high':
+													+row.cvss > 7 &&
+													+row.cvss < 9,
+												'sir-critical': +row.cvss >= 9
+											}"
+											>{{ value | number }}</mat-chip
+										>
+									</mat-chip-list>
+								</ng-template>
+							</ngx-datatable-column>
+						</ngx-datatable>
+					</div>
+				</mat-expansion-panel>
+				<mat-expansion-panel>
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							View Vulnerability History
+						</mat-panel-title>
+					</mat-expansion-panel-header>
+					<div
+						*ngIf="
+							deviceHistoryVuln &&
+							deviceHistoryVuln.results &&
+							!isdeviceHistoryVulnArray()
+						"
+					>
+						<p style="font-family:'Gotham-Light', sans-serif;">
+							No History available for this device
+						</p>
+					</div>
+					<div
+						style="display: flex;flex-direction: row;height: 40%;width: 70%;margin:auto;"
+						*ngIf="
+							deviceHistoryVuln &&
+							deviceHistoryVuln.results &&
+							isdeviceHistoryVulnArray()
+						"
+					>
+						<canvas
+							baseChart
+							[datasets]="barChartData"
+							[labels]="barChartLabels"
+							[options]="barChartOptions"
+							[legend]="barChartLegend"
+							[chartType]="barChartType"
+						>
+						</canvas>
+					</div>
+				</mat-expansion-panel>
+			</mat-accordion>
 		</div>
 	</div>
 </div>

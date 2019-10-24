@@ -256,15 +256,6 @@
 								(btnClick)="stepper.next()"
 							>
 							</mat-bar-button>
-							<button
-								mat-raised-button
-								color="warn"
-								(click)="onStepperReset()"
-								style="margin-right: 10px;"
-								[disabled]="barButtonOptions.active"
-							>
-								Reset Workflow
-							</button>
 						</div>
 					</form>
 				</mat-step>
@@ -276,6 +267,15 @@
 					></vscan-ondemand-results>
 				</mat-step>
 			</mat-horizontal-stepper>
+			<button
+				mat-raised-button
+				color="warn"
+				(click)="onStepperReset()"
+				style="margin: auto;"
+				[disabled]="barButtonOptions.active"
+			>
+				Reset Workflow
+			</button>
 		</kt-portlet-body>
 	</div>
 </kt-portlet>

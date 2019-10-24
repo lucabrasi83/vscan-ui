@@ -315,6 +315,7 @@
 								}} kt-badge--{{
 									device.osType
 								}} kt-badge--wide kt-badge--elevate"
+								style="font-size: 12px;"
 								>{{ device.osType }}</span
 							>
 						</mat-cell>
@@ -351,27 +352,13 @@
 						<mat-header-cell *matHeaderCellDef
 							>Status</mat-header-cell
 						>
-						<!--						<mat-cell *matCellDef="let customer">-->
-						<!--							<span-->
-						<!--								class="kt-badge kt-badge&#45;&#45;{{-->
-						<!--									getItemCssClassByType(customer.type)-->
-						<!--								}} kt-badge&#45;&#45;dot"-->
-						<!--							></span-->
-						<!--							>&nbsp;-->
-						<!--							<span-->
-						<!--								class="kt&#45;&#45;font-bold kt-font-{{-->
-						<!--									getItemCssClassByType(customer.type)-->
-						<!--								}}"-->
-						<!--								>{{ getItemTypeString(customer.type) }}</span-->
-						<!--							>-->
-						<!--						</mat-cell>-->
 
 						<mat-cell *matCellDef="let device">
 							<button
 								mat-icon-button
 								color="primary"
 								matTooltip="View Details"
-								(click)="openVulnDetailsDialog()"
+								(click)="openVulnDetailsDialog(device.deviceID)"
 							>
 								<mat-icon
 									*ngIf="

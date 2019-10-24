@@ -1,15 +1,7 @@
-<div class="kt-portlet">
-	<ng-template #customLoadingTemplate>
-		<div class="mat-table__loading-spinner">
-			<h3>
-				Fetching Data...
-			</h3>
-		</div>
-	</ng-template>
-	<ngx-loading
-		[show]="loadingDialog"
-		[template]="customLoadingTemplate"
-	></ngx-loading>
+<div class="mat-table__loading-spinner" *ngIf="loadingDialog">
+	<mat-spinner diameter="60"></mat-spinner>
+</div>
+<div class="kt-portlet" *ngIf="!loadingDialog">
 	<div class="kt-portlet__head kt-portlet__head__custom">
 		<div class="kt-portlet__head-label">
 			<h3 class="kt-portlet__head-title">{{ data.windowTitle }}</h3>

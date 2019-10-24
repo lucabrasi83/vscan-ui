@@ -293,11 +293,20 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		this.openScanFlowDialog(this.selection.selected);
 	}
 
-	openVulnDetailsDialog(): void {
+	openVulnDetailsDialog(devid: string): void {
+		// Get the particular device inventory details
+		let devDetails = this.dataSource.data.filter(item => {
+			return item.deviceID === devid;
+		});
+
 		const dialogRef = this.dialog.open(DeviceVulnDetailsComponent, {
-			width: "80%",
-			height: "70%",
-			data: { windowTitle: "Inventory Vulnerability Scan Workflow" },
+			width: "85%",
+			height: "80%",
+			data: {
+				windowTitle: `${devid}`,
+				device: devid,
+				details: devDetails
+			},
 			autoFocus: false
 		});
 

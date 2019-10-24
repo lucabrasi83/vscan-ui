@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card style="margin-bottom: 5px;">
 	<mat-card-header>
 		<mat-card-title>Scan Job Summary</mat-card-title>
 		<mat-card-subtitle
@@ -73,7 +73,7 @@
 		</mat-list>
 	</mat-card-content>
 </mat-card>
-<div class="kt-separator"></div>
+<div style="margin-bottom: 20px;"></div>
 <div class="kt-section">
 	<mat-accordion class="result-headers-align">
 		<div *ngFor="let scanRes of scanResults.results.devicesScanResults">
@@ -129,7 +129,7 @@
 						<ngx-datatable-column
 							name="Publication Date"
 							prop="firstPublished"
-							[width]="120"
+							[width]="150"
 						>
 							<ng-template
 								let-value="value"

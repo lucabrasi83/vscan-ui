@@ -10,8 +10,11 @@ import { SSHGateways } from "./ssh.gateway.model";
 import { InventoryScanRequest } from "./inventory.scan.model";
 import { InventoryScanResultsModel } from "./inventory.scan.results.model";
 import { OndemandScanResultsModel } from "./ondemand.scan.results.model";
+import {
+	DeviceVulnerabilitiesHistoryModel,
+	DeviceVulnerabilitiesModel
+} from "./device.vulnerabilities.model";
 
-const ADHOC_SCAN_URL = environment.vscanAPIURL + "/admin/on-demand-scan";
 const DEVICES_API_URL = environment.vscanAPIURL + "/devices/all";
 const ALL_USER_DEVICE_CREDENTIALS =
 	environment.vscanAPIURL + "/device-credentials/all";
@@ -23,7 +26,10 @@ const INVENTORY_SCAN_URL =
 	environment.vscanAPIURL + "/scan/bulk-anuta-inventory";
 
 const ON_DEMAND_SCAN_URL =
-	environment.vscanAPIURL + "/admin/bulk-on-demand-scan";
+	environment.vscanAPIURL + "/scan/bulk-on-demand-scan";
+
+const DEVICE_VULNERABILITIES_URL =
+	environment.vscanAPIURL + "/vulnerabilities/device/";
 
 @Injectable({
 	providedIn: "root"
@@ -42,21 +48,35 @@ export class VscanApiService {
 			.pipe(catchError(this.auth.handleError));
 	}
 
-	launchAdHocScan(hash: string | Int32Array): Observable<any> {
+	getDeviceVulnerabilities(
+		dev: string
+	): Observable<DeviceVulnerabilitiesModel> {
 		const httpHeaders = new HttpHeaders();
 		httpHeaders.set("Content-Type", "application/json");
 
 		return this.http
-			.post<any>(
-				ADHOC_SCAN_URL,
+			.get<DeviceVulnerabilitiesModel>(DEVICE_VULNERABILITIES_URL + dev, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	getDeviceHistoryVuln(
+		dev: string,
+		ent: string
+	): Observable<DeviceVulnerabilitiesHistoryModel> {
+		const httpHeaders = new HttpHeaders();
+		httpHeaders.set("Content-Type", "application/json");
+
+		return this.http
+			.get<DeviceVulnerabilitiesHistoryModel>(
+				DEVICE_VULNERABILITIES_URL +
+					dev +
+					"/history?recordLimit=10&enterpriseID=" +
+					ent,
 				{
-					hostname: "CSR1000V_RTR6",
-					ip: "192.168.1.13",
-					osType: "IOS-XE",
-					credentialsName: "seb-lab-creds",
-					logStreamHashReq: hash
-				},
-				{ headers: httpHeaders }
+					headers: httpHeaders
+				}
 			)
 			.pipe(catchError(this.auth.handleError));
 	}

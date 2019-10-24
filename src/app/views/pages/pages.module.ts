@@ -39,6 +39,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { OndemandScanComponent } from "./ondemand-scan/ondemand-scan.component";
 import { OndemandResultsComponent } from "./ondemand-scan/ondemand-results/ondemand-results.component";
+import { ChartsModule } from "ng2-charts";
 
 @NgModule({
 	declarations: [
@@ -88,7 +89,8 @@ import { OndemandResultsComponent } from "./ondemand-scan/ondemand-results/ondem
 		MatCardModule,
 		MatListModule,
 		MatExpansionModule,
-		NgxDatatableModule
+		NgxDatatableModule,
+		ChartsModule
 	],
 	entryComponents: [DeviceVulnDetailsComponent, VscanScanComponent],
 	providers: []

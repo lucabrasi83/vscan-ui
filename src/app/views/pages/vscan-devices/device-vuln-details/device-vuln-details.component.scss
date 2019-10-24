@@ -1,0 +1,37 @@
+.close-icon {
+	transform: scale(1.2);
+	color: black;
+	border-radius: 50%;
+	background-color: rgba(178, 178, 178, 0.43);
+}
+
+.dialog-close-button {
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.kt-link {
+	border-bottom: 1px solid transparent;
+}
+
+.sir-medium {
+	background-color: #ffe52f;
+	color: black;
+	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.sir-high {
+	background-color: #ff8823;
+	color: white;
+	font-weight: bold;
+	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.sir-critical {
+	background-color: #ff2c34;
+	color: white;
+	font-weight: bold;
+	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}

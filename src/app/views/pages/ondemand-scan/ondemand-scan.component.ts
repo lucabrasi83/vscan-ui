@@ -17,7 +17,7 @@ import {
 } from "@angular/forms";
 import { VscanSupportedOS } from "../../../core/vscan-api/supported.os.model";
 import { forkJoin, of, throwError } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
+import { catchError, finalize, tap } from "rxjs/operators";
 import { VscanApiService } from "../../../core/vscan-api/vscan-api.service";
 import { ToastNotifService } from "../../../core/_base/layout/services/toast-notif.service";
 import { DeviceCredential } from "../../../core/vscan-api/device.credentials.model";
@@ -246,6 +246,16 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 			return;
 		}
 
+		// Mark Form controls as invalid if empty
+		if (
+			this.scanSettingDetailsFormGroup.get("osTypeCtrl").value === "" ||
+			this.scanSettingDetailsFormGroup.get("credentialsCtrl").value === ""
+		) {
+			this.scanSettingDetailsFormGroup.markAllAsTouched();
+			this.barButtonOptions.active = false;
+			return;
+		}
+
 		// Scan Request body
 		let body = this.buildScanRequest();
 
@@ -290,6 +300,14 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 						.get("logStreamCtrl")
 						.setErrors({ incorrect: true });
 					return of(err);
+				}),
+				finalize(() => {
+					this.barButtonOptions.active = false;
+					this.barButtonOptions.disabled = true;
+					this.barButtonOptions.text = "No Results";
+
+					this.deviceDetailsFormGroup.markAsUntouched();
+					this.scanSettingDetailsFormGroup.markAsUntouched();
 				})
 			)
 			.subscribe();

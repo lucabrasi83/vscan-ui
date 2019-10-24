@@ -11,7 +11,7 @@ export class InventoryDeviceModel {
 	osVersion?: string;
 	deviceModel?: string;
 	serialNumber?: string;
-	suggestedSw?: string;
+	suggestedSW?: string;
 	deviceHostname?: string;
 	productID?: string;
 	vulnerabilitiesFound?: string[];
@@ -32,7 +32,7 @@ export class InventoryDeviceModel {
 		this.osVersion = "";
 		this.deviceModel = "";
 		this.serialNumber = "";
-		this.suggestedSw = "";
+		this.suggestedSW = "";
 		this.deviceHostname = "";
 		this.productID = "";
 		this.vulnerabilitiesFound = [];

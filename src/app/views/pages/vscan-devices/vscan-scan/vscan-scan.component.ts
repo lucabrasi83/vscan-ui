@@ -4,7 +4,6 @@ import {
 	Inject,
 	OnDestroy,
 	OnInit,
-	TemplateRef,
 	ViewChild
 } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
@@ -86,8 +85,6 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 	@ViewChild("deviceInput", { static: false }) deviceInput: ElementRef;
 
 	// Loading Template
-	@ViewChild("customLoadingTemplate", { static: false })
-	customLoadingTemplate: TemplateRef<any>;
 	loadingDialog = true;
 
 	// Supported OS for OVAL scans
