@@ -59,6 +59,9 @@
 													placeholder="Device Name"
 													required
 													formControlName="hostnameCtrl"
+													[errorStateMatcher]="
+														errorMatcher
+													"
 												/>
 												<mat-error
 													>Enter a device
@@ -79,6 +82,9 @@
 													placeholder="IP Address"
 													required
 													formControlName="ipAddressCtrl"
+													[errorStateMatcher]="
+														errorMatcher
+													"
 												/>
 												<mat-error
 													>Enter a valid IP
@@ -127,7 +133,7 @@
 								<button
 									mat-raised-button
 									color="primary"
-									matStepperNext
+									(click)="onValidateDeviceForm()"
 									style="margin-top: 25px;"
 								>
 									Next
@@ -153,6 +159,7 @@
 									<mat-select
 										formControlName="osTypeCtrl"
 										required
+										[errorStateMatcher]="errorMatcher"
 									>
 										<mat-option
 											*ngFor="let os of supportedOS"
@@ -173,6 +180,7 @@
 									<mat-select
 										formControlName="credentialsCtrl"
 										required
+										[errorStateMatcher]="errorMatcher"
 									>
 										<mat-option
 											*ngFor="
@@ -197,6 +205,7 @@
 									<mat-select
 										formControlName="sshGatewayCtrl"
 										name="SSH Gateway"
+										[errorStateMatcher]="errorMatcher"
 									>
 										<mat-option
 											*ngFor="
@@ -210,14 +219,6 @@
 							</div>
 						</div>
 						<div>
-							<button
-								mat-raised-button
-								color="accent"
-								matStepperPrevious
-								style="margin-right: 15px;margin-top: 25px;"
-							>
-								Back
-							</button>
 							<button
 								mat-raised-button
 								color="primary"
@@ -255,6 +256,15 @@
 								(btnClick)="stepper.next()"
 							>
 							</mat-bar-button>
+							<button
+								mat-raised-button
+								color="warn"
+								(click)="onStepperReset()"
+								style="margin-right: 10px;"
+								[disabled]="barButtonOptions.active"
+							>
+								Reset Workflow
+							</button>
 						</div>
 					</form>
 				</mat-step>

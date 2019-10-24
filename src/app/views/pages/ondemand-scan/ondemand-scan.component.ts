@@ -6,7 +6,15 @@ import {
 	TemplateRef,
 	ViewChild
 } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+	FormArray,
+	FormBuilder,
+	FormControl,
+	FormGroup,
+	FormGroupDirective,
+	NgForm,
+	Validators
+} from "@angular/forms";
 import { VscanSupportedOS } from "../../../core/vscan-api/supported.os.model";
 import { forkJoin, of, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
@@ -25,9 +33,21 @@ import { environment } from "../../../../environments/environment";
 import { webSocket } from "rxjs/webSocket";
 import { InventoryScanRequest } from "../../../core/vscan-api/inventory.scan.model";
 import { OndemandScanResultsModel } from "../../../core/vscan-api/ondemand.scan.results.model";
+import { MatStepper } from "@angular/material/stepper";
+import { ErrorStateMatcher } from "@angular/material/core";
 
 const ipaddressPattern =
 	"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+
+// define custom ErrorStateMatcher
+export class CustomErrorStateMatcher implements ErrorStateMatcher {
+	isErrorState(
+		control: FormControl,
+		form: NgForm | FormGroupDirective | null
+	) {
+		return control && control.invalid && control.touched;
+	}
+}
 
 @Component({
 	selector: "vscan-ondemand-scan",
@@ -42,6 +62,9 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 
 	// Unique Hash to generate for log file stream request
 	hash: string | Int32Array = this.generateLogStreamHash();
+
+	// create instance of custom ErrorStateMatcher
+	errorMatcher = new CustomErrorStateMatcher();
 
 	// Initialize JWT Token from NGRX Store
 	currentUserToken: string = "";
@@ -66,6 +89,9 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 	// Log Stream View
 	@ViewChild("logStreamContent", { static: false })
 	logStreamContent: ElementRef;
+
+	// Mat Stepper
+	@ViewChild("stepper", { static: false }) stepper: MatStepper;
 
 	// Progress Button options during scan request
 	barButtonOptions: MatProgressButtonOptions = {
@@ -241,10 +267,14 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 
 					this.toastNotif.successToastNotif(
 						`Scan Job ${res["results"]["scanJobID"]} successfully executed.`,
-						"Scan Job" + " Completed"
+						"Scan Job Completed"
 					);
 
 					this.scanResults = res;
+
+					this.deviceDetailsFormGroup.markAsUntouched();
+					this.logStreamFormGroup.markAsUntouched();
+					this.scanSettingDetailsFormGroup.markAsUntouched();
 				}),
 
 				catchError(err => {
@@ -252,6 +282,9 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 					this.barButtonOptions.active = false;
 					this.barButtonOptions.disabled = true;
 					this.barButtonOptions.text = "No Results";
+
+					this.deviceDetailsFormGroup.markAsUntouched();
+					this.scanSettingDetailsFormGroup.markAsUntouched();
 
 					this.logStreamFormGroup
 						.get("logStreamCtrl")
@@ -301,5 +334,42 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 		this._snackBar.open("Logs copied to clipboard", "Dismiss", {
 			duration: 3000
 		});
+	}
+	onStepperReset() {
+		this.stepper.reset();
+
+		this.barButtonOptions = {
+			active: true,
+			text: "Scanning...",
+			buttonColor: "accent",
+			barColor: undefined,
+			raised: true,
+			stroked: false,
+			mode: "indeterminate",
+			value: 0,
+			disabled: false,
+			fullWidth: false,
+			buttonIcon: {
+				fontIcon: "security"
+			}
+		};
+	}
+
+	onValidateDeviceForm() {
+		let devices = this.deviceDetailsFormGroup.get("deviceDetails").value;
+
+		let foundEmpty = false;
+		devices.forEach(item => {
+			if (item.ipAddressCtrl === "" || item.hostname === "") {
+				foundEmpty = true;
+			}
+		});
+
+		if (foundEmpty) {
+			this.deviceDetailsFormGroup.get("deviceDetails").markAllAsTouched();
+			this.deviceDetailsFormGroup.markAllAsTouched();
+		}
+
+		this.stepper.next();
 	}
 }
