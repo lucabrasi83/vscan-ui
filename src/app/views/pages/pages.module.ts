@@ -40,6 +40,10 @@ import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { OndemandScanComponent } from "./ondemand-scan/ondemand-scan.component";
 import { OndemandResultsComponent } from "./ondemand-scan/ondemand-results/ondemand-results.component";
 import { ChartsModule } from "ng2-charts";
+import { VscanDeviceCredsComponent } from "./vscan-device-creds/vscan-device-creds.component";
+import { VscanSshGatewaysComponent } from "./vscan-ssh-gateways/vscan-ssh-gateways.component";
+import { VscanJobsComponent } from "./vscan-jobs/vscan-jobs.component";
+import { VscanInventoryComponent } from "./vscan-inventory/vscan-inventory.component";
 
 @NgModule({
 	declarations: [
@@ -48,7 +52,11 @@ import { ChartsModule } from "ng2-charts";
 		VscanScanComponent,
 		ScanResultsComponent,
 		OndemandScanComponent,
-		OndemandResultsComponent
+		OndemandResultsComponent,
+		VscanDeviceCredsComponent,
+		VscanSshGatewaysComponent,
+		VscanJobsComponent,
+		VscanInventoryComponent
 	],
 	exports: [],
 	imports: [

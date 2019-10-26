@@ -308,34 +308,40 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 
 		this.webSocketSubject = webSocket({
 			url: wsURL,
-			deserializer: ({ data }) => data
+			deserializer: ({ data }) => data,
+			binaryType: "arraybuffer"
 		});
+
+		setTimeout(() => {
+			console.log("receiving logs");
+		}, 2000);
 
 		// Launch Scan
 		this.vscan
 			.launchInventoryScan(body)
 			.pipe(
 				tap((res: InventoryScanResultsModel) => {
-					this.barButtonOptions.active = false;
-					this.barButtonOptions.text = "View Results";
-
 					this.toastNotif.successToastNotif(
 						`Scan Job ${res["results"]["scanJobID"]} successfully executed.`,
 						"Scan Job" + " Completed"
 					);
 
 					this.scanResults = res;
+
+					this.barButtonOptions.active = false;
+					this.barButtonOptions.text = "View Results";
 				}),
 
 				catchError(err => {
 					this.toastNotif.errorToastNotif(err, "Scan Job failed");
-					this.barButtonOptions.active = false;
-					this.barButtonOptions.disabled = true;
-					this.barButtonOptions.text = "No Results";
 
 					this.logStreamFormGroup
 						.get("logStreamCtrl")
 						.setErrors({ incorrect: true });
+
+					this.barButtonOptions.active = false;
+					this.barButtonOptions.disabled = true;
+					this.barButtonOptions.text = "No Results";
 					return of(err);
 				})
 			)

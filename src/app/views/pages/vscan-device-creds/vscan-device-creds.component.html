@@ -18,7 +18,7 @@
 			<ng-container ktPortletTitle>
 				<h3 class="kt-portlet__head-title">
 					<span translate="ECOMMERCE.CUSTOMERS.CUSTOMERS_LIST"
-						>Inventory Devices</span
+						>Device Credentials</span
 					>
 				</h3>
 				<!-- For localisations we use @ngx-translate | See off. documentations => https://github.com/ngx-translate/core -->
@@ -27,33 +27,14 @@
 
 			<ng-container ktPortletTools>
 				<button
-					(click)="onClearFilters()"
-					style="margin-right: 20px;background-color: #5d78ff;"
 					mat-raised-button
-					matTooltip="Clear Dropdown Filters"
-					color="warn"
-					type="button"
-				>
-					<i class="flaticon2-rubbish-bin"></i>
-					<span translate="ECOMMERCE.CUSTOMERS.NEW_CUSTOMER"
-						>&nbsp;&nbsp;&nbsp;Clear Filters</span
-					>
-				</button>
-				<!-- Buttons (Material Angular) | See off.documenations 'https://material.angular.io/components/button/overview' -->
-				<!-- mat-raised-button | Rectangular contained button w/ elevation  -->
-			</ng-container>
-
-			<ng-container ktPortletTools>
-				<button
-					(click)="openScanFlowDialog([])"
-					mat-raised-button
-					matTooltip="Scan a new inventory device"
+					matTooltip="Add new Credentials"
 					color="primary"
 					type="button"
 				>
 					<i class="flaticon3-retinal-scan"></i>
 					<span translate="ECOMMERCE.CUSTOMERS.NEW_CUSTOMER"
-						>&nbsp;&nbsp;&nbsp;Scan New Device</span
+						>&nbsp;&nbsp;&nbsp;Add Credentials</span
 					>
 				</button>
 				<!-- Buttons (Material Angular) | See off.documenations 'https://material.angular.io/components/button/overview' -->
@@ -68,88 +49,6 @@
 				<!-- start::FILTERS -->
 				<div class="kt-form__filtration">
 					<div class="row align-items-center">
-						<div class="col-md-2 kt-margin-bottom-10-mobile">
-							<!-- 'm  margin-bottom-10-mobile' for adaptive make-up  -->
-							<div class="kt-form__control">
-								<mat-form-field class="mat-form-field-fluid">
-									<mat-select
-										[(value)]="filterEnterprise"
-										(selectionChange)="
-											doDropdownEnterpriseFilters(
-												$event.value
-											)
-										"
-										multiple
-										#filterEnterpriseDropdown
-									>
-										<mat-option
-											*ngFor="
-												let elem of enterpriseIDArray
-											"
-											[value]="elem"
-											>{{ elem }}</mat-option
-										>
-									</mat-select>
-									<mat-hint align="start">
-										<strong>Filter</strong> by Enterprise
-										Name
-									</mat-hint>
-								</mat-form-field>
-							</div>
-						</div>
-
-						<!--						<div class="col-md-2 kt-margin-bottom-10-mobile">-->
-						<!--							<div class="kt-form__control">-->
-						<!--								<mat-form-field class="mat-form-field-fluid">-->
-						<!--									<mat-select-->
-						<!--										[(value)]="filterProductID"-->
-						<!--										(selectionChange)="-->
-						<!--											doDropdownFilters($event.value)-->
-						<!--										"-->
-						<!--										#filterProductIDDropdown-->
-						<!--										multiple-->
-						<!--									>-->
-						<!--										<mat-option-->
-						<!--											*ngFor="let elem of productIDArray"-->
-						<!--											[value]="elem"-->
-						<!--											>{{ elem }}</mat-option-->
-						<!--										>-->
-						<!--									</mat-select>-->
-						<!--									<mat-hint align="start">-->
-						<!--										<strong>Filter</strong> by Product ID-->
-						<!--									</mat-hint>-->
-						<!--								</mat-form-field>-->
-						<!--							</div>-->
-						<!--						</div>-->
-
-						<div class="col-md-2 kt-margin-bottom-10-mobile">
-							<!-- 'm  margin-bottom-10-mobile' for adaptive make-up  -->
-							<div class="kt-form__control">
-								<mat-form-field class="mat-form-field-fluid">
-									<mat-select
-										[(value)]="filterVulnerabilityStatus"
-										(selectionChange)="
-											doDropdownStatusFilters(
-												$event.value
-											)
-										"
-										#filterVulnerabilityStatusDropdown
-									>
-										<mat-option value="AFFECTED"
-											>Affected</mat-option
-										>
-										<mat-option value="SAFE"
-											>Safe</mat-option
-										>
-									</mat-select>
-									<mat-hint align="start">
-										<strong>Filter</strong> by Vulnerability
-										Status
-									</mat-hint>
-								</mat-form-field>
-							</div>
-						</div>
-
 						<div class="col-md-4 kt-margin-bottom-10-mobile">
 							<mat-form-field
 								class="mat-form-field-fluid"
@@ -157,17 +56,8 @@
 							>
 								<input
 									matInput
-									[placeholder]="
-										filterEnterprise.length > 0 ||
-										filterVulnerabilityStatus.length > 0
-											? 'Search Disabled'
-											: ''
-									"
+									[placeholder]="'Text Search'"
 									(keyup)="doFilterText($event.target.value)"
-									[disabled]="
-										filterEnterprise.length > 0 ||
-										filterVulnerabilityStatus.length > 0
-									"
 								/>
 								<mat-hint align="start">
 									<strong>Search</strong> in all fields
@@ -206,15 +96,15 @@
 								<button
 									mat-raised-button
 									color="warn"
-									matTooltip="Delete selected devices"
+									matTooltip="Delete selected credentials"
 									class="mat-button-mt-4"
+									(click)="deleteDeviceCredential()"
 								>
 									<mat-icon>delete</mat-icon>
 									Delete Selected</button
 								>&nbsp;<!-- Call 'delete-entity-dialog' from _shared folder -->
 
 								<button
-									(click)="scanSelectedDevices()"
 									mat-raised-button
 									matTooltip="Scan selected devices"
 									class="mat-button-mt-4"
@@ -278,130 +168,85 @@
 						</mat-cell>
 					</ng-container>
 
-					<ng-container matColumnDef="deviceID">
+					<ng-container matColumnDef="credentialsName">
 						<!-- ATTRIBUTE mat-sort-header  for sorting | https://material.angular.io/components/sort/overview -->
 						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>Device ID</mat-header-cell
+							>Credentials Name</mat-header-cell
 						>
 						<mat-cell *matCellDef="let device">{{
-							device.deviceID
+							device.credentialsName
 						}}</mat-cell>
 					</ng-container>
 
-					<ng-container matColumnDef="enterpriseID">
+					<ng-container matColumnDef="credentialsDeviceVendor">
 						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>Enterprise</mat-header-cell
-						>
-						<mat-cell *matCellDef="let device">
-							<a
-								mat-raised-button
-								routerLink="/dashboard"
-								color="accent"
-								class="enterprise-button"
-								>{{ device.enterpriseID }}</a
-							></mat-cell
-						>
-					</ng-container>
-
-					<ng-container matColumnDef="osType">
-						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>OS Type</mat-header-cell
-						>
-						<mat-cell *matCellDef="let device">
-							<span
-								class="kt-badge kt-badge--inline kt-badge--pill kt-badge--{{
-									device.osType
-								}} kt-badge--{{
-									device.osType
-								}} kt-badge--wide kt-badge--elevate"
-								style="font-size: 12px;"
-								>{{ device.osType }}</span
-							>
-						</mat-cell>
-					</ng-container>
-
-					<ng-container matColumnDef="osVersion">
-						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>OS Version</mat-header-cell
-						>
-						<mat-cell *matCellDef="let device">{{
-							device.osVersion
-						}}</mat-cell>
-					</ng-container>
-
-					<ng-container matColumnDef="mgmtIP">
-						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>Mgmt IP</mat-header-cell
-						>
-						<mat-cell *matCellDef="let device">{{
-							device.mgmtIP
-						}}</mat-cell>
-					</ng-container>
-
-					<ng-container matColumnDef="productID">
-						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>Product ID</mat-header-cell
-						>
-						<mat-cell *matCellDef="let device">{{
-							device.productID
-						}}</mat-cell>
-					</ng-container>
-
-					<ng-container matColumnDef="vulnerabilityStatus">
-						<mat-header-cell *matHeaderCellDef
-							>Status</mat-header-cell
-						>
-
-						<mat-cell *matCellDef="let device">
-							<button
-								mat-icon-button
-								color="primary"
-								matTooltip="View Details"
-								(click)="openVulnDetailsDialog(device.deviceID)"
-							>
-								<mat-icon
-									*ngIf="
-										device.vulnerabilitiesFound &&
-										device.vulnerabilitiesFound.length >= 1
-									"
-									class="mat-icon-svg"
-									svgIcon="shield-failed"
-								></mat-icon>
-								<mat-icon
-									*ngIf="
-										device.vulnerabilitiesFound &&
-										device.vulnerabilitiesFound.length === 0
-									"
-									class="mat-icon-svg"
-									svgIcon="shield-success"
-								></mat-icon>
-							</button>
-						</mat-cell>
-					</ng-container>
-
-					<ng-container matColumnDef="lastScan">
-						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>Last Scan Date</mat-header-cell
-						>
-						<mat-cell *matCellDef="let device">{{
-							device.lastScan | date: "medium"
-						}}</mat-cell>
-					</ng-container>
-
-					<ng-container matColumnDef="scanMeanTimeMilliseconds">
-						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>Scan Meantime</mat-header-cell
+							>Credentials Device Vendor</mat-header-cell
 						>
 						<mat-cell *matCellDef="let device">
 							<mat-chip-list>
 								<mat-chip style="font-size: 12px;">
-									{{
-										device.scanMeanTimeMilliseconds / 1000
-											| number
-									}}
-									sec
+									{{ device.credentialsDeviceVendor }}
 								</mat-chip>
 							</mat-chip-list>
+						</mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="username">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>Username</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device">
+							{{ device.username }}
+						</mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="password">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>Password</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device">
+							<div *ngIf="device.password !== ''">
+								<input
+									style="color: black;"
+									disabled="true"
+									matInput
+									type="password"
+									value="*******"
+								/>
+							</div>
+						</mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="iosEnablePassword">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>IOS Enable Password</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device"
+							><div *ngIf="device.iosEnablePassword !== ''">
+								<input
+									style="color: black;"
+									disabled="true"
+									matInput
+									type="password"
+									value="*******"
+								/></div
+						></mat-cell>
+					</ng-container>
+
+					<ng-container matColumnDef="privateKey">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>Private Key</mat-header-cell
+						>
+						<mat-cell *matCellDef="let device">
+							<div *ngIf="device.privateKey !== ''">
+								<input
+									style="color: black;"
+									disabled="true"
+									matInput
+									type="password"
+									value="*******"
+								/>
+							</div>
 						</mat-cell>
 					</ng-container>
 
@@ -421,12 +266,6 @@
 				>
 					No records found
 				</div>
-				<!--				<div-->
-				<!--					class="mat-table__message"-->
-				<!--					*ngIf="isPreloadTextViewed$ | async"-->
-				<!--				>-->
-				<!--					Fetching Data....-->
-				<!--				</div>-->
 			</div>
 
 			<!-- start: BOTTOM -->

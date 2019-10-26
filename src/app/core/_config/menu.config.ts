@@ -468,7 +468,7 @@ export class MenuConfig {
 					root: true,
 					bullet: "dot",
 					icon: "flaticon2-shield",
-					page: "/user-management/users"
+					page: "/settings/device-credentials"
 				},
 
 				{ section: "Support" },

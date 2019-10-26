@@ -37,9 +37,7 @@
 							<div formArrayName="deviceDetails">
 								<div
 									*ngFor="
-										let device of deviceDetailsFormGroup.get(
-											'deviceDetails'
-										).controls;
+										let device of deviceItems.controls;
 										let i = index
 									"
 									[formGroupName]="i"

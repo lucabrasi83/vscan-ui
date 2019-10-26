@@ -49,19 +49,31 @@ export class DeviceVulnDetailsComponent implements OnInit {
 				{
 					gridLines: {
 						display: false
+					},
+					ticks: {
+						fontFamily: "Gotham-Light, sans-serif",
+						fontSize: 14
 					}
 				}
 			],
 			yAxes: [
 				{
 					ticks: {
-						beginAtZero: true
+						beginAtZero: true,
+						fontFamily: "Gotham-Light, sans-serif",
+						fontSize: 14
 					},
 					gridLines: {
 						display: false
 					}
 				}
 			]
+		},
+		tooltips: {
+			titleFontFamily: "Gotham, sans-serif",
+			titleFontSize: 14,
+			bodyFontFamily: "Gotham-Light, sans-serif",
+			bodyFontSize: 13
 		}
 	};
 	public barChartLabels: Label[] = this.historyVulnDate;
@@ -132,5 +144,9 @@ export class DeviceVulnDetailsComponent implements OnInit {
 
 	isdeviceHistoryVulnArray(): boolean {
 		return this.deviceHistoryVuln.results instanceof Array;
+	}
+
+	isdeviceVulnerabilitiesArray(): boolean {
+		return this.deviceVulnerabilities.results instanceof Array;
 	}
 }

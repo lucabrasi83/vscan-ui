@@ -119,8 +119,8 @@
 						style="font-family:'Gotham-Light', sans-serif;"
 						*ngIf="
 							deviceVulnerabilities &&
-							deviceVulnerabilities.results !==
-								'no vulnerability found for this device'
+							deviceVulnerabilities.results &&
+							isdeviceVulnerabilitiesArray()
 						"
 					>
 						<ngx-datatable

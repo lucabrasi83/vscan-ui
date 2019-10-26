@@ -31,6 +31,9 @@ const ON_DEMAND_SCAN_URL =
 const DEVICE_VULNERABILITIES_URL =
 	environment.vscanAPIURL + "/vulnerabilities/device/";
 
+const USER_DEVICE_CREDENTIAL =
+	environment.vscanAPIURL + "/device-credentials/credential/";
+
 @Injectable({
 	providedIn: "root"
 })
@@ -124,6 +127,17 @@ export class VscanApiService {
 
 		return this.http
 			.post<OndemandScanResultsModel>(ON_DEMAND_SCAN_URL, req, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	deleteDeviceCredentials(creds: string): Observable<any> {
+		const httpHeaders = new HttpHeaders();
+		httpHeaders.set("Content-Type", "application/json");
+
+		return this.http
+			.delete<any>(USER_DEVICE_CREDENTIAL + creds, {
 				headers: httpHeaders
 			})
 			.pipe(catchError(this.auth.handleError));

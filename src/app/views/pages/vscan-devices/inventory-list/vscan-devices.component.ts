@@ -20,7 +20,7 @@ import { ToastNotifService } from "../../../../core/_base/layout/services/toast-
 import { MatSelect } from "@angular/material/select";
 import { MatDialog } from "@angular/material/dialog";
 import { DeviceVulnDetailsComponent } from "../device-vuln-details/device-vuln-details.component";
-import { AuthService } from "../../../../core/auth/_services";
+
 import {
 	MAX_DEVICES,
 	VscanScanComponent
@@ -45,6 +45,7 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		"mgmtIP",
 		"osType",
 		"osVersion",
+		"scanMeanTimeMilliseconds",
 		"lastScan"
 	];
 
@@ -81,8 +82,7 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		private domSanitizer: DomSanitizer,
 		private vscanAPI: VscanApiService,
 		private toastNotif: ToastNotifService,
-		public dialog: MatDialog,
-		private auth: AuthService
+		public dialog: MatDialog
 	) {
 		this.matIconRegistry.addSvgIcon(
 			"shield-success",

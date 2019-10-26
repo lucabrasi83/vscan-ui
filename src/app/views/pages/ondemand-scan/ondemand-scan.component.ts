@@ -35,6 +35,7 @@ import { InventoryScanRequest } from "../../../core/vscan-api/inventory.scan.mod
 import { OndemandScanResultsModel } from "../../../core/vscan-api/ondemand.scan.results.model";
 import { MatStepper } from "@angular/material/stepper";
 import { ErrorStateMatcher } from "@angular/material/core";
+import { stringify } from "querystring";
 
 const ipaddressPattern =
 	"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
@@ -58,7 +59,7 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 	deviceDetailsFormGroup: FormGroup;
 	scanSettingDetailsFormGroup: FormGroup;
 	logStreamFormGroup: FormGroup;
-	deviceItems: FormArray;
+	// deviceItems: FormArray;
 
 	// Unique Hash to generate for log file stream request
 	hash: string | Int32Array = this.generateLogStreamHash();
@@ -164,6 +165,14 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 		this.currentUserToken = this.auth.getStoreToken();
 	}
 
+	// FormArray getter
+	get deviceItems(): FormArray {
+		if (this.deviceDetailsFormGroup) {
+			return this.deviceDetailsFormGroup.get(
+				"deviceDetails"
+			) as FormArray;
+		}
+	}
 	ngOnDestroy(): void {
 		if (this.webSocketSubject) {
 			this.webSocketSubject.next(null);
@@ -189,10 +198,6 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 	}
 
 	addNewDevice() {
-		this.deviceItems = this.deviceDetailsFormGroup.get(
-			"deviceDetails"
-		) as FormArray;
-
 		if (this.deviceItems.length > MAX_DEVICES) {
 			this.toastNotif.errorToastNotif(
 				`A maximum of ${MAX_DEVICES} devices can be selected for a single job scan`,
@@ -242,7 +247,9 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmitScan() {
-		if (this.deviceDetailsFormGroup.invalid) {
+		if (this.scanSettingDetailsFormGroup.invalid) {
+			this.scanSettingDetailsFormGroup.markAllAsTouched();
+			this.barButtonOptions.active = false;
 			return;
 		}
 
@@ -264,17 +271,19 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 
 		this.webSocketSubject = webSocket({
 			url: wsURL,
-			deserializer: ({ data }) => data
+			deserializer: ({ data }) => data,
+			binaryType: "arraybuffer"
 		});
+
+		setTimeout(() => {
+			console.log("receiving logs");
+		}, 2000);
 
 		// Launch Scan
 		this.vscan
 			.launchOnDemandScan(body)
 			.pipe(
 				tap((res: OndemandScanResultsModel) => {
-					this.barButtonOptions.active = false;
-					this.barButtonOptions.text = "View Results";
-
 					this.toastNotif.successToastNotif(
 						`Scan Job ${res["results"]["scanJobID"]} successfully executed.`,
 						"Scan Job Completed"
@@ -285,13 +294,13 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 					this.deviceDetailsFormGroup.markAsUntouched();
 					this.logStreamFormGroup.markAsUntouched();
 					this.scanSettingDetailsFormGroup.markAsUntouched();
+
+					this.barButtonOptions.active = false;
+					this.barButtonOptions.text = "View Results";
 				}),
 
 				catchError(err => {
 					this.toastNotif.errorToastNotif(err, "Scan Job failed");
-					this.barButtonOptions.active = false;
-					this.barButtonOptions.disabled = true;
-					this.barButtonOptions.text = "No Results";
 
 					this.deviceDetailsFormGroup.markAsUntouched();
 					this.scanSettingDetailsFormGroup.markAsUntouched();
@@ -299,15 +308,11 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 					this.logStreamFormGroup
 						.get("logStreamCtrl")
 						.setErrors({ incorrect: true });
-					return of(err);
-				}),
-				finalize(() => {
+
 					this.barButtonOptions.active = false;
 					this.barButtonOptions.disabled = true;
 					this.barButtonOptions.text = "No Results";
-
-					this.deviceDetailsFormGroup.markAsUntouched();
-					this.scanSettingDetailsFormGroup.markAsUntouched();
+					return of(err);
 				})
 			)
 			.subscribe();
@@ -355,6 +360,11 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 	}
 	onStepperReset() {
 		this.stepper.reset();
+
+		this.deviceItems.controls.splice(
+			1,
+			this.deviceItems.controls.length - 1
+		);
 
 		this.barButtonOptions = {
 			active: true,
