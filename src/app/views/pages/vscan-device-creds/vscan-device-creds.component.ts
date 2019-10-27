@@ -2,16 +2,13 @@ import { Component, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { SelectionModel } from "@angular/cdk/collections";
 import { BehaviorSubject, throwError } from "rxjs";
 import { MatTableDataSource } from "@angular/material/table";
-import {
-	DeviceCredential,
-	DeviceUserCredentials
-} from "../../../core/vscan-api/device.credentials.model";
+import { DeviceCredential } from "../../../core/vscan-api/device.credentials.model";
 import { VscanApiService } from "../../../core/vscan-api/vscan-api.service";
 import { ToastNotifService } from "../../../core/_base/layout/services/toast-notif.service";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { catchError, tap } from "rxjs/operators";
+import { catchError, switchMap, tap } from "rxjs/operators";
 
 @Component({
 	selector: "vscan-vscan-device-creds",
@@ -44,7 +41,11 @@ export class VscanDeviceCredsComponent implements OnInit {
 	// Loading flag
 	loading$ = new BehaviorSubject<boolean>(true);
 
+	// Credentials Data
+	userCredentials$ = new BehaviorSubject<DeviceCredential>(null);
+
 	dataSource = new MatTableDataSource<DeviceCredential>();
+
 	constructor(
 		private vscanAPI: VscanApiService,
 		private toastNotif: ToastNotifService,
@@ -52,20 +53,23 @@ export class VscanDeviceCredsComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.vscanAPI
-			.getAllUserDeviceCredentials()
+		this.userCredentials$
 			.pipe(
-				tap(res => {
-					this.dataSource.data = res.deviceCredentials;
-					this.loading$.next(false);
-				}),
-				catchError(err => {
-					this.toastNotif.errorToastNotif(
-						err,
-						"Failed to fetch credentials"
+				switchMap(() => {
+					return this.vscanAPI.getAllUserDeviceCredentials().pipe(
+						tap(res => {
+							this.dataSource.data = res.deviceCredentials;
+							this.loading$.next(false);
+						}),
+						catchError(err => {
+							this.toastNotif.errorToastNotif(
+								err,
+								"Failed to fetch credentials"
+							);
+							this.loading$.next(false);
+							return throwError(err);
+						})
 					);
-					this.loading$.next(false);
-					return throwError(err);
 				})
 			)
 			.subscribe();
@@ -115,12 +119,8 @@ export class VscanDeviceCredsComponent implements OnInit {
 							`Credential ${item.credentialsName} deletion success`
 						);
 
-						const itemIDX = this.dataSource.data.findIndex(
-							idx => idx.credentialsName === item.credentialsName
-						);
-						this.dataSource.data.splice(itemIDX, 1);
-
-						this.dataSource.paginator = this.paginator;
+						// Refresh HTTP Request Observable
+						this.userCredentials$.next(null);
 
 						this.selection.clear();
 

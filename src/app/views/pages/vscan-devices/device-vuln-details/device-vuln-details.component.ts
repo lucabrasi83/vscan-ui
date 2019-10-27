@@ -12,6 +12,7 @@ import { InventoryDeviceModel } from "../../../../core/vscan-api/device.inventor
 import { ColumnMode, SortType } from "@swimlane/ngx-datatable";
 import { ChartDataSets, ChartOptions, ChartType } from "chart.js";
 import { Label } from "ng2-charts";
+import { Timeline2Data } from "../../../partials/content/widgets/timeline2/timeline2.component";
 
 export interface VulnDialogData {
 	windowTitle: string;
@@ -31,6 +32,7 @@ export class DeviceVulnDetailsComponent implements OnInit {
 	deviceHistoryVuln: DeviceVulnerabilitiesHistoryModel;
 	historyVulnCount: number[] = [];
 	historyVulnDate: string[] = [];
+	historyResults: Timeline2Data[] = [];
 
 	ColumnMode = ColumnMode;
 	SortType = SortType;
@@ -61,7 +63,8 @@ export class DeviceVulnDetailsComponent implements OnInit {
 					ticks: {
 						beginAtZero: true,
 						fontFamily: "Gotham-Light, sans-serif",
-						fontSize: 14
+						fontSize: 14,
+						display: false
 					},
 					gridLines: {
 						display: false
@@ -120,10 +123,20 @@ export class DeviceVulnDetailsComponent implements OnInit {
 					this.deviceHistoryVuln = res[1];
 
 					if (this.deviceHistoryVuln.results instanceof Array) {
-						this.deviceHistoryVuln.results.forEach(item => {
+						this.deviceHistoryVuln.results.forEach((item, idx) => {
 							this.historyVulnCount.push(item.vulnFound.length);
 
-							this.historyVulnDate.push(item.scanDate.toString());
+							let date = new Date(item.scanDate.toString());
+
+							this.historyVulnDate.push(date.toLocaleString());
+
+							const historyDiff = this.vulnHistoryDiff(idx, item);
+
+							this.historyResults.push({
+								time: date.toLocaleString(),
+								text: historyDiff.timelineText,
+								icon: historyDiff.timelineIcon
+							});
 						});
 					}
 				}),
@@ -148,5 +161,63 @@ export class DeviceVulnDetailsComponent implements OnInit {
 
 	isdeviceVulnerabilitiesArray(): boolean {
 		return this.deviceVulnerabilities.results instanceof Array;
+	}
+
+	vulnHistoryDiff(idx: number, item: any): any {
+		// Build Timelines with vulnerabilities history
+		// Compare history indexes and show the diff to the user
+		let timelineText: string;
+		let timelineIcon: string;
+
+		// Handle first entry in the array
+		if (idx === 0) {
+			timelineText =
+				item.vulnFound.length > 0
+					? '<p class="timeline-vuln-danger">' +
+					  item.vulnFound
+							.map(val => {
+								return "+ " + val;
+							})
+							.join("\n") +
+					  "</p>"
+					: '<p class="timeline-vuln-success">No vulnerability found</p>';
+
+			timelineIcon =
+				item.vulnFound.length > 0
+					? "fa fa-genderless kt-font-danger"
+					: "fa fa-genderless kt-font-success";
+
+			return { timelineIcon: timelineIcon, timelineText: timelineText };
+		} else if (idx >= 1) {
+			// Convert previous record index to avoid compilation error
+			let prevHistoryRec: any = this.deviceHistoryVuln.results[
+				idx - 1
+			].valueOf();
+
+			// Get Intersection from current index
+			let intersection = item.vulnFound.filter(x =>
+				prevHistoryRec.vulnFound.includes(x)
+			);
+
+			if (intersection.length === item.vulnFound.length) {
+				console.log("hello");
+				timelineText = "No difference from previous scan";
+				timelineIcon = "fa fa-genderless kt-font-info";
+				return {
+					timelineIcon: timelineIcon,
+					timelineText: timelineText
+				};
+			} else {
+				// Item missing from current history record compared to previous one (Vulnerability Removed)
+				let intersection_left_exclude = item.vulnFound.filter(
+					x => !prevHistoryRec.vulnFound.includes(x)
+				);
+
+				// Item missing from previous record compared to current one (Vulnerability Added)
+				let intersection_right_exclude = prevHistoryRec.vulnFound.filter(
+					x => !item.vulnFound.includes(x)
+				);
+			}
+		}
 	}
 }

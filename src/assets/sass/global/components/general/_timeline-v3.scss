@@ -21,26 +21,26 @@
             top: 0.46rem;
             content: "";
         }
-        
+
         .kt-timeline-v3__item-time {
             display: table-cell;
             vertical-align: top;
             padding-top: 0.6rem;
             font-weight: 500;
-            font-size: 1.3rem;
+            font-size: 12px;
             position: absolute;
             text-align: right;
             width: 3.57rem;
             color: kt-base-color(label, 2);
-        } 
-        
+        }
+
         // Description
         .kt-timeline-v3__item-desc {
             display: table-cell;
             width: 100%;
             vertical-align: top;
             padding-left: 7rem;
-            
+
             .kt-timeline-v3__item-text {
                 font-size: 1rem;
                 font-weight: 400;
@@ -52,8 +52,8 @@
                     text-decoration: none;
                 }
             }
-        } 
-        
+        }
+
         // States
         @each $name, $color in $kt-state-colors {
             &.kt-timeline-v3__item--#{$name} {

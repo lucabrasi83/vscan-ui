@@ -1,4 +1,7 @@
-import { KtDialogService, StickyDirective } from '../../../../../core/_base/layout';
+import {
+	KtDialogService,
+	StickyDirective
+} from "../../../../../core/_base/layout";
 // Angular
 import {
 	AfterViewInit,
@@ -12,27 +15,33 @@ import {
 	OnInit,
 	PLATFORM_ID,
 	ViewChild
-} from '@angular/core';
+} from "@angular/core";
 // RXJS
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription } from "rxjs";
 
 @Component({
-	selector: 'kt-portlet-header',
-	styleUrls: ['portlet-header.component.scss'],
+	selector: "kt-portlet-header",
+	styleUrls: ["portlet-header.component.scss"],
 	template: `
-		<div class="kt-portlet__head-label" [hidden]="noTitle">
-			<span class="kt-portlet__head-icon" #refIcon [hidden]="hideIcon">
+		<div class="kt-portlet__head-label">
+			<span class="kt-portlet__head-icon" #refIcon>
 				<ng-content *ngIf="!icon" select="[ktPortletIcon]"></ng-content>
 				<i *ngIf="icon" [ngClass]="icon"></i>
 			</span>
 			<ng-content *ngIf="!title" select="[ktPortletTitle]"></ng-content>
-			<h3 *ngIf="title" class="kt-portlet__head-title" [innerHTML]="title"></h3>
+			<h3
+				*ngIf="title"
+				class="kt-portlet__head-title"
+				[innerHTML]="title"
+			></h3>
 		</div>
-		<div class="kt-portlet__head-toolbar" #refTools [hidden]="hideTools">
+		<div class="kt-portlet__head-toolbar" #refTools>
 			<ng-content select="[ktPortletTools]"></ng-content>
-		</div>`
+		</div>
+	`
 })
-export class PortletHeaderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PortletHeaderComponent
+	implements OnInit, AfterViewInit, OnDestroy {
 	// Public properties
 	// append html class to the portlet header
 	@Input() class: string;
@@ -48,29 +57,33 @@ export class PortletHeaderComponent implements OnInit, AfterViewInit, OnDestroy 
 	@Input() viewLoading$: Observable<boolean>;
 	viewLoading: boolean = false;
 
-	@HostBinding('class') classes: string = 'kt-portlet__head';
-	@HostBinding('attr.ktSticky') stickyDirective: StickyDirective;
+	@HostBinding("class") classes: string = "kt-portlet__head";
+	@HostBinding("attr.ktSticky") stickyDirective: StickyDirective;
 
-	@ViewChild('refIcon', {static: true}) refIcon: ElementRef;
+	@ViewChild("refIcon", { static: true }) refIcon: ElementRef;
 	hideIcon: boolean;
 
-	@ViewChild('refTools', {static: true}) refTools: ElementRef;
+	@ViewChild("refTools", { static: true }) refTools: ElementRef;
 	hideTools: boolean;
 
 	private lastScrollTop = 0;
 	private subscriptions: Subscription[] = [];
 	private isScrollDown = false;
 
-	constructor(private el: ElementRef, @Inject(PLATFORM_ID) private platformId: string, private ktDialogService: KtDialogService) {
+	constructor(
+		private el: ElementRef,
+		@Inject(PLATFORM_ID) private platformId: string,
+		private ktDialogService: KtDialogService
+	) {
 		this.stickyDirective = new StickyDirective(this.el, this.platformId);
 	}
 
-	@HostListener('window:resize', ['$event'])
+	@HostListener("window:resize", ["$event"])
 	onResize() {
 		this.updateStickyPosition();
 	}
 
-	@HostListener('window:scroll', ['$event'])
+	@HostListener("window:scroll", ["$event"])
 	onScroll() {
 		this.updateStickyPosition();
 		const st = window.pageYOffset || document.documentElement.scrollTop;
@@ -82,27 +95,47 @@ export class PortletHeaderComponent implements OnInit, AfterViewInit, OnDestroy 
 		if (this.sticky) {
 			Promise.resolve(null).then(() => {
 				// get boundary top margin for sticky header
-				const headerElement = <HTMLElement>document.querySelector('.kt-header');
-				const subheaderElement = <HTMLElement>document.querySelector('.kt-subheader');
-				const headerMobileElement = <HTMLElement>document.querySelector('.kt-header-mobile');
+				const headerElement = <HTMLElement>(
+					document.querySelector(".kt-header")
+				);
+				const subheaderElement = <HTMLElement>(
+					document.querySelector(".kt-subheader")
+				);
+				const headerMobileElement = <HTMLElement>(
+					document.querySelector(".kt-header-mobile")
+				);
 
 				let height = 0;
 
 				if (headerElement != null) {
 					// mobile header
-					if (window.getComputedStyle(headerElement).height === '0px') {
+					if (
+						window.getComputedStyle(headerElement).height === "0px"
+					) {
 						height += headerMobileElement.offsetHeight;
 					} else {
 						// desktop header
-						if (document.body.classList.contains('kt-header--minimize-topbar')) {
+						if (
+							document.body.classList.contains(
+								"kt-header--minimize-topbar"
+							)
+						) {
 							// hardcoded minimized header height
 							height = 60;
 						} else {
 							// normal fixed header
-							if (document.body.classList.contains('kt-header--fixed')) {
+							if (
+								document.body.classList.contains(
+									"kt-header--fixed"
+								)
+							) {
 								height += headerElement.offsetHeight;
 							}
-							if (document.body.classList.contains('kt-subheader--fixed')) {
+							if (
+								document.body.classList.contains(
+									"kt-subheader--fixed"
+								)
+							) {
 								height += subheaderElement.offsetHeight;
 							}
 						}
@@ -129,7 +162,7 @@ export class PortletHeaderComponent implements OnInit, AfterViewInit, OnDestroy 
 
 	ngAfterViewInit(): void {
 		// append custom class
-		this.classes += this.class ? ' ' + this.class : '';
+		this.classes += this.class ? " " + this.class : "";
 
 		// hide icon's parent node if no icon provided
 		this.hideIcon = this.refIcon.nativeElement.children.length === 0;
@@ -144,7 +177,9 @@ export class PortletHeaderComponent implements OnInit, AfterViewInit, OnDestroy 
 
 		// initialize loading dialog
 		if (this.viewLoading$) {
-			const loadingSubscription = this.viewLoading$.subscribe(res => this.toggleLoading(res));
+			const loadingSubscription = this.viewLoading$.subscribe(res =>
+				this.toggleLoading(res)
+			);
 			this.subscriptions.push(loadingSubscription);
 		}
 	}

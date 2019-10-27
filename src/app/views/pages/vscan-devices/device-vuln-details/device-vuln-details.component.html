@@ -267,23 +267,40 @@
 							No History available for this device
 						</p>
 					</div>
+
 					<div
-						style="display: flex;flex-direction: row;height: 40%;width: 70%;margin:auto;"
+						style="display: flex;flex-direction: row;height: 40%;width: 100%;margin:auto;"
+						class="row"
 						*ngIf="
 							deviceHistoryVuln &&
 							deviceHistoryVuln.results &&
 							isdeviceHistoryVulnArray()
 						"
 					>
-						<canvas
-							baseChart
-							[datasets]="barChartData"
-							[labels]="barChartLabels"
-							[options]="barChartOptions"
-							[legend]="barChartLegend"
-							[chartType]="barChartType"
-						>
-						</canvas>
+						<div class="col-xl-8">
+							<canvas
+								baseChart
+								[datasets]="barChartData"
+								[labels]="barChartLabels"
+								[options]="barChartOptions"
+								[legend]="barChartLegend"
+								[chartType]="barChartType"
+							>
+							</canvas>
+						</div>
+						<div class="col-xl-4">
+							<kt-portlet [class]="'kt-portlet--height-fluid'">
+								<kt-portlet-header
+									[title]="'Vulnerabilities Timeline'"
+								>
+								</kt-portlet-header>
+								<kt-portlet-body>
+									<kt-timeline2
+										[data]="historyResults"
+									></kt-timeline2>
+								</kt-portlet-body>
+							</kt-portlet>
+						</div>
 					</div>
 				</mat-expansion-panel>
 			</mat-accordion>

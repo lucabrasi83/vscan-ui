@@ -300,8 +300,9 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		});
 
 		const dialogRef = this.dialog.open(DeviceVulnDetailsComponent, {
-			width: "85%",
-			height: "80%",
+			width: "95%",
+			height: "85%",
+			maxWidth: "100%",
 			data: {
 				windowTitle: `${devid}`,
 				device: devid,
@@ -317,8 +318,9 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 
 	openScanFlowDialog(devices: any[]): void {
 		const dialogRef = this.dialog.open(VscanScanComponent, {
-			width: "80%",
-			height: "70%",
+			width: "95%",
+			height: "85%",
+			maxWidth: "100%",
 			data: {
 				windowTitle: "Inventory Vulnerability Scan Workflow",
 				selectedDevices: devices
