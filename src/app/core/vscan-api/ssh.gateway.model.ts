@@ -29,6 +29,7 @@ export interface SSHGatewayCreate {
 }
 
 export interface SSHGatewayUpdate {
+	gatewayName: string;
 	gatewayIP?: string;
 	gatewayUsername?: string;
 	gatewayPassword?: string;

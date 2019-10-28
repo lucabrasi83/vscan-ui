@@ -35,7 +35,6 @@ import { InventoryScanRequest } from "../../../core/vscan-api/inventory.scan.mod
 import { OndemandScanResultsModel } from "../../../core/vscan-api/ondemand.scan.results.model";
 import { MatStepper } from "@angular/material/stepper";
 import { ErrorStateMatcher } from "@angular/material/core";
-import { stringify } from "querystring";
 
 const ipaddressPattern =
 	"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";

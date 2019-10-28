@@ -21,7 +21,6 @@ import { MatSort } from "@angular/material/sort";
 import { catchError, switchMap, tap } from "rxjs/operators";
 import { LayoutUtilsService } from "../../../core/_base/crud";
 import { DeviceCredsEditComponent } from "./device-creds-edit/device-creds-edit.component";
-import { InventoryScanRequest } from "../../../core/vscan-api/inventory.scan.model";
 
 @Component({
 	selector: "vscan-vscan-device-creds",
@@ -187,9 +186,9 @@ export class VscanDeviceCredsComponent implements OnInit, AfterViewInit {
 						.pipe(
 							tap(() => {
 								this.toastNotif.successToastNotif(
-									"Successfully created credentials: " +
+									"Successfully updated credentials: " +
 										body.credentialsName,
-									`Credentials Creation Success`
+									`Credentials update success`
 								);
 
 								// Refresh HTTP Request Observable
@@ -202,7 +201,7 @@ export class VscanDeviceCredsComponent implements OnInit, AfterViewInit {
 							catchError(err => {
 								this.toastNotif.errorToastNotif(
 									err,
-									`Credentials Creation Failure`
+									`Credentials Update Failure`
 								);
 								this.loading$.next(false);
 								return throwError(err);

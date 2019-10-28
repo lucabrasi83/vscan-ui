@@ -10,7 +10,11 @@ import {
 	DeviceCredentialsUpdate,
 	DeviceUserCredentials
 } from "./device.credentials.model";
-import { SSHGateways } from "./ssh.gateway.model";
+import {
+	SSHGatewayCreate,
+	SSHGateways,
+	SSHGatewayUpdate
+} from "./ssh.gateway.model";
 import { InventoryScanRequest } from "./inventory.scan.model";
 import { InventoryScanResultsModel } from "./inventory.scan.results.model";
 import { OndemandScanResultsModel } from "./ondemand.scan.results.model";
@@ -39,6 +43,9 @@ const USER_DEVICE_CREDENTIAL =
 	environment.vscanAPIURL + "/device-credentials/credential";
 
 const INVENTORY_DEVICES_DELETION = environment.vscanAPIURL + "/devices/device";
+
+const ENTERPRISE_SSH_GATEWAY =
+	environment.vscanAPIURL + "/ssh-gateways/gateway";
 
 @Injectable({
 	providedIn: "root"
@@ -191,6 +198,43 @@ export class VscanApiService {
 					headers: httpHeaders
 				}
 			)
+			.pipe(catchError(this.auth.handleError));
+	}
+	createSSHGateway(
+		req: SSHGatewayCreate | SSHGatewayUpdate
+	): Observable<any> {
+		const httpHeaders = new HttpHeaders();
+		httpHeaders.set("Content-Type", "application/json");
+
+		return this.http
+			.post<any>(ENTERPRISE_SSH_GATEWAY, req, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	updateSSHGateway(req: SSHGatewayUpdate): Observable<any> {
+		const httpHeaders = new HttpHeaders();
+		httpHeaders.set("Content-Type", "application/json");
+
+		return this.http
+			.patch<any>(ENTERPRISE_SSH_GATEWAY + "/" + req.gatewayName, req, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	deleteSSHGateways(sshgw: string[]): Observable<any> {
+		const httpHeaders = new HttpHeaders();
+		httpHeaders.set("Content-Type", "application/json");
+
+		const httpOptions = {
+			headers: httpHeaders,
+			body: { sshGateways: sshgw }
+		};
+
+		return this.http
+			.request<any>("delete", ENTERPRISE_SSH_GATEWAY, httpOptions)
 			.pipe(catchError(this.auth.handleError));
 	}
 }

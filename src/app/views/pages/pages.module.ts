@@ -46,6 +46,7 @@ import { VscanJobsComponent } from "./vscan-jobs/vscan-jobs.component";
 import { VscanInventoryComponent } from "./vscan-inventory/vscan-inventory.component";
 import { DeleteEntityDialogComponent } from "../partials/content/crud";
 import { DeviceCredsEditComponent } from "./vscan-device-creds/device-creds-edit/device-creds-edit.component";
+import { SshGwEditComponent } from "./vscan-ssh-gateways/ssh-gw-edit/ssh-gw-edit.component";
 
 @NgModule({
 	declarations: [
@@ -59,7 +60,8 @@ import { DeviceCredsEditComponent } from "./vscan-device-creds/device-creds-edit
 		VscanSshGatewaysComponent,
 		VscanJobsComponent,
 		VscanInventoryComponent,
-		DeviceCredsEditComponent
+		DeviceCredsEditComponent,
+		SshGwEditComponent
 	],
 	exports: [],
 	imports: [
@@ -107,7 +109,8 @@ import { DeviceCredsEditComponent } from "./vscan-device-creds/device-creds-edit
 		DeviceVulnDetailsComponent,
 		VscanScanComponent,
 		DeleteEntityDialogComponent,
-		DeviceCredsEditComponent
+		DeviceCredsEditComponent,
+		SshGwEditComponent
 	],
 	providers: []
 })

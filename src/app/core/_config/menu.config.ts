@@ -460,7 +460,7 @@ export class MenuConfig {
 					root: true,
 					bullet: "dot",
 					icon: "flaticon3-wifi-router",
-					page: "/user-management/users"
+					page: "/settings/ssh-gateways"
 				},
 
 				{

@@ -9,6 +9,7 @@ import { AuthGuard } from "./core/auth";
 import { VscanDevicesComponent } from "./views/pages/vscan-devices/inventory-list/vscan-devices.component";
 import { OndemandScanComponent } from "./views/pages/ondemand-scan/ondemand-scan.component";
 import { VscanDeviceCredsComponent } from "./views/pages/vscan-device-creds/vscan-device-creds.component";
+import { VscanSshGatewaysComponent } from "./views/pages/vscan-ssh-gateways/vscan-ssh-gateways.component";
 
 const routes: Routes = [
 	{
@@ -51,6 +52,11 @@ const routes: Routes = [
 			{
 				path: "settings/device-credentials",
 				component: VscanDeviceCredsComponent,
+				canActivate: [AuthGuard]
+			},
+			{
+				path: "settings/ssh-gateways",
+				component: VscanSshGatewaysComponent,
 				canActivate: [AuthGuard]
 			},
 			{
