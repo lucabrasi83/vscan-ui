@@ -14,7 +14,7 @@ import { InventoryDeviceModel } from "../../../../core/vscan-api/device.inventor
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatIconRegistry } from "@angular/material/icon";
 import { VscanApiService } from "../../../../core/vscan-api/vscan-api.service";
-import { catchError, map } from "rxjs/operators";
+import { catchError, map, switchMap, tap } from "rxjs/operators";
 import { MatTableDataSource } from "@angular/material/table";
 import { ToastNotifService } from "../../../../core/_base/layout/services/toast-notif.service";
 import { MatSelect } from "@angular/material/select";
@@ -25,6 +25,7 @@ import {
 	MAX_DEVICES,
 	VscanScanComponent
 } from "../vscan-scan/vscan-scan.component";
+import { LayoutUtilsService } from "../../../../core/_base/crud";
 
 @Component({
 	selector: "vscan-devices",
@@ -77,12 +78,16 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 	deviceResults: InventoryDeviceModel[] = [];
 	dataSource = new MatTableDataSource<InventoryDeviceModel>();
 
+	// Inventory Devices Subject Data
+	inventoryDevices$ = new BehaviorSubject<InventoryDeviceModel>(null);
+
 	constructor(
 		private matIconRegistry: MatIconRegistry,
 		private domSanitizer: DomSanitizer,
 		private vscanAPI: VscanApiService,
 		private toastNotif: ToastNotifService,
-		public dialog: MatDialog
+		public dialog: MatDialog,
+		private layoutUtilsService: LayoutUtilsService
 	) {
 		this.matIconRegistry.addSvgIcon(
 			"shield-success",
@@ -103,38 +108,44 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		// If the user changes the sort order, reset back to the first page.
 		this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
-		this.vscanAPI
-			.getAllInventoryDevices()
+		this.inventoryDevices$
 			.pipe(
-				map(elem => {
-					return elem.devices;
-				}),
-				catchError(err => {
-					this.toastNotif.errorToastNotif(
-						err,
-						"Failed to fetch devices"
+				switchMap(() => {
+					return this.vscanAPI.getAllInventoryDevices().pipe(
+						map(elem => {
+							return elem.devices;
+						}),
+						tap(data => {
+							this.dataSource.data = data as InventoryDeviceModel[];
+
+							this.loading$.next(false);
+
+							this.deviceResults = this.dataSource.data;
+
+							// Set dropdown filters data
+							data.forEach(elem => {
+								this.enterpriseIDSet.add(
+									elem.enterpriseName.trim()
+								);
+							});
+							// Copy Sets into sorted array
+
+							this.enterpriseIDArray = Array.from(
+								this.enterpriseIDSet
+							).sort();
+						}),
+						catchError(err => {
+							this.toastNotif.errorToastNotif(
+								err,
+								"Failed to fetch devices"
+							);
+							this.loading$.next(false);
+							return throwError(err);
+						})
 					);
-					this.loading$.next(false);
-					return throwError(err);
 				})
 			)
-			.subscribe(data => {
-				this.dataSource.data = data as InventoryDeviceModel[];
-
-				this.loading$.next(false);
-
-				this.deviceResults = this.dataSource.data;
-
-				// Set dropdown filters data
-				data.forEach(elem => {
-					this.enterpriseIDSet.add(elem.enterpriseName.trim());
-				});
-				// Copy Sets into sorted array
-
-				this.enterpriseIDArray = Array.from(
-					this.enterpriseIDSet
-				).sort();
-			});
+			.subscribe();
 
 		// Customer Filter predicate
 		this.dataSource.filterPredicate = this.customerFilterPredicate;
@@ -330,6 +341,57 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 
 		dialogRef.afterClosed().subscribe(result => {
 			console.log("The dialog was closed " + result);
+		});
+	}
+
+	deleteInventoryDevices() {
+		let selectedDevices: string[] = [];
+
+		this.selection.selected.forEach(item => {
+			selectedDevices.push(item.deviceID);
+		});
+
+		const dialogRef = this.layoutUtilsService.deleteElement(
+			"Devices Deletion",
+			"Confirm you want to delete the following device(s): ",
+			selectedDevices.join("\n")
+		);
+		dialogRef.afterClosed().subscribe(res => {
+			if (!res) {
+				return;
+			}
+
+			if (res) {
+				this.loading$.next(true);
+
+				this.vscanAPI
+					.deleteInventoryDevices(selectedDevices)
+					.pipe(
+						tap(() => {
+							this.toastNotif.successToastNotif(
+								"Successfully deleted devices:\n" +
+									selectedDevices.join("\n"),
+								`Devices Deletion Success`
+							);
+
+							// Refresh HTTP Request Observable
+							this.inventoryDevices$.next(null);
+
+							this.selection.clear();
+
+							this.loading$.next(false);
+						}),
+						catchError(err => {
+							this.toastNotif.errorToastNotif(
+								err,
+								`Devices Deletion Failure`
+							);
+							this.loading$.next(false);
+							return throwError(err);
+						})
+					)
+					.subscribe();
+			}
 		});
 	}
 }

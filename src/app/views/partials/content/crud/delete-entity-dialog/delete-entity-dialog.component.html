@@ -2,10 +2,13 @@
 	<div class="kt-portlet__head kt-portlet__head__custom">
 		<div class="kt-portlet__head-progress">
 			<!-- here can place a progress bar-->
-			<mat-progress-bar mode="indeterminate" *ngIf="viewLoading"></mat-progress-bar>
+			<!--			<mat-progress-bar-->
+			<!--				mode="indeterminate"-->
+			<!--				*ngIf="viewLoading"-->
+			<!--			></mat-progress-bar>-->
 		</div>
 		<div class="kt-portlet__head-label">
-			<h3 class="kt-portlet__head-title">{{data.title}}</h3>
+			<h3 class="kt-portlet__head-title">{{ data.title }}</h3>
 			<span class="kt-portlet__head-icon kt-hide">
 				<i class="la la-gear"></i>
 			</span>
@@ -15,14 +18,29 @@
 		<div class="kt-portlet__body">
 			<div class="form-group kt-form__group row">
 				<div class="col-lg-12">
-					{{viewLoading ? data.waitDesciption : data.description}}
+					{{ data.description }}
+				</div>
+				<br />
+				<br />
+				<div class="col-lg-12" style="white-space: pre-line;">
+					{{ data.waitDescription }}
 				</div>
 			</div>
 		</div>
-		<div class="kt-portlet__foot kt-portlet__no-border kt-portlet__foot--fit text-right">
+		<div
+			class="kt-portlet__foot kt-portlet__no-border kt-portlet__foot--fit text-right"
+		>
 			<div class="kt-form__actions kt-form__actions--sm">
-				<button mat-button (click)="onNoClick()">Cancel</button>&nbsp;
-				<button mat-button (click)="onYesClick()" color="primary" cdkFocusInitial [disabled]="viewLoading">Delete</button>
+				<button mat-raised-button (click)="onNoClick()">Cancel</button
+				>&nbsp;
+				<button
+					mat-raised-button
+					(click)="onYesClick()"
+					color="warn"
+					cdkFocusInitial
+				>
+					Delete
+				</button>
 			</div>
 		</div>
 	</div>

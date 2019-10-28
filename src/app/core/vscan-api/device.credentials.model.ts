@@ -19,3 +19,21 @@ export class DeviceCredential {
 		this.privateKey = "";
 	}
 }
+
+export interface DeviceCredentialsCreate {
+	credentialsName: string;
+	credentialsDeviceVendor: string;
+	username: string;
+	password?: string;
+	iosEnablePassword?: string;
+	privateKey?: string;
+}
+
+export interface DeviceCredentialsUpdate {
+	credentialsName?: string;
+	credentialsDeviceVendor?: string;
+	username?: string;
+	password?: string;
+	iosEnablePassword?: string;
+	privateKey?: string;
+}

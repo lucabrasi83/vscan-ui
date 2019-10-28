@@ -19,3 +19,18 @@ export class EnterpriseSSHGateway {
 		this.enterpriseID = "";
 	}
 }
+
+export interface SSHGatewayCreate {
+	gatewayName: string;
+	gatewayIP: string;
+	gatewayUsername: string;
+	gatewayPassword?: string;
+	gatewayPrivateKey?: string;
+}
+
+export interface SSHGatewayUpdate {
+	gatewayIP?: string;
+	gatewayUsername?: string;
+	gatewayPassword?: string;
+	gatewayPrivateKey?: string;
+}

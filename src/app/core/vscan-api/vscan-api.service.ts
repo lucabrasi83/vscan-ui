@@ -5,7 +5,11 @@ import { Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { catchError } from "rxjs/operators";
 import { AuthService } from "../auth/_services";
-import { DeviceUserCredentials } from "./device.credentials.model";
+import {
+	DeviceCredentialsCreate,
+	DeviceCredentialsUpdate,
+	DeviceUserCredentials
+} from "./device.credentials.model";
 import { SSHGateways } from "./ssh.gateway.model";
 import { InventoryScanRequest } from "./inventory.scan.model";
 import { InventoryScanResultsModel } from "./inventory.scan.results.model";
@@ -32,7 +36,9 @@ const DEVICE_VULNERABILITIES_URL =
 	environment.vscanAPIURL + "/vulnerabilities/device/";
 
 const USER_DEVICE_CREDENTIAL =
-	environment.vscanAPIURL + "/device-credentials/credential/";
+	environment.vscanAPIURL + "/device-credentials/credential";
+
+const INVENTORY_DEVICES_DELETION = environment.vscanAPIURL + "/devices/device";
 
 @Injectable({
 	providedIn: "root"
@@ -132,14 +138,59 @@ export class VscanApiService {
 			.pipe(catchError(this.auth.handleError));
 	}
 
-	deleteDeviceCredentials(creds: string): Observable<any> {
+	deleteDeviceCredentials(creds: string[]): Observable<any> {
+		const httpHeaders = new HttpHeaders();
+		httpHeaders.set("Content-Type", "application/json");
+
+		const httpOptions = {
+			headers: httpHeaders,
+			body: { credentials: creds }
+		};
+
+		return this.http
+			.request<any>("delete", USER_DEVICE_CREDENTIAL, httpOptions)
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	deleteInventoryDevices(devices: string[]): Observable<any> {
+		const httpHeaders = new HttpHeaders();
+		httpHeaders.set("Content-Type", "application/json");
+
+		const httpOptions = {
+			headers: httpHeaders,
+			body: { devices: devices }
+		};
+
+		return this.http
+			.request<any>("delete", INVENTORY_DEVICES_DELETION, httpOptions)
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	createDeviceCredentials(
+		req: DeviceCredentialsCreate | DeviceCredentialsUpdate
+	): Observable<any> {
 		const httpHeaders = new HttpHeaders();
 		httpHeaders.set("Content-Type", "application/json");
 
 		return this.http
-			.delete<any>(USER_DEVICE_CREDENTIAL + creds, {
+			.post<any>(USER_DEVICE_CREDENTIAL, req, {
 				headers: httpHeaders
 			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	updateDeviceCredentials(req: DeviceCredentialsUpdate): Observable<any> {
+		const httpHeaders = new HttpHeaders();
+		httpHeaders.set("Content-Type", "application/json");
+
+		return this.http
+			.patch<any>(
+				USER_DEVICE_CREDENTIAL + "/" + req.credentialsName,
+				req,
+				{
+					headers: httpHeaders
+				}
+			)
 			.pipe(catchError(this.auth.handleError));
 	}
 }

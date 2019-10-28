@@ -1,10 +1,10 @@
 // Angular
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject, OnInit } from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
 @Component({
-	selector: 'kt-delete-entity-dialog',
-	templateUrl: './delete-entity-dialog.component.html'
+	selector: "kt-delete-entity-dialog",
+	templateUrl: "./delete-entity-dialog.component.html"
 })
 export class DeleteEntityDialogComponent implements OnInit {
 	// Public properties
@@ -19,7 +19,7 @@ export class DeleteEntityDialogComponent implements OnInit {
 	constructor(
 		public dialogRef: MatDialogRef<DeleteEntityDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any
-	) { }
+	) {}
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
@@ -28,8 +28,7 @@ export class DeleteEntityDialogComponent implements OnInit {
 	/**
 	 * On init
 	 */
-	ngOnInit() {
-	}
+	ngOnInit() {}
 
 	/**
 	 * Close dialog with false result
@@ -44,8 +43,7 @@ export class DeleteEntityDialogComponent implements OnInit {
 	onYesClick(): void {
 		/* Server loading imitation. Remove this */
 		this.viewLoading = true;
-		setTimeout(() => {
-			this.dialogRef.close(true); // Keep only this row
-		}, 2500);
+
+		this.dialogRef.close(true); // Keep only this row
 	}
 }

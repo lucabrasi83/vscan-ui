@@ -1,12 +1,13 @@
 // Angular
-import { Injectable } from '@angular/core';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { Injectable } from "@angular/core";
+import { MatSnackBar, MatDialog } from "@angular/material";
 // Partials for CRUD
-import { ActionNotificationComponent,
+import {
+	ActionNotificationComponent,
 	DeleteEntityDialogComponent,
 	FetchEntityDialogComponent,
 	UpdateStatusDialogComponent
-} from '../../../../views/partials/content/crud';
+} from "../../../../views/partials/content/crud";
 
 export enum MessageType {
 	Create,
@@ -23,8 +24,7 @@ export class LayoutUtilsService {
 	 * @param snackBar: MatSnackBar
 	 * @param dialog: MatDialog
 	 */
-	constructor(private snackBar: MatSnackBar,
-		private dialog: MatDialog) { }
+	constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {}
 
 	/**
 	 * Showing (Mat-Snackbar) Notification
@@ -44,7 +44,7 @@ export class LayoutUtilsService {
 		_showCloseButton: boolean = true,
 		_showUndoButton: boolean = true,
 		_undoButtonDuration: number = 3000,
-		_verticalPosition: 'top' | 'bottom' = 'bottom'
+		_verticalPosition: "top" | "bottom" = "bottom"
 	) {
 		const _data = {
 			message: _message,
@@ -54,7 +54,7 @@ export class LayoutUtilsService {
 			undoButtonDuration: _undoButtonDuration,
 			verticalPosition: _verticalPosition,
 			type: _type,
-			action: 'Undo'
+			action: "Undo"
 		};
 		return this.snackBar.openFromComponent(ActionNotificationComponent, {
 			duration: _duration,
@@ -68,12 +68,17 @@ export class LayoutUtilsService {
 	 *
 	 * @param title: stirng
 	 * @param description: stirng
-	 * @param waitDesciption: string
+	 * @param waitDescription: string
 	 */
-	deleteElement(title: string = '', description: string = '', waitDesciption: string = '') {
+	deleteElement(
+		title: string = "",
+		description: string = "",
+		waitDescription: string = ""
+	) {
 		return this.dialog.open(DeleteEntityDialogComponent, {
-			data: { title, description, waitDesciption },
-			width: '440px'
+			data: { title, description, waitDescription: waitDescription },
+			width: "550px",
+			height: "auto"
 		});
 	}
 
@@ -85,7 +90,7 @@ export class LayoutUtilsService {
 	fetchElements(_data) {
 		return this.dialog.open(FetchEntityDialogComponent, {
 			data: _data,
-			width: '400px'
+			width: "400px"
 		});
 	}
 
@@ -99,7 +104,7 @@ export class LayoutUtilsService {
 	updateStatusForEntities(title, statuses, messages) {
 		return this.dialog.open(UpdateStatusDialogComponent, {
 			data: { title, statuses, messages },
-			width: '480px'
+			width: "480px"
 		});
 	}
 }

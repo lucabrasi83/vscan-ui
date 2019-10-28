@@ -44,6 +44,8 @@ import { VscanDeviceCredsComponent } from "./vscan-device-creds/vscan-device-cre
 import { VscanSshGatewaysComponent } from "./vscan-ssh-gateways/vscan-ssh-gateways.component";
 import { VscanJobsComponent } from "./vscan-jobs/vscan-jobs.component";
 import { VscanInventoryComponent } from "./vscan-inventory/vscan-inventory.component";
+import { DeleteEntityDialogComponent } from "../partials/content/crud";
+import { DeviceCredsEditComponent } from "./vscan-device-creds/device-creds-edit/device-creds-edit.component";
 
 @NgModule({
 	declarations: [
@@ -56,7 +58,8 @@ import { VscanInventoryComponent } from "./vscan-inventory/vscan-inventory.compo
 		VscanDeviceCredsComponent,
 		VscanSshGatewaysComponent,
 		VscanJobsComponent,
-		VscanInventoryComponent
+		VscanInventoryComponent,
+		DeviceCredsEditComponent
 	],
 	exports: [],
 	imports: [
@@ -100,7 +103,12 @@ import { VscanInventoryComponent } from "./vscan-inventory/vscan-inventory.compo
 		NgxDatatableModule,
 		ChartsModule
 	],
-	entryComponents: [DeviceVulnDetailsComponent, VscanScanComponent],
+	entryComponents: [
+		DeviceVulnDetailsComponent,
+		VscanScanComponent,
+		DeleteEntityDialogComponent,
+		DeviceCredsEditComponent
+	],
 	providers: []
 })
 export class PagesModule {}

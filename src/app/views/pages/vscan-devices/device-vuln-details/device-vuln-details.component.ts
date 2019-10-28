@@ -42,7 +42,7 @@ export class DeviceVulnDetailsComponent implements OnInit {
 		legend: {
 			labels: {
 				fontFamily: "Gotham-Light, sans-serif",
-				fontSize: 14
+				fontSize: 12
 			}
 		},
 		// We use these empty structures as placeholders for dynamic theming.
@@ -54,7 +54,8 @@ export class DeviceVulnDetailsComponent implements OnInit {
 					},
 					ticks: {
 						fontFamily: "Gotham-Light, sans-serif",
-						fontSize: 14
+						fontSize: 12,
+						beginAtZero: true
 					}
 				}
 			],
@@ -63,8 +64,9 @@ export class DeviceVulnDetailsComponent implements OnInit {
 					ticks: {
 						beginAtZero: true,
 						fontFamily: "Gotham-Light, sans-serif",
-						fontSize: 14,
-						display: false
+						fontSize: 12,
+						display: true,
+						stepSize: 1
 					},
 					gridLines: {
 						display: false
@@ -74,7 +76,7 @@ export class DeviceVulnDetailsComponent implements OnInit {
 		},
 		tooltips: {
 			titleFontFamily: "Gotham, sans-serif",
-			titleFontSize: 14,
+			titleFontSize: 12,
 			bodyFontFamily: "Gotham-Light, sans-serif",
 			bodyFontSize: 13
 		}
@@ -143,7 +145,7 @@ export class DeviceVulnDetailsComponent implements OnInit {
 				catchError(err => {
 					this.toastNotif.errorToastNotif(
 						err,
-						"Failed to device vulnerability data"
+						"Failed to fetch device vulnerability data"
 					);
 					this.loadingDialog = false;
 					return throwError(err);
@@ -200,7 +202,6 @@ export class DeviceVulnDetailsComponent implements OnInit {
 			);
 
 			if (intersection.length === item.vulnFound.length) {
-				console.log("hello");
 				timelineText = "No difference from previous scan";
 				timelineIcon = "fa fa-genderless kt-font-info";
 				return {
@@ -208,15 +209,46 @@ export class DeviceVulnDetailsComponent implements OnInit {
 					timelineText: timelineText
 				};
 			} else {
-				// Item missing from current history record compared to previous one (Vulnerability Removed)
+				// Items added to current history record compared to previous one (Vulnerability Added)
 				let intersection_left_exclude = item.vulnFound.filter(
 					x => !prevHistoryRec.vulnFound.includes(x)
 				);
 
-				// Item missing from previous record compared to current one (Vulnerability Added)
+				intersection_left_exclude.length > 0
+					? (timelineText =
+							'<p class="timeline-vuln-danger">' +
+							intersection_left_exclude
+								.map(val => {
+									return "+ " + val;
+								})
+								.join("\n") +
+							"</p>")
+					: "";
+
+				// Item missing from previous record compared to current one (Vulnerability Removed)
 				let intersection_right_exclude = prevHistoryRec.vulnFound.filter(
 					x => !item.vulnFound.includes(x)
 				);
+
+				intersection_right_exclude.length > 0
+					? (timelineText +=
+							'<p class="timeline-vuln-success">' +
+							intersection_right_exclude
+								.map(val => {
+									return "- " + val;
+								})
+								.join("\n") +
+							"</p>")
+					: "";
+
+				intersection_left_exclude.length >
+				intersection_right_exclude.length
+					? (timelineIcon = "fa fa-genderless kt-font-danger")
+					: (timelineIcon = "fa fa-genderless kt-font-success");
+				return {
+					timelineIcon: timelineIcon,
+					timelineText: timelineText
+				};
 			}
 		}
 	}

@@ -3,7 +3,7 @@
 		<ng-template #customLoadingTemplate>
 			<div class="mat-table__loading-spinner">
 				<h3>
-					Fetching Data...
+					Processing Data...
 				</h3>
 			</div>
 		</ng-template>
@@ -208,6 +208,7 @@
 									color="warn"
 									matTooltip="Delete selected devices"
 									class="mat-button-mt-4"
+									(click)="deleteInventoryDevices()"
 								>
 									<mat-icon>delete</mat-icon>
 									Delete Selected</button

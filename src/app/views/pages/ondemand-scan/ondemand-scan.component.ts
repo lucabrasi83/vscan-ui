@@ -331,7 +331,7 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 		devices.forEach(item => {
 			devicesObjArray.push({
 				ip: item.ipAddressCtrl,
-				hostname: item.hostnameCtrl
+				hostname: item.hostnameCtrl.trim()
 			});
 		});
 
