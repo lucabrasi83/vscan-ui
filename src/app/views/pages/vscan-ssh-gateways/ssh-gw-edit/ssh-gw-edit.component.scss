@@ -1,0 +1,8 @@
+::ng-deep.mat-form-field-disabled .mat-form-field-underline {
+	background-image: linear-gradient(
+		to right,
+		rgba(216, 220, 230, 0.42)
+	) !important;
+	background-size: 1px 100% !important;
+	background-repeat: repeat-x !important;
+}
