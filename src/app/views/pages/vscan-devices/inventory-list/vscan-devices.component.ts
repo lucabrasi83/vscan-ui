@@ -2,6 +2,7 @@ import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	Component,
+	ElementRef,
 	OnInit,
 	TemplateRef,
 	ViewChild
@@ -54,6 +55,10 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 	filterEnterprise: string[] = [];
 
 	filterVulnerabilityStatus: string = "";
+
+	// Device Search Filter Input
+	@ViewChild("deviceSearchFilterInput", { static: false })
+	deviceSearchFilterInput: ElementRef<any>;
 
 	// Loading Template
 	@ViewChild("customLoadingTemplate", { static: false })
@@ -290,6 +295,7 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 		this.filterEnterprise = [];
 		this.filterVulnerabilityStatus = "";
 		this.dataSource.filter = "";
+		this.deviceSearchFilterInput.nativeElement.value = "";
 		this.selection.clear();
 	}
 
@@ -321,10 +327,6 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 			},
 			autoFocus: false
 		});
-
-		dialogRef.afterClosed().subscribe(result => {
-			console.log("The dialog was closed " + result);
-		});
 	}
 
 	openScanFlowDialog(devices: any[]): void {
@@ -337,10 +339,6 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 				selectedDevices: devices
 			},
 			autoFocus: false
-		});
-
-		dialogRef.afterClosed().subscribe(result => {
-			console.log("The dialog was closed " + result);
 		});
 	}
 

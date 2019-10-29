@@ -27,7 +27,7 @@ export class DeviceCredsEditComponent implements OnInit {
 
 	createForm() {
 		this.credentialForm = this.fb.group({
-			sshGatewayName: [
+			credentialName: [
 				{
 					value: this.credential.credentialsName,
 					disabled: this.credential.credentialsName !== ""

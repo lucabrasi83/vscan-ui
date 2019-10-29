@@ -1,7 +1,21 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import {
+	Component,
+	Inject,
+	OnInit,
+	TemplateRef,
+	ViewChild
+} from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { EnterpriseSSHGateway } from "../../../../core/vscan-api/ssh.gateway.model";
+import {
+	EnterpriseSSHGateway,
+	SSHGatewayCreate,
+	SSHGatewayTestResult
+} from "../../../../core/vscan-api/ssh.gateway.model";
+import { VscanApiService } from "../../../../core/vscan-api/vscan-api.service";
+import { catchError, tap } from "rxjs/operators";
+import { throwError } from "rxjs";
+import { ToastNotifService } from "../../../../core/_base/layout/services/toast-notif.service";
 
 const sshPrivateKeyPattern = "-{3,}BEGIN.*\\n([\\s\\S]{400,}?)\\n-{3,}END.*";
 
@@ -17,10 +31,18 @@ export class SshGwEditComponent implements OnInit {
 	sshGateway: EnterpriseSSHGateway;
 	sshGatewayForm: FormGroup;
 
+	isSSHTestOngoing: boolean = false;
+
+	closeAlert: boolean = false;
+
+	sshGatewayTestResults: SSHGatewayTestResult;
+
 	constructor(
 		public dialogRef: MatDialogRef<SshGwEditComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
-		private fb: FormBuilder
+		private fb: FormBuilder,
+		private vscan: VscanApiService,
+		private toastNotif: ToastNotifService
 	) {}
 
 	ngOnInit() {
@@ -88,5 +110,42 @@ export class SshGwEditComponent implements OnInit {
 		) {
 			return "A maximum of 30 characters are allowed";
 		}
+	}
+	sshGatewayTest() {
+		this.isSSHTestOngoing = true;
+
+		let formValues = this.sshGatewayForm.getRawValue();
+
+		let body: SSHGatewayCreate = {
+			gatewayName: formValues.gatewayName,
+			gatewayIP: formValues.gatewayIP,
+			gatewayUsername: formValues.gatewayUsername,
+			gatewayPassword: formValues.gatewayPassword,
+			gatewayPrivateKey: formValues.gatewayPrivateKey
+		};
+
+		this.vscan
+			.connectivityTestSSHGateway(body)
+			.pipe(
+				tap((res: SSHGatewayTestResult) => {
+					this.isSSHTestOngoing = false;
+
+					this.sshGatewayTestResults = res;
+					this.closeAlert = false;
+				}),
+				catchError(err => {
+					this.toastNotif.errorToastNotif(
+						err,
+						`SSH Gateway Test Failure`
+					);
+					this.isSSHTestOngoing = false;
+					return throwError(err);
+				})
+			)
+			.subscribe();
+	}
+
+	onCloseAlert() {
+		this.closeAlert = true;
 	}
 }

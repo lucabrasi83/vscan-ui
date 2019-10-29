@@ -1,4 +1,6 @@
 import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
 	Component,
 	ElementRef,
 	Inject,
@@ -52,7 +54,7 @@ export const MAX_DEVICES = 20;
 	templateUrl: "./vscan-scan.component.html",
 	styleUrls: ["./vscan-scan.component.scss"]
 })
-export class VscanScanComponent implements OnInit, OnDestroy {
+export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 	// Unique Hash to generate for log file stream request
 	hash: string | Int32Array = this.generateLogStreamHash();
 
@@ -62,7 +64,6 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 	// Declare Websocket Subject
 	webSocketSubject: WebSocketSubject<any>;
 
-	loading = true;
 	isSearching = false;
 	filteredDevices: string[] = [];
 
@@ -120,7 +121,7 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 		active: true,
 		text: "Scanning...",
 		buttonColor: "accent",
-		barColor: undefined,
+		barColor: "accent",
 		raised: true,
 		stroked: false,
 		mode: "indeterminate",
@@ -146,32 +147,6 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 		this.logStreamFormGroup = this._formBuilder.group({
 			logStreamCtrl: [""]
 		});
-
-		// Devices Search
-		this.devicesFormGroup
-			.get("devicesCtrl")
-			.valueChanges.pipe(
-				debounceTime(500),
-				distinctUntilChanged(),
-				tap(() => {
-					this.filteredDevices = [];
-					this.isSearching = true;
-				}),
-				switchMap(value =>
-					this.http.get(DEVICE_SEARCH_API_URL + value).pipe(
-						finalize(() => {
-							this.isSearching = false;
-						})
-					)
-				)
-			)
-			.subscribe(data => {
-				if (data["devices"] == undefined) {
-					this.filteredDevices = [];
-				} else {
-					this.filteredDevices = data["devices"];
-				}
-			});
 
 		// Get Current JWT Token from NGRX Store
 		this.currentUserToken = this.auth.getStoreToken();
@@ -209,6 +184,42 @@ export class VscanScanComponent implements OnInit, OnDestroy {
 				this.userDeviceCredentials = res[0].deviceCredentials;
 				this.enterpriseSSHGateway = res[1].sshGateway;
 			});
+	}
+
+	ngAfterViewInit(): void {
+		// Devices Search
+		this.devicesFormGroup
+			.get("devicesCtrl")
+			.valueChanges.pipe(
+				debounceTime(500),
+				distinctUntilChanged(),
+				tap(() => {
+					this.filteredDevices = [];
+					this.isSearching = true;
+				}),
+				switchMap(value =>
+					this.http.get(DEVICE_SEARCH_API_URL + value).pipe(
+						finalize(() => {
+							this.isSearching = false;
+						})
+					)
+				)
+			)
+			.subscribe(data => {
+				if (data["devices"] == undefined) {
+					this.filteredDevices = [];
+				} else {
+					this.filteredDevices = data["devices"];
+				}
+			});
+
+		// Set OS Type from inventory selection
+		if (this.data.selectedDevices && this.data.selectedDevices.length > 0) {
+			this.devicesFormGroup
+				.get("osTypeCtrl")
+				.setValue(this.data.selectedDevices[0].osType);
+			this.devicesFormGroup.get("osTypeCtrl").disable();
+		}
 	}
 
 	ngOnDestroy(): void {

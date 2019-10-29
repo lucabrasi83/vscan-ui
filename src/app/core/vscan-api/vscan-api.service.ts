@@ -13,6 +13,7 @@ import {
 import {
 	SSHGatewayCreate,
 	SSHGateways,
+	SSHGatewayTestResult,
 	SSHGatewayUpdate
 } from "./ssh.gateway.model";
 import { InventoryScanRequest } from "./inventory.scan.model";
@@ -235,6 +236,23 @@ export class VscanApiService {
 
 		return this.http
 			.request<any>("delete", ENTERPRISE_SSH_GATEWAY, httpOptions)
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	connectivityTestSSHGateway(
+		req: SSHGatewayCreate
+	): Observable<SSHGatewayTestResult> {
+		const httpHeaders = new HttpHeaders();
+		httpHeaders.set("Content-Type", "application/json");
+
+		return this.http
+			.post<SSHGatewayTestResult>(
+				ENTERPRISE_SSH_GATEWAY + "/test-connectivity",
+				req,
+				{
+					headers: httpHeaders
+				}
+			)
 			.pipe(catchError(this.auth.handleError));
 	}
 }

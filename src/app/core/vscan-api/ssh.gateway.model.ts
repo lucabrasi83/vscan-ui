@@ -35,3 +35,8 @@ export interface SSHGatewayUpdate {
 	gatewayPassword?: string;
 	gatewayPrivateKey?: string;
 }
+
+export interface SSHGatewayTestResult {
+	message: string;
+	testSuccess: boolean;
+}

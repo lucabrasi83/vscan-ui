@@ -49,7 +49,8 @@
     }
 
     &.kt-mat-alert--primary {
-        background: kt-get($mat-primary, 500);
+        //background: kt-get($mat-primary, 500);
+		background: #31bb62;
     }
 
     &.kt-mat-alert--accent {

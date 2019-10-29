@@ -28,15 +28,15 @@
 			<ng-container ktPortletTools>
 				<button
 					(click)="onClearFilters()"
-					style="margin-right: 20px;background-color: #5d78ff;"
+					style="margin-right: 20px;"
 					mat-raised-button
 					matTooltip="Clear Dropdown Filters"
-					color="warn"
+					color="accent"
 					type="button"
 				>
-					<i class="flaticon2-rubbish-bin"></i>
+					<i class="flaticon2-sort-down"></i>
 					<span translate="ECOMMERCE.CUSTOMERS.NEW_CUSTOMER"
-						>&nbsp;&nbsp;&nbsp;Clear Filters</span
+						>&nbsp;&nbsp;Clear Filters</span
 					>
 				</button>
 				<!-- Buttons (Material Angular) | See off.documenations 'https://material.angular.io/components/button/overview' -->
@@ -156,6 +156,7 @@
 								style="color: black;"
 							>
 								<input
+									#deviceSearchFilterInput
 									matInput
 									[placeholder]="
 										filterEnterprise.length > 0 ||
@@ -219,6 +220,7 @@
 									mat-raised-button
 									matTooltip="Scan selected devices"
 									class="mat-button-mt-4"
+									color="accent"
 								>
 									<i class="flaticon3-retinal-scan"></i>
 									&nbsp;&nbsp;Scan Selected</button
@@ -296,9 +298,9 @@
 						<mat-cell *matCellDef="let device">
 							<a
 								mat-raised-button
-								routerLink="/dashboard"
 								color="accent"
 								class="enterprise-button"
+								style="font-size: 12px;"
 								>{{ device.enterpriseID }}</a
 							></mat-cell
 						>

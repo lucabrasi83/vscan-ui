@@ -1,13 +1,21 @@
 .mat-raised-button:hover {
-	color: #fff;
-	background-color: #ee6214;
+	&.mat-primary {
+		color: #fff;
+		background-color: #ee6214;
+	}
+}
 
+.mat-raised-button:hover {
+	&.mat-accent {
+		color: #fff;
+		background-color: #4447c3;
+	}
 }
 
 .mat-raised-button:hover {
 	&.mat-warn {
 		color: #fff;
-		background-color: #cc2529;
+		background-color: rgb(200, 37, 43);
 	}
 }
 

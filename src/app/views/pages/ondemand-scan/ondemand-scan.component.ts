@@ -98,7 +98,7 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 		active: true,
 		text: "Scanning...",
 		buttonColor: "accent",
-		barColor: undefined,
+		barColor: "accent",
 		raised: true,
 		stroked: false,
 		mode: "indeterminate",

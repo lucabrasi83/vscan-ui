@@ -24,9 +24,9 @@ $mat-primary: (
 );
 
 $mat-accent: (
-	100: lighten(kt-get($kt-state-colors, primary, base), 8%),
-	500: kt-get($kt-state-colors, primary, base),
-	700: darken(kt-get($kt-state-colors, primary, base), 8%),
+	100: lighten(kt-get($kt-state-colors, info, base), 8%),
+	500: kt-get($kt-state-colors, info, base),
+	700: darken(kt-get($kt-state-colors, info, base), 8%),
 	contrast: (
 		100: $dark-primary-text,
 		500: $light-primary-text,

@@ -1,4 +1,9 @@
-<div class="kt-portlet">
+<div
+	class="kt-portlet"
+	[ngClass]="{
+		'kt-portlet--body-progress kt-portlet--body-progress-overlay': isSSHTestOngoing
+	}"
+>
 	<div class="kt-portlet__head kt-portlet__head__custom">
 		<div class="kt-portlet__head-label">
 			<h3 class="kt-portlet__head-title">{{ getTitle() }}</h3>
@@ -6,19 +11,51 @@
 	</div>
 	<form class="kt-form" [formGroup]="sshGatewayForm">
 		<div class="kt-portlet__body">
-			<!--			<div class="kt-portlet__body-progress">-->
-			<!--				<mat-spinner [diameter]="20"></mat-spinner>-->
-			<!--			</div>-->
+			<div class="kt-portlet__body-progress">
+				<div
+					style="display: flex;flex-direction: column; align-items: center;"
+				>
+					<div style="display: flex;flex-direction: row;">
+						<mat-spinner [diameter]="80"></mat-spinner>
+					</div>
+					<div
+						style="display: flex;flex-direction: row;margin-top:30px;"
+					>
+						<h3>Testing SSH Connectivity...</h3>
+					</div>
+				</div>
+			</div>
 
-			<!--			<kt-alert-->
-			<!--				*ngIf="hasFormErrors"-->
-			<!--				type="warn"-->
-			<!--				[duration]="30000"-->
-			<!--				[showCloseButton]="true"-->
-			<!--				(close)="onAlertClose($event)"-->
-			<!--			>-->
-			<!--				Oh snap! Change a few things up and try submitting again.-->
-			<!--			</kt-alert>-->
+			<kt-alert
+				*ngIf="
+					sshGatewayTestResults &&
+					!sshGatewayTestResults.testSuccess &&
+					!closeAlert
+				"
+				type="warn"
+				[duration]="30000"
+				[showCloseButton]="true"
+				(close)="onCloseAlert()"
+			>
+				SSH Connectivity Test Failed. Error:
+				{{ sshGatewayTestResults.message }}
+			</kt-alert>
+
+			<kt-alert
+				*ngIf="
+					sshGatewayTestResults &&
+					sshGatewayTestResults.testSuccess &&
+					!closeAlert
+				"
+				type="primary"
+				[duration]="30000"
+				(close)="onCloseAlert()"
+				[showCloseButton]="true"
+			>
+				SSH Connectivity Successful.<br />
+				Gateway SSH agent version:
+				{{ sshGatewayTestResults.message }}
+			</kt-alert>
 
 			<div class="form-group kt-form__group row">
 				<div class="col-lg-4 kt-margin-bottom-20-mobile">
@@ -117,8 +154,6 @@
 			</div>
 		</div>
 
-		<div class="kt-separator"></div>
-
 		<div
 			class="kt-portlet__foot kt-portlet__no-border kt-portlet__foot--fit"
 		>
@@ -137,9 +172,12 @@
 						<button
 							type="button"
 							mat-raised-button
-							(click)="onCloseCancelDialog()"
+							(click)="sshGatewayTest()"
 							matTooltip="Test Gateway"
-							style="background-color: #5d78ff;color: white;"
+							color="accent"
+							[disabled]="
+								sshGatewayForm.invalid || isSSHTestOngoing
+							"
 						>
 							Test Connection</button
 						>&nbsp;
@@ -150,7 +188,9 @@
 							[mat-dialog-close]="sshGatewayForm.getRawValue()"
 							matTooltip="Save changes"
 							[disabled]="
-								sshGatewayForm.invalid || !sshGatewayForm.dirty
+								sshGatewayForm.invalid ||
+								!sshGatewayForm.dirty ||
+								isSSHTestOngoing
 							"
 						>
 							Save

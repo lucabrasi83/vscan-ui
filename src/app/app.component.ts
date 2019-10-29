@@ -85,6 +85,10 @@ export class AppComponent implements OnInit, OnDestroy {
 			}
 		});
 		this.unsubscribe.push(routerSubscription);
+
+		// setInterval(() => {
+		// 	alert("hello");
+		// }, 5000);
 	}
 
 	/**
