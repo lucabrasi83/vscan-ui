@@ -219,6 +219,7 @@ export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 				.get("osTypeCtrl")
 				.setValue(this.data.selectedDevices[0].osType);
 			this.devicesFormGroup.get("osTypeCtrl").disable();
+			// this.devicesFormGroup.get("devicesCtrl").disable();
 		}
 	}
 

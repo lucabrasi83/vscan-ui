@@ -32,6 +32,9 @@ import {
 	AuthService
 } from "../../../core/auth";
 import { JwtModule } from "@auth0/angular-jwt";
+import { RefreshSessionComponent } from "./refresh-session/refresh-session.component";
+import { MatIconModule } from "@angular/material/icon";
+import { CountdownModule } from "ngx-countdown";
 
 const routes: Routes = [
 	{
@@ -72,7 +75,9 @@ const routes: Routes = [
 		MatCheckboxModule,
 		TranslateModule.forChild(),
 		StoreModule.forFeature("auth", authReducer),
-		EffectsModule.forFeature([AuthEffects])
+		EffectsModule.forFeature([AuthEffects]),
+		MatIconModule,
+		CountdownModule
 	],
 	providers: [
 		InterceptService,
@@ -88,8 +93,10 @@ const routes: Routes = [
 		LoginComponent,
 		RegisterComponent,
 		ForgotPasswordComponent,
-		AuthNoticeComponent
-	]
+		AuthNoticeComponent,
+		RefreshSessionComponent
+	],
+	entryComponents: [RefreshSessionComponent]
 })
 export class AuthModule {
 	static forRoot(): ModuleWithProviders {

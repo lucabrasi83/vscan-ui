@@ -40,6 +40,14 @@ const routes: Routes = [
 					)
 			},
 			{
+				path: "admin",
+				loadChildren: () =>
+					import("./views/pages/vscan-admin/vscan-admin.module").then(
+						m => m.VscanAdminModule
+					),
+				canActivate: [AuthGuard]
+			},
+			{
 				path: "scan/devices",
 				component: VscanDevicesComponent,
 				canActivate: [AuthGuard]

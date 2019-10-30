@@ -1,12 +1,12 @@
 // Angular
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 // RxJS
-import { Observable } from 'rxjs';
+import { Observable, of } from "rxjs";
 // Models
-import { DataTableItemModel } from '../models/datatable-item.model';
+import { DataTableItemModel } from "../models/datatable-item.model";
 
-const API_DATATABLE_URL = 'api/cars';
+const API_DATATABLE_URL = "api/cars";
 
 @Injectable()
 export class DataTableService {
@@ -15,12 +15,14 @@ export class DataTableService {
 	 *
 	 * @param http: HttpClient
 	 */
-	constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) {}
 
 	/**
 	 * Returns data from fake server
 	 */
 	getAllItems(): Observable<DataTableItemModel[]> {
-		return this.http.get<DataTableItemModel[]>(API_DATATABLE_URL);
+		// return this.http.get<DataTableItemModel[]>(API_DATATABLE_URL);
+		let item: DataTableItemModel[] = [];
+		return of(item);
 	}
 }

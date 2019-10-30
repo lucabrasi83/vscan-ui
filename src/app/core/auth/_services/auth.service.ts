@@ -4,7 +4,7 @@ import {
 	HttpErrorResponse,
 	HttpHeaders
 } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
+import { Observable, of, throwError } from "rxjs";
 import { User } from "../_models/user.model";
 import { Permission } from "../_models/permission.model";
 import { Role } from "../_models/role.model";
@@ -15,13 +15,14 @@ import { JwtokenModel } from "../_models/jwtoken-model";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { AppState } from "../../reducers";
 import { select, Store } from "@ngrx/store";
-import { currentAuthToken } from "../_selectors/auth.selectors";
+import { currentAuthToken, isLoggedIn } from "../_selectors/auth.selectors";
 import { AuthNoticeService } from "../auth-notice/auth-notice.service";
 
 // const API_USERS_URL = "api/users";
 const API_USERS_URL = environment.vscanAPIURL + "/login";
 const API_PERMISSION_URL = "api/permissions";
 const API_ROLES_URL = "api/roles";
+const API_REFRESH_TOKEN = environment.vscanAPIURL + "/refresh-token";
 
 @Injectable()
 export class AuthService {
@@ -38,6 +39,13 @@ export class AuthService {
 				username: email,
 				password: password
 			})
+			.pipe(catchError(this.handleError));
+	}
+
+	// Refresh Token
+	refreshToken(): Observable<JwtokenModel> {
+		return this.http
+			.get<JwtokenModel>(API_REFRESH_TOKEN)
 			.pipe(catchError(this.handleError));
 	}
 
@@ -99,6 +107,34 @@ export class AuthService {
 		});
 
 		return currentToken;
+	}
+
+	isUserLoggedIn(): boolean {
+		let isloggedIn: boolean = false;
+		this.store.pipe(select(isLoggedIn)).subscribe(loggedIn => {
+			isloggedIn = loggedIn;
+		});
+		return isloggedIn;
+	}
+
+	getTokenExpirationDate(): Date {
+		let userToken = this.getStoreToken();
+		let expDate = new Date();
+
+		// By default set year to 1970
+		expDate.setFullYear(1970);
+
+		const jwtHelper = new JwtHelperService();
+
+		if (userToken && userToken !== "") {
+			try {
+				expDate = jwtHelper.getTokenExpirationDate(userToken);
+			} catch (e) {
+				console.log(e);
+				return expDate;
+			}
+		}
+		return expDate;
 	}
 
 	getUserByToken(): Observable<User> {
@@ -179,7 +215,9 @@ export class AuthService {
 
 	// Permission
 	getAllPermissions(): Observable<Permission[]> {
-		return this.http.get<Permission[]>(API_PERMISSION_URL);
+		// return this.http.get<Permission[]>(API_PERMISSION_URL);
+		let perm: Permission[] = [];
+		return of(perm);
 	}
 
 	getRolePermissions(roleId: number): Observable<Permission[]> {
@@ -190,7 +228,10 @@ export class AuthService {
 
 	// Roles
 	getAllRoles(): Observable<Role[]> {
-		return this.http.get<Role[]>(API_ROLES_URL);
+		// return this.http.get<Role[]>(API_ROLES_URL);
+
+		let role: Role[] = [];
+		return of(role);
 	}
 
 	getRoleById(roleId: number): Observable<Role> {

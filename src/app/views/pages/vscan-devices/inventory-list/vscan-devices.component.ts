@@ -300,6 +300,22 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 	}
 
 	scanSelectedDevices() {
+		// Verify selected devices all share the same Operating System
+		let osTypeSet = new Set<string>();
+
+		this.selection.selected.forEach(item => {
+			osTypeSet.add(item.osType);
+		});
+
+		if (osTypeSet.size > 1) {
+			this.toastNotif.errorToastNotif(
+				"Devices selected for scan must have the same Operating System",
+				"Multiple OS Type selected"
+			);
+			return;
+		}
+
+		// Verify number of selected devices not above MAX_DEVICES supported
 		if (this.selection.selected.length > MAX_DEVICES) {
 			this.toastNotif.errorToastNotif(
 				`A maximum of ${MAX_DEVICES} devices can be selected for a single job scan`,

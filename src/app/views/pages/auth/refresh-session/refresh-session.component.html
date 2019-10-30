@@ -1,0 +1,41 @@
+<div class="kt-portlet">
+	<div class="kt-portlet__head kt-portlet__head__custom">
+		<div class="kt-portlet__head-label">
+			<h3 class="kt-portlet__head-title">Session About to Expire</h3>
+		</div>
+	</div>
+	<div class="kt-portlet__body">
+		<div mat-dialog-content style="overflow: hidden;max-height:100%;">
+			<div style="display: flex;flex-direction: row;padding:15px;">
+				<div style="font-size: 16px;">
+					Your session will expire in &nbsp;
+				</div>
+				<countdown
+					[config]="{ leftTime: data.remainingTime, format: 'mm:ss' }"
+					(event)="handleEvent($event)"
+					style="font-size: 16px;"
+				></countdown>
+			</div>
+			<div
+				style="display: flex;flex-direction: row;justify-content: center;"
+			>
+				<button
+					mat-raised-button
+					color="warn"
+					(click)="onIgnoreWarning()"
+					style="margin-top:20px;font-size:12px;margin-right:20px;"
+				>
+					Sign Out
+				</button>
+				<button
+					mat-raised-button
+					color="primary"
+					(click)="onRefreshSession()"
+					style="margin-top:20px;font-size:12px;"
+				>
+					Refresh Session
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

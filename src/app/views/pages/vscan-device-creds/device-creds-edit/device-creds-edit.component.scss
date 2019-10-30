@@ -17,3 +17,17 @@
 		background: rgba(234, 121, 38, 0.15) !important;
 	}
 }
+
+.dialog-close-button {
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.close-icon {
+	transform: scale(1.2);
+	color: black;
+	border-radius: 50%;
+	background-color: rgba(178, 178, 178, 0.43);
+}
