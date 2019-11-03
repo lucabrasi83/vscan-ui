@@ -142,13 +142,25 @@ export class AppComponent implements OnInit, OnDestroy {
 
 									if (warningDate < currentDate) {
 										this.stop();
+
+										// Calculate the remaining seconds for the token to be valid
+										let remainingSeconds: number =
+											Math.floor(
+												tokenExpDate.getTime() / 1000
+											) -
+											Math.floor(
+												currentDate.getTime() / 1000
+											);
+
 										const dialogRef = this.dialog.open(
 											RefreshSessionComponent,
 											{
 												width: "400px",
 												autoFocus: false,
 												disableClose: true,
-												data: { remainingTime: 300 }
+												data: {
+													remainingTime: remainingSeconds
+												}
 											}
 										);
 										dialogRef

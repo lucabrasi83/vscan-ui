@@ -75,8 +75,13 @@ export class VscanDeviceCredsComponent implements OnInit, AfterViewInit {
 				switchMap(() => {
 					return this.vscanAPI.getAllUserDeviceCredentials().pipe(
 						tap(res => {
-							this.dataSource.data = res.deviceCredentials;
-							this.loading$.next(false);
+							if (res.deviceCredentials) {
+								this.dataSource.data = res.deviceCredentials;
+								this.loading$.next(false);
+							} else {
+								this.dataSource.data = [];
+								this.loading$.next(false);
+							}
 						}),
 						catchError(err => {
 							this.toastNotif.errorToastNotif(

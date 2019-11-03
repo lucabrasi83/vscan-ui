@@ -10,6 +10,7 @@ import { VscanDevicesComponent } from "./views/pages/vscan-devices/inventory-lis
 import { OndemandScanComponent } from "./views/pages/ondemand-scan/ondemand-scan.component";
 import { VscanDeviceCredsComponent } from "./views/pages/vscan-device-creds/vscan-device-creds.component";
 import { VscanSshGatewaysComponent } from "./views/pages/vscan-ssh-gateways/vscan-ssh-gateways.component";
+import { VscanJobsComponent } from "./views/pages/vscan-jobs/vscan-jobs.component";
 
 const routes: Routes = [
 	{
@@ -50,6 +51,11 @@ const routes: Routes = [
 			{
 				path: "scan/devices",
 				component: VscanDevicesComponent,
+				canActivate: [AuthGuard]
+			},
+			{
+				path: "scan/jobs",
+				component: VscanJobsComponent,
 				canActivate: [AuthGuard]
 			},
 			{

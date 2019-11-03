@@ -69,8 +69,13 @@ export class VscanSshGatewaysComponent implements OnInit {
 				switchMap(() => {
 					return this.vscanAPI.getAllEnterpriseSSHGateways().pipe(
 						tap(res => {
-							this.dataSource.data = res.sshGateway;
-							this.loading$.next(false);
+							if (res.sshGateway) {
+								this.dataSource.data = res.sshGateway;
+								this.loading$.next(false);
+							} else {
+								this.dataSource.data = [];
+								this.loading$.next(false);
+							}
 						}),
 						catchError(err => {
 							this.toastNotif.errorToastNotif(

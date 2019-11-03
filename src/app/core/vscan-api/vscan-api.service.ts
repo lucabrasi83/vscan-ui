@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { InventoryDevices } from "./device.inventory.model";
 import { Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
@@ -23,6 +23,7 @@ import {
 	DeviceVulnerabilitiesHistoryModel,
 	DeviceVulnerabilitiesModel
 } from "./device.vulnerabilities.model";
+import { VscanJobs } from "./scan.jobs.model";
 
 const DEVICES_API_URL = environment.vscanAPIURL + "/devices/all";
 const ALL_USER_DEVICE_CREDENTIALS =
@@ -48,6 +49,8 @@ const INVENTORY_DEVICES_DELETION = environment.vscanAPIURL + "/devices/device";
 const ENTERPRISE_SSH_GATEWAY =
 	environment.vscanAPIURL + "/ssh-gateways/gateway";
 
+const JOBS_HISTORY = environment.vscanAPIURL + "/jobs/history";
+
 @Injectable({
 	providedIn: "root"
 })
@@ -55,8 +58,10 @@ export class VscanApiService {
 	constructor(private http: HttpClient, private auth: AuthService) {}
 
 	getAllInventoryDevices(): Observable<InventoryDevices> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.get<InventoryDevices>(DEVICES_API_URL, {
@@ -68,8 +73,10 @@ export class VscanApiService {
 	getDeviceVulnerabilities(
 		dev: string
 	): Observable<DeviceVulnerabilitiesModel> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.get<DeviceVulnerabilitiesModel>(DEVICE_VULNERABILITIES_URL + dev, {
@@ -82,8 +89,10 @@ export class VscanApiService {
 		dev: string,
 		ent: string
 	): Observable<DeviceVulnerabilitiesHistoryModel> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.get<DeviceVulnerabilitiesHistoryModel>(
@@ -99,8 +108,10 @@ export class VscanApiService {
 	}
 
 	getAllUserDeviceCredentials(): Observable<DeviceUserCredentials> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.get<DeviceUserCredentials>(ALL_USER_DEVICE_CREDENTIALS, {
@@ -110,8 +121,10 @@ export class VscanApiService {
 	}
 
 	getAllEnterpriseSSHGateways(): Observable<SSHGateways> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.get<SSHGateways>(ALL_ENTERPRISE_SSH_GATEWAYS, {
@@ -123,8 +136,10 @@ export class VscanApiService {
 	launchInventoryScan(
 		req: InventoryScanRequest
 	): Observable<InventoryScanResultsModel> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.post<InventoryScanResultsModel>(INVENTORY_SCAN_URL, req, {
@@ -136,8 +151,10 @@ export class VscanApiService {
 	launchOnDemandScan(
 		req: InventoryScanRequest
 	): Observable<OndemandScanResultsModel> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.post<OndemandScanResultsModel>(ON_DEMAND_SCAN_URL, req, {
@@ -147,8 +164,10 @@ export class VscanApiService {
 	}
 
 	deleteDeviceCredentials(creds: string[]): Observable<any> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		const httpOptions = {
 			headers: httpHeaders,
@@ -161,8 +180,10 @@ export class VscanApiService {
 	}
 
 	deleteInventoryDevices(devices: string[]): Observable<any> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		const httpOptions = {
 			headers: httpHeaders,
@@ -177,8 +198,10 @@ export class VscanApiService {
 	createDeviceCredentials(
 		req: DeviceCredentialsCreate | DeviceCredentialsUpdate
 	): Observable<any> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.post<any>(USER_DEVICE_CREDENTIAL, req, {
@@ -188,8 +211,10 @@ export class VscanApiService {
 	}
 
 	updateDeviceCredentials(req: DeviceCredentialsUpdate): Observable<any> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.patch<any>(
@@ -204,8 +229,10 @@ export class VscanApiService {
 	createSSHGateway(
 		req: SSHGatewayCreate | SSHGatewayUpdate
 	): Observable<any> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.post<any>(ENTERPRISE_SSH_GATEWAY, req, {
@@ -215,8 +242,10 @@ export class VscanApiService {
 	}
 
 	updateSSHGateway(req: SSHGatewayUpdate): Observable<any> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.patch<any>(ENTERPRISE_SSH_GATEWAY + "/" + req.gatewayName, req, {
@@ -226,8 +255,10 @@ export class VscanApiService {
 	}
 
 	deleteSSHGateways(sshgw: string[]): Observable<any> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		const httpOptions = {
 			headers: httpHeaders,
@@ -242,8 +273,10 @@ export class VscanApiService {
 	connectivityTestSSHGateway(
 		req: SSHGatewayCreate
 	): Observable<SSHGatewayTestResult> {
-		const httpHeaders = new HttpHeaders();
-		httpHeaders.set("Content-Type", "application/json");
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
 
 		return this.http
 			.post<SSHGatewayTestResult>(
@@ -254,5 +287,53 @@ export class VscanApiService {
 				}
 			)
 			.pipe(catchError(this.auth.handleError));
+	}
+
+	getjobsHistory(
+		filters: any,
+		sort: any,
+		pageSize: number,
+		pageNumber: number
+	): Observable<VscanJobs> {
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
+
+		const httpParams = this.buildQueryURL(
+			filters,
+			sort,
+			pageSize,
+			pageNumber
+		);
+
+		return this.http
+			.get<VscanJobs>(JOBS_HISTORY, {
+				headers: httpHeaders,
+				params: httpParams
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	buildQueryURL(
+		filters: any,
+		sort: any,
+		pageSize: number,
+		pageNumber: number
+	): HttpParams {
+		const columnMaps = {
+			startTime: "start_time",
+			endTime: "end_time",
+			jobResult: "job_result",
+			agent: "scan_exec_agent"
+		};
+
+		const params = new HttpParams()
+			.set("sort[direction]", sort.direction)
+			.set("sort[column]", columnMaps[sort.column])
+			.set("pageSize", pageSize.toString())
+			.set("pageNumber", (pageSize * pageNumber).toString());
+
+		return params;
 	}
 }

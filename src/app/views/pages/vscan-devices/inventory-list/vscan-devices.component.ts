@@ -3,13 +3,14 @@ import {
 	ChangeDetectionStrategy,
 	Component,
 	ElementRef,
+	OnDestroy,
 	OnInit,
 	TemplateRef,
 	ViewChild
 } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { BehaviorSubject, throwError } from "rxjs";
+import { BehaviorSubject, Subscription, throwError } from "rxjs";
 import { SelectionModel } from "@angular/cdk/collections";
 import { InventoryDeviceModel } from "../../../../core/vscan-api/device.inventory.model";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -34,7 +35,7 @@ import { LayoutUtilsService } from "../../../../core/_base/crud";
 	styleUrls: ["./vscan-devices.component.scss"],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VscanDevicesComponent implements OnInit, AfterViewInit {
+export class VscanDevicesComponent implements OnInit, AfterViewInit, OnDestroy {
 	// Table fields
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild("sort1", { static: true }) sort: MatSort;
@@ -86,6 +87,9 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 	// Inventory Devices Subject Data
 	inventoryDevices$ = new BehaviorSubject<InventoryDeviceModel>(null);
 
+	// Subscriptions
+	private subscriptions: Subscription[] = [];
+
 	constructor(
 		private matIconRegistry: MatIconRegistry,
 		private domSanitizer: DomSanitizer,
@@ -111,7 +115,10 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 
 	ngOnInit() {
 		// If the user changes the sort order, reset back to the first page.
-		this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+		const sortSubscription = this.sort.sortChange.subscribe(
+			() => (this.paginator.pageIndex = 0)
+		);
+		this.subscriptions.push(sortSubscription);
 
 		this.inventoryDevices$
 			.pipe(
@@ -159,6 +166,9 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit {
 	ngAfterViewInit() {
 		this.dataSource.sort = this.sort;
 		this.dataSource.paginator = this.paginator;
+	}
+	ngOnDestroy(): void {
+		this.subscriptions.forEach(el => el.unsubscribe());
 	}
 
 	/**

@@ -435,7 +435,7 @@ export class MenuConfig {
 					root: true,
 					bullet: "dot",
 					icon: "flaticon3-edit-tools",
-					page: "/ngbootstrap/accordion"
+					page: "/scan/jobs"
 				},
 
 				{ section: "Settings" },
