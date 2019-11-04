@@ -122,7 +122,11 @@ export class AppComponent implements OnInit, OnDestroy {
 							timer(0, 10000).pipe(
 								tap(() => {
 									let tokenExpDate = this.auth.getTokenExpirationDate();
-									let warningDate = tokenExpDate;
+
+									// Copy Token Expiry Date Object into a new Date object
+									let warningDate = new Date(
+										tokenExpDate.getTime()
+									);
 									let currentDate = new Date();
 
 									// Logout user immediately if token has expired
@@ -139,7 +143,6 @@ export class AppComponent implements OnInit, OnDestroy {
 									warningDate.setMinutes(
 										warningDate.getMinutes() - 5
 									);
-
 									if (warningDate < currentDate) {
 										this.stop();
 

@@ -1,6 +1,7 @@
 import {
 	AfterViewInit,
 	Component,
+	ElementRef,
 	OnDestroy,
 	OnInit,
 	TemplateRef,
@@ -13,10 +14,25 @@ import { MatDialog } from "@angular/material/dialog";
 import { LayoutUtilsService } from "../../../core/_base/crud";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { distinctUntilChanged, skip, tap } from "rxjs/operators";
-import { Subscription, merge } from "rxjs";
+import {
+	catchError,
+	debounceTime,
+	distinctUntilChanged,
+	skip,
+	tap
+} from "rxjs/operators";
+import { Subscription, merge, fromEvent, throwError } from "rxjs";
 import { ScanJobs } from "../../../core/vscan-api/scan.jobs.model";
 import { SelectionModel } from "@angular/cdk/collections";
+import { AuthService } from "../../../core/auth/_services";
+import {
+	MatDatepicker,
+	MatDatepickerInputEvent
+} from "@angular/material/datepicker";
+import { VscanUsers } from "../../../core/vscan-api/users.model";
+
+const ipaddressPattern =
+	"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
 @Component({
 	selector: "vscan-vscan-jobs",
@@ -40,6 +56,31 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 	selection = new SelectionModel<ScanJobs>(true, []);
 	jobResult: ScanJobs[] = [];
 
+	// Root User flag to control displayed column
+	rootUser: boolean = false;
+
+	// All Users array
+	usersArray: VscanUsers[] = [];
+
+	// Filters
+	filterUsers: string = "";
+	filterJobResults: string = "";
+	@ViewChild("searchInputDevName", { static: true })
+	searchInputDevName: ElementRef;
+	@ViewChild("searchInputDevIP", { static: true })
+	searchInputDevIP: ElementRef;
+
+	@ViewChild("searchInputJobLogs", { static: true })
+	searchInputJobLogs: ElementRef;
+
+	@ViewChild("startDatePicker", { static: false })
+	startDatePicker: MatDatepicker<string>;
+	filterStartDate: string;
+
+	@ViewChild("endDatePicker", { static: false })
+	endDatePicker: MatDatepicker<string>;
+	filterEndDate: string;
+
 	displayedColumns = [
 		"select",
 		"jobID",
@@ -47,7 +88,6 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 		"endTime",
 		"jobResult",
 		"userID",
-		"scannedDevices",
 		"agent",
 		"jobLogs"
 	];
@@ -56,6 +96,7 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 		private vscanAPI: VscanApiService,
 		private toastNotif: ToastNotifService,
 		public dialog: MatDialog,
+		private auth: AuthService,
 		private layoutUtilsService: LayoutUtilsService
 	) {}
 
@@ -78,6 +119,55 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 			.subscribe();
 		this.subscriptions.push(paginatorSubscriptions);
 
+		// Filtration, bind to searchInput
+		const DeviceNameSearchSubscription = fromEvent(
+			this.searchInputDevName.nativeElement,
+			"keyup"
+		)
+			.pipe(
+				// tslint:disable-next-line:max-line-length
+				debounceTime(300),
+				distinctUntilChanged(), // This operator will eliminate duplicate values
+				tap(() => {
+					this.paginator.pageIndex = 0;
+					this.loadJobHistory();
+				})
+			)
+			.subscribe();
+		this.subscriptions.push(DeviceNameSearchSubscription);
+
+		const DeviceIPSearchSubscription = fromEvent(
+			this.searchInputDevIP.nativeElement,
+			"keyup"
+		)
+			.pipe(
+				// tslint:disable-next-line:max-line-length
+				debounceTime(1000),
+				distinctUntilChanged(), // This operator will eliminate duplicate values
+				tap(() => {
+					this.paginator.pageIndex = 0;
+					this.loadJobHistory();
+				})
+			)
+			.subscribe();
+		this.subscriptions.push(DeviceIPSearchSubscription);
+
+		const LogSearchSubscription = fromEvent(
+			this.searchInputJobLogs.nativeElement,
+			"keyup"
+		)
+			.pipe(
+				// tslint:disable-next-line:max-line-length
+				debounceTime(300),
+				distinctUntilChanged(), // This operator will eliminate duplicate values
+				tap(() => {
+					this.paginator.pageIndex = 0;
+					this.loadJobHistory();
+				})
+			)
+			.subscribe();
+		this.subscriptions.push(LogSearchSubscription);
+
 		// Init DataSource
 		this.dataSource = new VscanJobsDataSource(this.vscanAPI);
 
@@ -92,6 +182,27 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.subscriptions.push(entitiesSubscription);
 
 		this.dataSource.loadJobsHistory();
+
+		// Check if User is admin
+		this.rootUser = this.auth.isUserRoot();
+
+		// Load All users if current user is admin
+		if (this.rootUser) {
+			this.vscanAPI
+				.getAllUsers()
+				.pipe(
+					tap(res => {
+						if (res.users) {
+							this.usersArray = res.users;
+						}
+					}),
+					catchError(err => {
+						this.toastNotif.errorToastNotif(err, "Failed to users");
+						return throwError(err);
+					})
+				)
+				.subscribe();
+		}
 	}
 
 	ngAfterViewInit(): void {
@@ -106,7 +217,7 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.selection.clear();
 
 		this.dataSource.loadJobsHistory(
-			{},
+			this.filterConfiguration(),
 			{ direction: this.sort.direction, column: this.sort.active },
 			this.paginator.pageSize,
 			this.paginator.pageIndex
@@ -144,6 +255,99 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 	onClearFilters() {
+		this.searchInputDevName.nativeElement.value = "";
+		this.searchInputDevIP.nativeElement.value = "";
+		this.searchInputJobLogs.nativeElement.value = "";
+		this.filterJobResults = "";
+		this.filterUsers = "";
+		this.startDatePicker.select(undefined);
+		this.endDatePicker.select(undefined);
+
+		this.loadJobHistory();
+	}
+
+	columnsToDisplay(): string[] {
+		if (!this.rootUser) {
+			const idx = this.displayedColumns.indexOf("userID");
+			if (idx !== -1) {
+				this.displayedColumns.splice(idx, 1);
+			}
+			return this.displayedColumns.slice();
+		}
+		return this.displayedColumns.slice();
+	}
+
+	/**
+	 * Returns object for filter
+	 */
+	filterConfiguration(): any {
+		const filter: any = {};
+		const searchDeviceNameText: string = this.searchInputDevName
+			.nativeElement.value;
+
+		const searchDeviceNameIP: string = this.searchInputDevIP.nativeElement
+			.value;
+
+		const searchLogText: string = this.searchInputJobLogs.nativeElement
+			.value;
+
+		if (searchDeviceNameText) {
+			filter.deviceName = searchDeviceNameText.trim();
+		}
+
+		if (searchDeviceNameIP && searchDeviceNameIP.match(ipaddressPattern)) {
+			filter.deviceIP = searchDeviceNameIP.trim();
+		}
+
+		if (searchLogText) {
+			filter.logPattern = searchLogText.trim();
+		}
+
+		if (this.filterStartDate) {
+			filter.startTime = this.filterStartDate;
+		}
+
+		if (this.filterEndDate) {
+			filter.endTime = this.filterEndDate;
+		}
+
+		if (this.filterJobResults) {
+			filter.jobResult = this.filterJobResults;
+		}
+
+		if (this.filterUsers) {
+			filter.userID = this.filterUsers;
+		}
+
+		// if (this.filterJobResults && this.filterJobResults.length > 0) {
+		// 	filter.status = +this.filterJobResults;
+		// }
+		//
+		// if (this.filterUsers && this.filterUsers.length > 0) {
+		// 	filter.type = +this.filterUsers;
+		// }
+		//
+		// filter.lastName = searchText;
+		// if (!searchText) {
+		// 	return filter;
+		// }
+		//
+		// filter.firstName = searchText;
+		// filter.email = searchText;
+		// filter.ipAddress = searchText;
+		return filter;
+	}
+	dateStartPickedChange(event: MatDatepickerInputEvent<Date>) {
+		this.filterStartDate = event.value
+			? event.value.toISOString()
+			: undefined;
+		this.loadJobHistory();
+	}
+
+	dateEndPickedChange(event: MatDatepickerInputEvent<Date>) {
+		this.filterEndDate = event.value
+			? event.value.toISOString()
+			: undefined;
 		this.loadJobHistory();
 	}
 }

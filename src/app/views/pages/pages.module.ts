@@ -47,6 +47,8 @@ import { VscanInventoryComponent } from "./vscan-inventory/vscan-inventory.compo
 import { DeleteEntityDialogComponent } from "../partials/content/crud";
 import { DeviceCredsEditComponent } from "./vscan-device-creds/device-creds-edit/device-creds-edit.component";
 import { SshGwEditComponent } from "./vscan-ssh-gateways/ssh-gw-edit/ssh-gw-edit.component";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { NgbTimepickerModule } from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
 	declarations: [
@@ -103,7 +105,9 @@ import { SshGwEditComponent } from "./vscan-ssh-gateways/ssh-gw-edit/ssh-gw-edit
 		MatListModule,
 		MatExpansionModule,
 		NgxDatatableModule,
-		ChartsModule
+		ChartsModule,
+		MatDatepickerModule,
+		NgbTimepickerModule
 	],
 	entryComponents: [
 		DeviceVulnDetailsComponent,

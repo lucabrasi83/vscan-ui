@@ -50,14 +50,150 @@
 				<!-- start::FILTERS -->
 				<div class="kt-form__filtration">
 					<div class="row align-items-center">
-						<div class="col-md-4 kt-margin-bottom-10-mobile">
+						<div class="col-md-1 kt-margin-bottom-10-mobile">
+							<div class="kt-form__control">
+								<mat-form-field class="mat-form-field-fluid">
+									<mat-select
+										[(value)]="filterJobResults"
+										(selectionChange)="loadJobHistory()"
+									>
+										<mat-option value="FAILED"
+											>FAILED</mat-option
+										>
+										<mat-option value="SUCCESS"
+											>SUCCESS</mat-option
+										>
+										<mat-option value="UNKNOWN"
+											>UNKNOWN</mat-option
+										>
+									</mat-select>
+									<mat-hint align="start">
+										<strong>Filter</strong> by Job Status
+									</mat-hint>
+								</mat-form-field>
+							</div>
+						</div>
+
+						<div
+							class="col-md-3 kt-margin-bottom-10-mobile"
+							*ngIf="rootUser"
+						>
+							<div class="kt-form__control">
+								<mat-form-field class="mat-form-field-fluid">
+									<mat-select
+										[(value)]="filterUsers"
+										(selectionChange)="loadJobHistory()"
+									>
+										<mat-option
+											*ngFor="let user of usersArray"
+											[value]="user.userID"
+											>{{ user.email }}</mat-option
+										>
+									</mat-select>
+									<mat-hint align="start">
+										<strong>Filter</strong> by Users
+									</mat-hint>
+								</mat-form-field>
+							</div>
+						</div>
+
+						<div class="col-md-2 kt-margin-bottom-10-mobile">
 							<mat-form-field
 								class="mat-form-field-fluid"
 								style="color: black;"
 							>
-								<input matInput [placeholder]="'Text Search'" />
+								<input
+									matInput
+									[placeholder]="'Inventory device search'"
+									#searchInputDevName
+								/>
 								<mat-hint align="start">
-									<strong>Search</strong> in all fields
+									Search an<strong>
+										inventory device hostname</strong
+									>
+								</mat-hint>
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-2 kt-margin-bottom-10-mobile">
+							<mat-form-field
+								class="mat-form-field-fluid"
+								style="color: black;"
+							>
+								<input
+									matInput
+									[placeholder]="'Device IP search'"
+									#searchInputDevIP
+								/>
+								<mat-hint align="start">
+									Search a<strong> Device IP</strong>
+								</mat-hint>
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-2 kt-margin-bottom-10-mobile">
+							<mat-form-field
+								class="mat-form-field-fluid"
+								style="color: black;"
+							>
+								<input
+									matInput
+									[placeholder]="'Logs Search'"
+									#searchInputJobLogs
+								/>
+								<mat-hint align="start">
+									Search a <strong>word in logs</strong>
+								</mat-hint>
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-1 kt-margin-bottom-10-mobile">
+							<mat-form-field
+								class="mat-form-field-fluid"
+								style="color: black;"
+								color="primary"
+							>
+								<input
+									matInput
+									readonly
+									[matDatepicker]="startDatePicker"
+									(dateChange)="dateStartPickedChange($event)"
+								/>
+								<mat-datepicker-toggle
+									matSuffix
+									[for]="startDatePicker"
+								></mat-datepicker-toggle>
+								<mat-datepicker
+									color="primary"
+									#startDatePicker
+								></mat-datepicker>
+								<mat-hint align="start">
+									After Start Date
+								</mat-hint>
+							</mat-form-field>
+						</div>
+						<div class="col-md-1 kt-margin-bottom-10-mobile">
+							<mat-form-field
+								class="mat-form-field-fluid"
+								style="color: black;"
+								color="primary"
+							>
+								<input
+									matInput
+									readonly
+									[matDatepicker]="endDatePicker"
+									(dateChange)="dateEndPickedChange($event)"
+								/>
+								<mat-datepicker-toggle
+									matSuffix
+									[for]="endDatePicker"
+								></mat-datepicker-toggle>
+								<mat-datepicker
+									color="primary"
+									#endDatePicker
+								></mat-datepicker>
+								<mat-hint align="start">
+									Before End Date
 								</mat-hint>
 							</mat-form-field>
 						</div>
@@ -167,7 +303,7 @@
 
 					<ng-container matColumnDef="startTime">
 						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>Start Time</mat-header-cell
+							>Start Date/Time</mat-header-cell
 						>
 						<mat-cell *matCellDef="let job">
 							<mat-chip-list>
@@ -180,7 +316,7 @@
 
 					<ng-container matColumnDef="endTime">
 						<mat-header-cell *matHeaderCellDef mat-sort-header
-							>End Time</mat-header-cell
+							>End Date/Time</mat-header-cell
 						>
 						<mat-cell *matCellDef="let job">
 							<mat-chip-list>
@@ -210,20 +346,12 @@
 							</mat-chip-list>
 						</mat-cell>
 					</ng-container>
-					<ng-container matColumnDef="userID">
+					<ng-container matColumnDef="userID" *ngIf="rootUser">
 						<mat-header-cell *matHeaderCellDef mat-sort-header
 							>User</mat-header-cell
 						>
 						<mat-cell *matCellDef="let job">
 							{{ job.user }}
-						</mat-cell>
-					</ng-container>
-					<ng-container matColumnDef="scannedDevices">
-						<mat-header-cell *matHeaderCellDef
-							>Scanned Devices</mat-header-cell
-						>
-						<mat-cell *matCellDef="let job">
-							{{ job.devicesScannedName?.length }}
 						</mat-cell>
 					</ng-container>
 
@@ -243,7 +371,7 @@
 							<button
 								mat-icon-button
 								color="accent"
-								matTooltip="View Logs"
+								matTooltip="View Job Details"
 							>
 								<mat-icon>visibility</mat-icon></button
 							>&nbsp;
@@ -251,11 +379,11 @@
 					</ng-container>
 
 					<mat-header-row
-						*matHeaderRowDef="displayedColumns"
+						*matHeaderRowDef="columnsToDisplay()"
 					></mat-header-row>
 
 					<mat-row
-						*matRowDef="let row; columns: displayedColumns"
+						*matRowDef="let row; columns: columnsToDisplay()"
 					></mat-row>
 				</mat-table>
 				<!-- Message for empty data  -->

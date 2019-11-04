@@ -13,6 +13,7 @@ export interface OndemandScanResultsModel {
 
 interface deviceScanResults {
 	deviceName: string;
+	deviceIP: string;
 	totalVulnerabilitiesFound: number;
 	totalVulnerabilitiesScanned: number;
 	scanDeviceMeanTimeMsec: number;

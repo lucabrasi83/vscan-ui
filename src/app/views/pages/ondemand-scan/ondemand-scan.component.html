@@ -43,7 +43,7 @@
 									[formGroupName]="i"
 								>
 									<div
-										style="display: flex;flex-direction: row;"
+										style="display: flex;flex-direction: row;margin-bottom: 20px;"
 									>
 										<div
 											class="col-md-4 kt-margin-bottom-10-mobile"
@@ -62,8 +62,9 @@
 													"
 												/>
 												<mat-error
-													>Enter a device
-													hostname</mat-error
+													>Enter a device hostname
+													with min 5 / max 30
+													characters</mat-error
 												>
 											</mat-form-field>
 										</div>
@@ -85,8 +86,28 @@
 													"
 												/>
 												<mat-error
+													*ngIf="
+														deviceItems.controls[
+															i
+														].get('ipAddressCtrl')
+															.errors?.required ||
+														deviceItems.controls[
+															i
+														].get('ipAddressCtrl')
+															.errors?.pattern
+													"
 													>Enter a valid IP
 													Address</mat-error
+												>
+												<mat-error
+													*ngIf="
+														deviceItems.controls[
+															i
+														].get('ipAddressCtrl')
+															.errors
+															?.hasDuplicate
+													"
+													>Duplicate IP</mat-error
 												>
 											</mat-form-field>
 										</div>
@@ -114,9 +135,7 @@
 											matTooltip="Delete row"
 											(click)="removeDevice()"
 											[disabled]="
-												deviceDetailsFormGroup.get(
-													'deviceDetails'
-												).value.length < 2
+												deviceItems.controls.length < 2
 											"
 										>
 											<mat-icon class="add-device-icon"

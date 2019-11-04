@@ -82,7 +82,9 @@
 			<mat-expansion-panel>
 				<mat-expansion-panel-header>
 					<mat-panel-title>
-						{{ scanRes.deviceName }}
+						{{ scanRes.deviceName }} &nbsp;IP:&nbsp;{{
+							scanRes.deviceIP
+						}}
 					</mat-panel-title>
 					<mat-panel-description>
 						Vulnerabilities Found

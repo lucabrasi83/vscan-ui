@@ -77,7 +77,7 @@ export class AuthService {
 
 	getUserTokenField(field: string): string {
 		const jwtHelper = new JwtHelperService();
-		// const token = localStorage.getItem(environment.vscanJWT);
+
 		let userToken: string;
 
 		// Get Token from NGRX Store

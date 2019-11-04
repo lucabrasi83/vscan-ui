@@ -7,6 +7,7 @@ import {
 	ViewChild
 } from "@angular/core";
 import {
+	AbstractControl,
 	FormArray,
 	FormBuilder,
 	FormControl,
@@ -17,7 +18,7 @@ import {
 } from "@angular/forms";
 import { VscanSupportedOS } from "../../../core/vscan-api/supported.os.model";
 import { forkJoin, of, throwError } from "rxjs";
-import { catchError, finalize, tap } from "rxjs/operators";
+import { catchError, tap } from "rxjs/operators";
 import { VscanApiService } from "../../../core/vscan-api/vscan-api.service";
 import { ToastNotifService } from "../../../core/_base/layout/services/toast-notif.service";
 import { DeviceCredential } from "../../../core/vscan-api/device.credentials.model";
@@ -38,6 +39,46 @@ import { ErrorStateMatcher } from "@angular/material/core";
 
 const ipaddressPattern =
 	"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+
+// Check for duplicate IP's in form
+function duplicateIPValidator(
+	control: FormArray
+): { [key: string]: boolean } | null {
+	const ipAddrArray = control.value.map(item => item.ipAddressCtrl);
+
+	const duplicateIPs = ipAddrArray.filter((item, index) => {
+		return ipAddrArray.indexOf(item) !== index && item !== null;
+	});
+
+	let hasDuplicate = duplicateIPs.length > 0;
+
+	// If we found duplicate, mark each form control in the array as errored
+	if (hasDuplicate) {
+		for (let i = 0; i <= ipAddrArray.length; i++) {
+			if (duplicateIPs[0] == ipAddrArray[i]) {
+				control.controls[i]
+					.get("ipAddressCtrl")
+					.setErrors({ hasDuplicate: true });
+			}
+		}
+	} else {
+		// Loop the Form Array controls to dynamically clear the errors if no duplicate and other validation errors
+		// found.
+		for (let i = 0; i <= ipAddrArray.length; i++) {
+			if (
+				control.controls[i] &&
+				!control.controls[i]
+					.get("ipAddressCtrl")
+					.hasError("required") &&
+				!control.controls[i].get("ipAddressCtrl").hasError("pattern")
+			) {
+				control.controls[i].get("ipAddressCtrl").setErrors(null);
+			}
+		}
+	}
+
+	return hasDuplicate ? { hasDuplicate: true } : null;
+}
 
 // define custom ErrorStateMatcher
 export class CustomErrorStateMatcher implements ErrorStateMatcher {
@@ -123,9 +164,10 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.deviceDetailsFormGroup = this._formBuilder.group({
-			deviceDetails: this._formBuilder.array([
-				this.buildDeviceDetailsForm()
-			])
+			deviceDetails: this._formBuilder.array(
+				[this.buildDeviceDetailsForm()],
+				[duplicateIPValidator]
+			)
 		});
 		this.scanSettingDetailsFormGroup = this._formBuilder.group({
 			osTypeCtrl: ["", Validators.required],
@@ -209,22 +251,7 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		let mapIP = new Map<string, number>();
-
-		let hasDuplicate = false;
-
-		// Warn about duplicate IP's in form
-		this.deviceItems.controls.forEach(ctrl => {
-			if (mapIP[ctrl.value.ipAddressCtrl] === 0) {
-				this.toastNotif.warningToastNotif(
-					"You have entered duplicate IP's in the form fields",
-					"Duplicate IP's"
-				);
-				hasDuplicate = true;
-			}
-
-			mapIP[ctrl.value.ipAddressCtrl] = 0;
-		});
+		let hasDuplicate = this.checkDuplicateIP();
 
 		if (hasDuplicate) {
 			this.deviceDetailsFormGroup.get("deviceDetails").clearValidators();
@@ -365,11 +392,13 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 			this.deviceItems.controls.length - 1
 		);
 
+		this.webSocketSubject.next(null);
+
 		this.barButtonOptions = {
 			active: true,
 			text: "Scanning...",
 			buttonColor: "accent",
-			barColor: undefined,
+			barColor: "accent",
 			raised: true,
 			stroked: false,
 			mode: "indeterminate",
@@ -380,6 +409,8 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 				fontIcon: "security"
 			}
 		};
+
+		this.hash = this.generateLogStreamHash();
 	}
 
 	onValidateDeviceForm() {
@@ -398,5 +429,26 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 		}
 
 		this.stepper.next();
+	}
+
+	checkDuplicateIP(): boolean {
+		let mapIP = new Map<string, number>();
+
+		let hasDuplicate = false;
+
+		// Warn about duplicate IP's in form
+		this.deviceItems.controls.forEach(ctrl => {
+			if (mapIP[ctrl.value.ipAddressCtrl] === 1) {
+				this.toastNotif.warningToastNotif(
+					"You have entered duplicate IP's in the form fields",
+					"Duplicate IP's"
+				);
+				hasDuplicate = true;
+			}
+
+			mapIP[ctrl.value.ipAddressCtrl] = 1;
+		});
+
+		return hasDuplicate;
 	}
 }

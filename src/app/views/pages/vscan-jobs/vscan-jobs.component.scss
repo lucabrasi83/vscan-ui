@@ -13,6 +13,12 @@
 	background-repeat: repeat-x !important;
 }
 
+.mat-option {
+	&.mat-active {
+		background: rgba(234, 121, 38, 0.15) !important;
+	}
+}
+
 .mat-cell {
 	font-size: 12px;
 	font-weight: 300;

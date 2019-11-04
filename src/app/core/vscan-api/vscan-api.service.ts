@@ -24,6 +24,7 @@ import {
 	DeviceVulnerabilitiesModel
 } from "./device.vulnerabilities.model";
 import { VscanJobs } from "./scan.jobs.model";
+import { VscanUsers, VscanUsersList } from "./users.model";
 
 const DEVICES_API_URL = environment.vscanAPIURL + "/devices/all";
 const ALL_USER_DEVICE_CREDENTIALS =
@@ -50,6 +51,8 @@ const ENTERPRISE_SSH_GATEWAY =
 	environment.vscanAPIURL + "/ssh-gateways/gateway";
 
 const JOBS_HISTORY = environment.vscanAPIURL + "/jobs/history";
+
+const ALL_USERS_URL = environment.vscanAPIURL + "/admin/users/all";
 
 @Injectable({
 	providedIn: "root"
@@ -289,6 +292,19 @@ export class VscanApiService {
 			.pipe(catchError(this.auth.handleError));
 	}
 
+	getAllUsers(): Observable<VscanUsersList> {
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
+
+		return this.http
+			.get<VscanUsersList>(ALL_USERS_URL, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
 	getjobsHistory(
 		filters: any,
 		sort: any,
@@ -328,11 +344,17 @@ export class VscanApiService {
 			agent: "scan_exec_agent"
 		};
 
-		const params = new HttpParams()
+		let params = new HttpParams()
 			.set("sort[direction]", sort.direction)
 			.set("sort[column]", columnMaps[sort.column])
 			.set("pageSize", pageSize.toString())
 			.set("pageNumber", (pageSize * pageNumber).toString());
+
+		if (filters) {
+			Object.keys(filters).forEach(elem => {
+				params = params.set("filters[" + elem + "]", filters[elem]);
+			});
+		}
 
 		return params;
 	}
