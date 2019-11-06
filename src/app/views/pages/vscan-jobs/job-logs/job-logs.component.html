@@ -1,0 +1,42 @@
+<div class="kt-portlet">
+	<div class="kt-portlet__head kt-portlet__head__custom">
+		<div class="kt-portlet__head-label">
+			<h3 class="kt-portlet__head-title">
+				Job ID {{ data.jobConfig.jobID }} Details
+			</h3>
+			<div class="dialog-close-button">
+				<button
+					class="close-icon"
+					mat-icon-button
+					color="warn"
+					(click)="onCloseDialog()"
+				>
+					<mat-icon>close</mat-icon>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="kt-portlet__body">
+		<div mat-dialog-content style="overflow: hidden;max-height:100%;">
+			<div style="position: relative;">
+				<a
+					href="javascript:;"
+					class="kt-portlet__code-copy"
+					title="Copy Logs"
+					matTooltip="Copy Logs"
+					style="right:2%;"
+					(click)="onCopyLogContent()"
+				>
+					<i class="la la-copy"></i>
+				</a>
+				<pre
+					#logStreamContent
+					style="background-color: black;color: white;height:700px;font-size: 14px;padding:20px;white-space: pre-line;"
+				>
+				{{ data.jobConfig.jobLogs }}
+			</pre
+				>
+			</div>
+		</div>
+	</div>
+</div>
