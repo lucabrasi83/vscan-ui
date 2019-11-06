@@ -48,7 +48,12 @@ import { DeleteEntityDialogComponent } from "../partials/content/crud";
 import { DeviceCredsEditComponent } from "./vscan-device-creds/device-creds-edit/device-creds-edit.component";
 import { SshGwEditComponent } from "./vscan-ssh-gateways/ssh-gw-edit/ssh-gw-edit.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { NgbTimepickerModule } from "@ng-bootstrap/ng-bootstrap";
+import {
+	NgbProgressbarModule,
+	NgbTimepickerModule
+} from "@ng-bootstrap/ng-bootstrap";
+import { JobLogsComponent } from "./vscan-jobs/job-logs/job-logs.component";
+import { MatBadgeModule } from "@angular/material/badge";
 
 @NgModule({
 	declarations: [
@@ -63,7 +68,8 @@ import { NgbTimepickerModule } from "@ng-bootstrap/ng-bootstrap";
 		VscanJobsComponent,
 		VscanInventoryComponent,
 		DeviceCredsEditComponent,
-		SshGwEditComponent
+		SshGwEditComponent,
+		JobLogsComponent
 	],
 	exports: [],
 	imports: [
@@ -79,6 +85,7 @@ import { NgbTimepickerModule } from "@ng-bootstrap/ng-bootstrap";
 		MatSelectModule,
 		MatInputModule,
 		MatCheckboxModule,
+		MatBadgeModule,
 		MatMenuModule,
 		MatProgressSpinnerModule,
 		MatPaginatorModule,
@@ -107,14 +114,16 @@ import { NgbTimepickerModule } from "@ng-bootstrap/ng-bootstrap";
 		NgxDatatableModule,
 		ChartsModule,
 		MatDatepickerModule,
-		NgbTimepickerModule
+		NgbTimepickerModule,
+		NgbProgressbarModule
 	],
 	entryComponents: [
 		DeviceVulnDetailsComponent,
 		VscanScanComponent,
 		DeleteEntityDialogComponent,
 		DeviceCredsEditComponent,
-		SshGwEditComponent
+		SshGwEditComponent,
+		JobLogsComponent
 	],
 	providers: []
 })

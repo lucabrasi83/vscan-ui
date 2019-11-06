@@ -219,16 +219,22 @@ export class VscanDeviceCredsComponent implements OnInit, AfterViewInit {
 	}
 
 	// Delete Individual Credential
-	deleteDeviceCredential(creds: DeviceCredential) {
+	deleteDeviceCredential(creds: DeviceCredential | null) {
+		let credsArray: string[] = [];
+
 		const dialogRef = this.layoutUtilsService.deleteElement(
 			"Credentials Deletion",
 			"Confirm you want to delete the following credential(s): ",
-			creds.credentialsName
+			credsArray.join("\n")
 		);
 
-		let credsArray: string[] = [];
-
-		credsArray.push(creds.credentialsName);
+		if (creds) {
+			credsArray.push(creds.credentialsName);
+		} else {
+			this.selection.selected.forEach(item => {
+				credsArray.push(item.credentialsName);
+			});
+		}
 
 		dialogRef.afterClosed().subscribe(res => {
 			if (!res) {
@@ -241,60 +247,15 @@ export class VscanDeviceCredsComponent implements OnInit, AfterViewInit {
 					.deleteDeviceCredentials(credsArray)
 					.pipe(
 						tap(() => {
+							const toastMsg: string =
+								credsArray.length > 10
+									? credsArray.slice(0, 11).join("\n") +
+									  "\n...\n"
+									: credsArray.join("\n");
+
 							this.toastNotif.successToastNotif(
 								"Successfully deleted credentials:\n" +
-									creds.credentialsName,
-								`Credentials Deletion Success`
-							);
-
-							// Refresh HTTP Request Observable
-							this.userCredentials$.next(null);
-
-							this.selection.clear();
-
-							this.loading$.next(false);
-						}),
-						catchError(err => {
-							this.toastNotif.errorToastNotif(
-								err,
-								`Credentials Deletion Failure`
-							);
-							this.loading$.next(false);
-							return throwError(err);
-						})
-					)
-					.subscribe();
-			}
-		});
-	}
-
-	// Delete Multiple Credentials
-	bulkDeleteDeviceCredential() {
-		let selectedCreds: string[] = [];
-
-		this.selection.selected.forEach(item => {
-			selectedCreds.push(item.credentialsName);
-		});
-
-		const dialogRef = this.layoutUtilsService.deleteElement(
-			"Credentials Deletion",
-			"Confirm you want to delete the following credential(s): ",
-			selectedCreds.join("\n")
-		);
-		dialogRef.afterClosed().subscribe(res => {
-			if (!res) {
-				return;
-			}
-			if (res) {
-				this.loading$.next(true);
-
-				this.vscanAPI
-					.deleteDeviceCredentials(selectedCreds)
-					.pipe(
-						tap(() => {
-							this.toastNotif.successToastNotif(
-								"Successfully deleted credentials:\n" +
-									selectedCreds.join("\n"),
+									toastMsg,
 								`Credentials Deletion Success`
 							);
 

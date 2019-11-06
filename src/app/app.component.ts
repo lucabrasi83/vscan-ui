@@ -6,7 +6,7 @@ import {
 	OnDestroy,
 	OnInit
 } from "@angular/core";
-import { NavigationEnd, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 // Layout
 import {
 	LayoutConfigService,
@@ -49,6 +49,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	private readonly _stop = new Subject<void>();
 	private readonly _start = new Subject<void>();
+
+	currentRoute: string;
 
 	/**
 	 * Component constructor
@@ -121,6 +123,15 @@ export class AppComponent implements OnInit, OnDestroy {
 							// Check every 10 seconds JWT expiration date vs current date
 							timer(0, 10000).pipe(
 								tap(() => {
+									// Stop flow is we're in the login panel
+									if (
+										window.location.pathname.includes(
+											"/auth/login"
+										)
+									) {
+										this.stop();
+									}
+
 									let tokenExpDate = this.auth.getTokenExpirationDate();
 
 									// Copy Token Expiry Date Object into a new Date object
@@ -130,12 +141,21 @@ export class AppComponent implements OnInit, OnDestroy {
 									let currentDate = new Date();
 
 									// Logout user immediately if token has expired
-									if (tokenExpDate < currentDate) {
+									if (
+										tokenExpDate < currentDate &&
+										!window.location.pathname.includes(
+											"/auth/login"
+										)
+									) {
+										// Stop interval timer
+										this.stop();
+
 										// Set Session Expired Flag
 										this.notice.setNotice(
 											"Your session has expired. Please login again.",
 											"info"
 										);
+
 										this.store.dispatch(new Logout());
 									}
 
@@ -143,7 +163,14 @@ export class AppComponent implements OnInit, OnDestroy {
 									warningDate.setMinutes(
 										warningDate.getMinutes() - 5
 									);
-									if (warningDate < currentDate) {
+
+									if (
+										warningDate < currentDate &&
+										!window.location.pathname.includes(
+											"/auth/login"
+										)
+									) {
+										// Stop interval timer
 										this.stop();
 
 										// Calculate the remaining seconds for the token to be valid

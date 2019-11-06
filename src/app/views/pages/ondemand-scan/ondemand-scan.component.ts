@@ -7,7 +7,6 @@ import {
 	ViewChild
 } from "@angular/core";
 import {
-	AbstractControl,
 	FormArray,
 	FormBuilder,
 	FormControl,
@@ -18,7 +17,7 @@ import {
 } from "@angular/forms";
 import { VscanSupportedOS } from "../../../core/vscan-api/supported.os.model";
 import { forkJoin, of, throwError } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
+import { catchError, finalize, tap } from "rxjs/operators";
 import { VscanApiService } from "../../../core/vscan-api/vscan-api.service";
 import { ToastNotifService } from "../../../core/_base/layout/services/toast-notif.service";
 import { DeviceCredential } from "../../../core/vscan-api/device.credentials.model";
@@ -39,6 +38,46 @@ import { ErrorStateMatcher } from "@angular/material/core";
 
 const ipaddressPattern =
 	"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+
+function duplicateHostnameValidator(
+	control: FormArray
+): { [key: string]: boolean } | null {
+	const hostnameArray = control.value.map(item => item.hostnameCtrl);
+
+	const duplicateHostnames = hostnameArray.filter((item, index) => {
+		return hostnameArray.indexOf(item) !== index && item !== null;
+	});
+
+	let hasDuplicate = duplicateHostnames.length > 0;
+
+	// If we found duplicate, mark each form control in the array as errored
+	if (hasDuplicate) {
+		for (let i = 0; i <= hostnameArray.length; i++) {
+			if (duplicateHostnames[0] == hostnameArray[i]) {
+				control.controls[i]
+					.get("hostnameCtrl")
+					.setErrors({ hasDuplicate: true });
+			}
+		}
+	} else {
+		// Loop the Form Array controls to dynamically clear the errors if no duplicate and other validation errors
+		// found.
+		for (let i = 0; i <= hostnameArray.length; i++) {
+			if (
+				control.controls[i] &&
+				!control.controls[i].get("hostnameCtrl").hasError("required") &&
+				!control.controls[i]
+					.get("hostnameCtrl")
+					.hasError("minLength") &&
+				!control.controls[i].get("hostnameCtrl").hasError("maxLength")
+			) {
+				control.controls[i].get("hostnameCtrl").setErrors(null);
+			}
+		}
+	}
+
+	return hasDuplicate ? { hasDuplicate: true } : null;
+}
 
 // Check for duplicate IP's in form
 function duplicateIPValidator(
@@ -153,6 +192,8 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 
 	scanResults: OndemandScanResultsModel;
 
+	isScanning: boolean = true;
+
 	constructor(
 		private _formBuilder: FormBuilder,
 		private vscan: VscanApiService,
@@ -166,7 +207,7 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 		this.deviceDetailsFormGroup = this._formBuilder.group({
 			deviceDetails: this._formBuilder.array(
 				[this.buildDeviceDetailsForm()],
-				[duplicateIPValidator]
+				[duplicateIPValidator, duplicateHostnameValidator]
 			)
 		});
 		this.scanSettingDetailsFormGroup = this._formBuilder.group({
@@ -323,6 +364,8 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 
 					this.barButtonOptions.active = false;
 					this.barButtonOptions.text = "View Results";
+
+					this.isScanning = false;
 				}),
 
 				catchError(err => {
@@ -338,7 +381,12 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 					this.barButtonOptions.active = false;
 					this.barButtonOptions.disabled = true;
 					this.barButtonOptions.text = "No Results";
+
+					this.isScanning = false;
 					return of(err);
+				}),
+				finalize(() => {
+					this.isScanning = false;
 				})
 			)
 			.subscribe();

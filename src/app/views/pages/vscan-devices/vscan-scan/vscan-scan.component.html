@@ -174,22 +174,35 @@
 						<ng-template matStepLabel
 							>View Scan Job logs</ng-template
 						>
-						<pre
-							#logStreamContent
-							style="background-color: black;color: white;height:700px;font-size: 14px;padding:20px;"
-						><strong>Scan Job Logs</strong><br><br>{{ webSocketSubject | async }}</pre>
-						<div style="flex-direction: row">
-							<button
-								mat-raised-button
-								color="primary"
-								(click)="onCopyLogContent()"
-								style="margin-right: 10px;"
+						<div style="position: relative;">
+							<ngb-progressbar
+								*ngIf="isScanning"
+								type="info"
+								[value]="100"
+								[striped]="true"
+								[animated]="true"
+								><i
+									>Vulnerability Scan Ongoing...</i
+								></ngb-progressbar
 							>
-								Copy Logs
-							</button>
+							<a
+								href="javascript:;"
+								class="kt-portlet__code-copy"
+								title="Copy Logs"
+								matTooltip="Copy Logs"
+								style="right:1%;top:2%;"
+								(click)="onCopyLogContent()"
+							>
+								<i class="la la-copy"></i>
+							</a>
+							<pre
+								#logStreamContent
+								style="background-color: black;color: white;height:700px;font-size: 14px;padding:20px;"
+							><strong>Scan Job Logs</strong><br><br>{{ webSocketSubject | async }}</pre>
+						</div>
+						<div style="flex-direction: row">
 							<mat-bar-button
 								[options]="barButtonOptions"
-								style="margin-right: 10px;"
 								(btnClick)="stepper.next()"
 							>
 							</mat-bar-button>

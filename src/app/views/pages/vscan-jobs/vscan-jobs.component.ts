@@ -30,6 +30,7 @@ import {
 	MatDatepickerInputEvent
 } from "@angular/material/datepicker";
 import { VscanUsers } from "../../../core/vscan-api/users.model";
+import { JobLogsComponent } from "./job-logs/job-logs.component";
 
 const ipaddressPattern =
 	"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
@@ -89,6 +90,7 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 		"jobResult",
 		"userID",
 		"agent",
+		"devicesScanned",
 		"jobLogs"
 	];
 
@@ -318,29 +320,14 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (this.filterUsers) {
 			filter.userID = this.filterUsers;
 		}
-
-		// if (this.filterJobResults && this.filterJobResults.length > 0) {
-		// 	filter.status = +this.filterJobResults;
-		// }
-		//
-		// if (this.filterUsers && this.filterUsers.length > 0) {
-		// 	filter.type = +this.filterUsers;
-		// }
-		//
-		// filter.lastName = searchText;
-		// if (!searchText) {
-		// 	return filter;
-		// }
-		//
-		// filter.firstName = searchText;
-		// filter.email = searchText;
-		// filter.ipAddress = searchText;
 		return filter;
 	}
 	dateStartPickedChange(event: MatDatepickerInputEvent<Date>) {
 		this.filterStartDate = event.value
 			? event.value.toISOString()
 			: undefined;
+		// Move page back to index 0
+		this.paginator.pageIndex = 0;
 		this.loadJobHistory();
 	}
 
@@ -348,6 +335,74 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.filterEndDate = event.value
 			? event.value.toISOString()
 			: undefined;
+		// Move page back to index 0
+		this.paginator.pageIndex = 0;
 		this.loadJobHistory();
+	}
+
+	onViewLogs(job: ScanJobs) {
+		this.dialog.open(JobLogsComponent, {
+			data: { jobConfig: job },
+			height: "auto",
+			width: "80%",
+			autoFocus: false
+		});
+	}
+	onDropDownFilterSelect() {
+		// Move page back to index 0
+		this.paginator.pageIndex = 0;
+		this.loadJobHistory();
+	}
+
+	// Delete Scan Job
+	deleteJobsHistory() {
+		let jobArray: string[] = [];
+
+		this.selection.selected.forEach(item => {
+			jobArray.push(item.jobID);
+		});
+
+		const dialogRef = this.layoutUtilsService.deleteElement(
+			"Scan Job Deletion",
+			"Confirm you want to delete the following job(s): ",
+			jobArray.join("\n")
+		);
+
+		dialogRef.afterClosed().subscribe(res => {
+			if (!res) {
+				return;
+			}
+			if (res) {
+				this.vscanAPI
+					.deleteScanJobsHistory(jobArray)
+					.pipe(
+						tap(() => {
+							// Only copy the first 10 elements in the toast message
+							const toastMsg: string =
+								jobArray.length > 10
+									? jobArray.slice(0, 11).join("\n") +
+									  "\n...\n"
+									: jobArray.join("\n");
+
+							this.toastNotif.successToastNotif(
+								"Successfully deleted job(s):\n" + toastMsg,
+								`Scan Job Deletion Success`
+							);
+
+							this.selection.clear();
+							// Refresh HTTP Request Observable
+							this.loadJobHistory();
+						}),
+						catchError(err => {
+							this.toastNotif.errorToastNotif(
+								err,
+								`Scan Job Deletion Failure`
+							);
+							return throwError(err);
+						})
+					)
+					.subscribe();
+			}
+		});
 	}
 }

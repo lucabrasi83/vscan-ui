@@ -212,17 +212,25 @@ export class VscanSshGatewaysComponent implements OnInit {
 		});
 	}
 
-	// Delete Individual Credential
-	deleteSSHGateway(sshgw: EnterpriseSSHGateway) {
+	// Delete SSH Gateway
+	deleteSSHGateway(sshgw: EnterpriseSSHGateway | null) {
+		let gwArray: string[] = [];
+
+		// If individual button is pressed we passed the sshgw object. If Not, we know the deletion comes from
+		// checkbox selection
+		if (sshgw) {
+			gwArray.push(sshgw.gatewayName);
+		} else {
+			this.selection.selected.forEach(item => {
+				gwArray.push(item.gatewayName);
+			});
+		}
+
 		const dialogRef = this.layoutUtilsService.deleteElement(
 			"SSH Gateway Deletion",
 			"Confirm you want to delete the following gateway(s): ",
-			sshgw.gatewayName
+			gwArray.join("\n")
 		);
-
-		let gwArray: string[] = [];
-
-		gwArray.push(sshgw.gatewayName);
 
 		dialogRef.afterClosed().subscribe(res => {
 			if (!res) {
@@ -235,60 +243,14 @@ export class VscanSshGatewaysComponent implements OnInit {
 					.deleteSSHGateways(gwArray)
 					.pipe(
 						tap(() => {
+							const toastMsg: string =
+								gwArray.length > 10
+									? gwArray.slice(0, 11).join("\n") +
+									  "\n...\n"
+									: gwArray.join("\n");
+
 							this.toastNotif.successToastNotif(
-								"Successfully deleted gateway(s):\n" +
-									sshgw.gatewayName,
-								`SSH Gateway Deletion Success`
-							);
-
-							// Refresh HTTP Request Observable
-							this.userCredentials$.next(null);
-
-							this.selection.clear();
-
-							this.loading$.next(false);
-						}),
-						catchError(err => {
-							this.toastNotif.errorToastNotif(
-								err,
-								`SSH Gateway Deletion Failure`
-							);
-							this.loading$.next(false);
-							return throwError(err);
-						})
-					)
-					.subscribe();
-			}
-		});
-	}
-
-	// Delete Multiple Gateways
-	bulkDeleteSSHGateways() {
-		let selectedSSHGateways: string[] = [];
-
-		this.selection.selected.forEach(item => {
-			selectedSSHGateways.push(item.gatewayName);
-		});
-
-		const dialogRef = this.layoutUtilsService.deleteElement(
-			"SSH Gateway Deletion",
-			"Confirm you want to delete the following gateway(s): ",
-			selectedSSHGateways.join("\n")
-		);
-		dialogRef.afterClosed().subscribe(res => {
-			if (!res) {
-				return;
-			}
-			if (res) {
-				this.loading$.next(true);
-
-				this.vscanAPI
-					.deleteSSHGateways(selectedSSHGateways)
-					.pipe(
-						tap(() => {
-							this.toastNotif.successToastNotif(
-								"Successfully deleted gateway(s):\n" +
-									selectedSSHGateways.join("\n"),
+								"Successfully deleted gateway(s):\n" + toastMsg,
 								`SSH Gateway Deletion Success`
 							);
 

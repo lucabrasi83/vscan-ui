@@ -55,7 +55,9 @@
 								<mat-form-field class="mat-form-field-fluid">
 									<mat-select
 										[(value)]="filterJobResults"
-										(selectionChange)="loadJobHistory()"
+										(selectionChange)="
+											onDropDownFilterSelect()
+										"
 									>
 										<mat-option value="FAILED"
 											>FAILED</mat-option
@@ -82,7 +84,9 @@
 								<mat-form-field class="mat-form-field-fluid">
 									<mat-select
 										[(value)]="filterUsers"
-										(selectionChange)="loadJobHistory()"
+										(selectionChange)="
+											onDropDownFilterSelect()
+										"
 									>
 										<mat-option
 											*ngFor="let user of usersArray"
@@ -231,6 +235,7 @@
 									color="warn"
 									matTooltip="Delete job(s)"
 									class="mat-button-mt-4"
+									(click)="deleteJobsHistory()"
 								>
 									<mat-icon>delete</mat-icon>
 									Delete Selected</button
@@ -363,6 +368,25 @@
 							{{ job.agent }}
 						</mat-cell>
 					</ng-container>
+
+					<ng-container matColumnDef="devicesScanned">
+						<mat-header-cell *matHeaderCellDef mat-sort-header
+							>Devices Scanned</mat-header-cell
+						>
+						<mat-cell *matCellDef="let job">
+							<button
+								mat-raised-button
+								matTooltip="Click to view devices"
+								color="accent"
+							>
+								{{
+									job.devicesScannedName
+										? job.devicesScannedName.length
+										: 0
+								}}
+							</button>
+						</mat-cell>
+					</ng-container>
 					<ng-container matColumnDef="jobLogs">
 						<mat-header-cell *matHeaderCellDef
 							>Job Logs</mat-header-cell
@@ -372,6 +396,7 @@
 								mat-icon-button
 								color="accent"
 								matTooltip="View Job Details"
+								(click)="onViewLogs(job)"
 							>
 								<mat-icon>visibility</mat-icon></button
 							>&nbsp;

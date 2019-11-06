@@ -331,6 +331,22 @@ export class VscanApiService {
 			.pipe(catchError(this.auth.handleError));
 	}
 
+	deleteScanJobsHistory(jobs: string[]): Observable<any> {
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
+
+		const httpOptions = {
+			headers: httpHeaders,
+			body: { jobs: jobs }
+		};
+
+		return this.http
+			.request<any>("delete", JOBS_HISTORY, httpOptions)
+			.pipe(catchError(this.auth.handleError));
+	}
+
 	buildQueryURL(
 		filters: any,
 		sort: any,

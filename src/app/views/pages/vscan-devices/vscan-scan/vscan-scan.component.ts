@@ -64,6 +64,7 @@ export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 	// Declare Websocket Subject
 	webSocketSubject: WebSocketSubject<any>;
 
+	isScanning: boolean = true;
 	isSearching = false;
 	filteredDevices: string[] = [];
 
@@ -342,6 +343,7 @@ export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 
 					this.barButtonOptions.active = false;
 					this.barButtonOptions.text = "View Results";
+					this.isScanning = false;
 				}),
 
 				catchError(err => {
@@ -354,8 +356,11 @@ export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 					this.barButtonOptions.active = false;
 					this.barButtonOptions.disabled = true;
 					this.barButtonOptions.text = "No Results";
+
+					this.isScanning = false;
 					return of(err);
-				})
+				}),
+				finalize(() => (this.isScanning = false))
 			)
 			.subscribe();
 	}
