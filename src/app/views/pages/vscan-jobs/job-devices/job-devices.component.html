@@ -1,0 +1,42 @@
+<div class="kt-portlet">
+	<div class="kt-portlet__head kt-portlet__head__custom">
+		<div class="kt-portlet__head-label">
+			<h3 class="kt-portlet__head-title">
+				Devices Scanned Successfully
+			</h3>
+			<div class="dialog-close-button">
+				<button
+					class="close-icon"
+					mat-icon-button
+					color="warn"
+					(click)="onCloseDialog()"
+				>
+					<mat-icon>close</mat-icon>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="kt-portlet__body">
+		<div mat-dialog-content style="overflow: hidden;max-height:100%;">
+			<div class="list-group">
+				<div
+					*ngFor="
+						let dev of data.jobConfig.devicesScannedName;
+						let i = index
+					"
+				>
+					<a
+						href="javascript:;"
+						class="list-group-item list-group-item-action list-group-item-info"
+						style="text-align: center;cursor: default;"
+						><u>Name:</u>&nbsp;<strong>{{ dev }}</strong> -
+						<u>IP:</u>&nbsp;
+						<strong>{{
+							data.jobConfig.devicesScannedIP[i]
+						}}</strong></a
+					>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

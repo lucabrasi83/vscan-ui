@@ -378,6 +378,8 @@
 								mat-raised-button
 								matTooltip="Click to view devices"
 								color="accent"
+								(click)="onViewScannedDevices(job)"
+								[disabled]="!job.devicesScannedName?.length"
 							>
 								{{
 									job.devicesScannedName

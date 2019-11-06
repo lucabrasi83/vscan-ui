@@ -222,12 +222,6 @@ export class VscanDeviceCredsComponent implements OnInit, AfterViewInit {
 	deleteDeviceCredential(creds: DeviceCredential | null) {
 		let credsArray: string[] = [];
 
-		const dialogRef = this.layoutUtilsService.deleteElement(
-			"Credentials Deletion",
-			"Confirm you want to delete the following credential(s): ",
-			credsArray.join("\n")
-		);
-
 		if (creds) {
 			credsArray.push(creds.credentialsName);
 		} else {
@@ -235,6 +229,12 @@ export class VscanDeviceCredsComponent implements OnInit, AfterViewInit {
 				credsArray.push(item.credentialsName);
 			});
 		}
+
+		const dialogRef = this.layoutUtilsService.deleteElement(
+			"Credentials Deletion",
+			"Confirm you want to delete the following credential(s): ",
+			credsArray.join("\n")
+		);
 
 		dialogRef.afterClosed().subscribe(res => {
 			if (!res) {

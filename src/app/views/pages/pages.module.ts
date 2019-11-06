@@ -54,6 +54,7 @@ import {
 } from "@ng-bootstrap/ng-bootstrap";
 import { JobLogsComponent } from "./vscan-jobs/job-logs/job-logs.component";
 import { MatBadgeModule } from "@angular/material/badge";
+import { JobDevicesComponent } from "./vscan-jobs/job-devices/job-devices.component";
 
 @NgModule({
 	declarations: [
@@ -69,7 +70,8 @@ import { MatBadgeModule } from "@angular/material/badge";
 		VscanInventoryComponent,
 		DeviceCredsEditComponent,
 		SshGwEditComponent,
-		JobLogsComponent
+		JobLogsComponent,
+		JobDevicesComponent
 	],
 	exports: [],
 	imports: [
@@ -123,7 +125,8 @@ import { MatBadgeModule } from "@angular/material/badge";
 		DeleteEntityDialogComponent,
 		DeviceCredsEditComponent,
 		SshGwEditComponent,
-		JobLogsComponent
+		JobLogsComponent,
+		JobDevicesComponent
 	],
 	providers: []
 })

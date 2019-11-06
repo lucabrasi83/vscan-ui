@@ -31,6 +31,7 @@ import {
 } from "@angular/material/datepicker";
 import { VscanUsers } from "../../../core/vscan-api/users.model";
 import { JobLogsComponent } from "./job-logs/job-logs.component";
+import { JobDevicesComponent } from "./job-devices/job-devices.component";
 
 const ipaddressPattern =
 	"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
@@ -348,6 +349,15 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 			autoFocus: false
 		});
 	}
+	onViewScannedDevices(job: ScanJobs) {
+		this.dialog.open(JobDevicesComponent, {
+			data: { jobConfig: job },
+			height: "auto",
+			width: "40%",
+			autoFocus: false
+		});
+	}
+
 	onDropDownFilterSelect() {
 		// Move page back to index 0
 		this.paginator.pageIndex = 0;
