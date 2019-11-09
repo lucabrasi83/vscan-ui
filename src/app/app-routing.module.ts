@@ -11,6 +11,7 @@ import { OndemandScanComponent } from "./views/pages/ondemand-scan/ondemand-scan
 import { VscanDeviceCredsComponent } from "./views/pages/vscan-device-creds/vscan-device-creds.component";
 import { VscanSshGatewaysComponent } from "./views/pages/vscan-ssh-gateways/vscan-ssh-gateways.component";
 import { VscanJobsComponent } from "./views/pages/vscan-jobs/vscan-jobs.component";
+import { AdminLoadGuard } from "./core/auth/_guards/admin-load.guard";
 
 const routes: Routes = [
 	{
@@ -46,7 +47,8 @@ const routes: Routes = [
 					import("./views/pages/vscan-admin/vscan-admin.module").then(
 						m => m.VscanAdminModule
 					),
-				canActivate: [AuthGuard]
+				canActivate: [AuthGuard],
+				canLoad: [AdminLoadGuard]
 			},
 			{
 				path: "scan/devices",
@@ -73,17 +75,16 @@ const routes: Routes = [
 				component: VscanSshGatewaysComponent,
 				canActivate: [AuthGuard]
 			},
-			{
-				path: "error/403",
-				component: ErrorPageComponent,
-				data: {
-					type: "error-v6",
-					code: 403,
-					title: "403... Access forbidden",
-					desc:
-						"Looks like you don't have permission to access for requested page.<br> Please, contact administrator"
-				}
-			},
+			// {
+			// 	path: "error/unauthorized",
+			// 	component: ErrorPageComponent,
+			// 	data: {
+			// 		type: "error-v4",
+			// 		code: 401,
+			// 		title: "Unauthorized",
+			// 		desc: "Sorry, you don't have access to this resource."
+			// 	}
+			// },
 			{ path: "error/:type", component: ErrorPageComponent },
 			{ path: "", redirectTo: "dashboard", pathMatch: "full" },
 			{ path: "**", redirectTo: "dashboard", pathMatch: "full" }

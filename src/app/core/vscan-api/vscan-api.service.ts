@@ -24,8 +24,10 @@ import {
 	DeviceVulnerabilitiesModel
 } from "./device.vulnerabilities.model";
 import { VscanJobs } from "./scan.jobs.model";
-import { VscanUsers, VscanUsersList } from "./users.model";
+import { UserCreate, UserUpdate, VscanUsersList } from "./users.model";
+import { EnterprisesListModel } from "./enterprises.model";
 
+const ALL_ENTERPRISES_URL = environment.vscanAPIURL + "/admin/enterprises/all";
 const DEVICES_API_URL = environment.vscanAPIURL + "/devices/all";
 const ALL_USER_DEVICE_CREDENTIALS =
 	environment.vscanAPIURL + "/device-credentials/all";
@@ -53,6 +55,10 @@ const ENTERPRISE_SSH_GATEWAY =
 const JOBS_HISTORY = environment.vscanAPIURL + "/jobs/history";
 
 const ALL_USERS_URL = environment.vscanAPIURL + "/admin/users/all";
+
+const CREATE_USER_URL = environment.vscanAPIURL + "/admin/user";
+
+const DELETE_USERS_URL = environment.vscanAPIURL + "/admin/users";
 
 @Injectable({
 	providedIn: "root"
@@ -300,6 +306,61 @@ export class VscanApiService {
 
 		return this.http
 			.get<VscanUsersList>(ALL_USERS_URL, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	createUser(req: UserCreate | UserUpdate): Observable<any> {
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
+
+		return this.http
+			.post<any>(CREATE_USER_URL, req, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	updateUser(req: UserUpdate): Observable<any> {
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
+
+		return this.http
+			.patch<any>(CREATE_USER_URL + "/" + req.email, req, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	deleteUsers(userEmail: string[]): Observable<any> {
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
+
+		const httpOptions = {
+			headers: httpHeaders,
+			body: { users: userEmail }
+		};
+
+		return this.http
+			.request<any>("delete", DELETE_USERS_URL, httpOptions)
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	getAllEnterprises(): Observable<EnterprisesListModel> {
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
+
+		return this.http
+			.get<EnterprisesListModel>(ALL_ENTERPRISES_URL, {
 				headers: httpHeaders
 			})
 			.pipe(catchError(this.auth.handleError));

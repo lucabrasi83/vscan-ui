@@ -93,6 +93,7 @@
 		<a
 			*ngIf="!item.submenu && item.title !== 'API Documentation'"
 			[routerLink]="item.page"
+			[hidden]="item.admin && !isRootUser"
 			class="kt-menu__link kt-menu__toggle"
 		>
 			<ng-container
@@ -107,6 +108,7 @@
 		<a
 			*ngIf="!item.submenu && item.title === 'API Documentation'"
 			[href]="item.page"
+			[hidden]="item.admin && !isRootUser"
 			target="_blank"
 			class="kt-menu__link kt-menu__toggle"
 		>

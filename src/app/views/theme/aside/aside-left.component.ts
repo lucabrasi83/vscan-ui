@@ -19,6 +19,7 @@ import {
 	OffcanvasOptions
 } from "../../../core/_base/layout";
 import { HtmlClassService } from "../html-class.service";
+import { AuthService } from "../../../core/auth/_services";
 
 @Component({
 	selector: "kt-aside-left",
@@ -32,6 +33,8 @@ export class AsideLeftComponent implements OnInit, AfterViewInit {
 	currentRouteUrl: string = "";
 	insideTm: any;
 	outsideTm: any;
+
+	isRootUser: boolean = false;
 
 	menuCanvasOptions: OffcanvasOptions = {
 		baseClass: "kt-aside",
@@ -72,6 +75,7 @@ export class AsideLeftComponent implements OnInit, AfterViewInit {
 	 * @param router: Router
 	 * @param render: Renderer2
 	 * @param cdr: ChangeDetectorRef
+	 * @param auth: AuthService
 	 */
 	constructor(
 		public htmlClassService: HtmlClassService,
@@ -79,13 +83,16 @@ export class AsideLeftComponent implements OnInit, AfterViewInit {
 		public layoutConfigService: LayoutConfigService,
 		private router: Router,
 		private render: Renderer2,
-		private cdr: ChangeDetectorRef
+		private cdr: ChangeDetectorRef,
+		private auth: AuthService
 	) {}
 
 	ngAfterViewInit(): void {}
 
 	ngOnInit() {
 		this.currentRouteUrl = this.router.url.split(/[?#]/)[0];
+
+		this.isRootUser = this.auth.isUserRoot();
 
 		this.router.events
 			.pipe(filter(event => event instanceof NavigationEnd))

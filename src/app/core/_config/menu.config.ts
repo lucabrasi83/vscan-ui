@@ -445,7 +445,8 @@ export class MenuConfig {
 					root: true,
 					bullet: "dot",
 					icon: "flaticon3-developer",
-					page: "/admin/users"
+					page: "/admin/users",
+					admin: true
 				},
 
 				{
@@ -453,7 +454,8 @@ export class MenuConfig {
 					root: true,
 					bullet: "dot",
 					icon: "flaticon3-old-building",
-					page: "/admin/enterprises"
+					page: "/admin/enterprises",
+					admin: true
 				},
 				{
 					title: "SSH Gateways",

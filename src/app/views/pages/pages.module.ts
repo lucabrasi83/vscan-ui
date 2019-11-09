@@ -48,10 +48,7 @@ import { DeleteEntityDialogComponent } from "../partials/content/crud";
 import { DeviceCredsEditComponent } from "./vscan-device-creds/device-creds-edit/device-creds-edit.component";
 import { SshGwEditComponent } from "./vscan-ssh-gateways/ssh-gw-edit/ssh-gw-edit.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import {
-	NgbProgressbarModule,
-	NgbTimepickerModule
-} from "@ng-bootstrap/ng-bootstrap";
+import { NgbProgressbarModule } from "@ng-bootstrap/ng-bootstrap";
 import { JobLogsComponent } from "./vscan-jobs/job-logs/job-logs.component";
 import { MatBadgeModule } from "@angular/material/badge";
 import { JobDevicesComponent } from "./vscan-jobs/job-devices/job-devices.component";
@@ -116,7 +113,6 @@ import { JobDevicesComponent } from "./vscan-jobs/job-devices/job-devices.compon
 		NgxDatatableModule,
 		ChartsModule,
 		MatDatepickerModule,
-		NgbTimepickerModule,
 		NgbProgressbarModule
 	],
 	entryComponents: [

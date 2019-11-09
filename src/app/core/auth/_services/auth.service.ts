@@ -17,6 +17,7 @@ import { AppState } from "../../reducers";
 import { select, Store } from "@ngrx/store";
 import { currentAuthToken, isLoggedIn } from "../_selectors/auth.selectors";
 import { AuthNoticeService } from "../auth-notice/auth-notice.service";
+import { ROOT_ROLE } from "../../vscan-api/users.model";
 
 // const API_USERS_URL = "api/users";
 const API_USERS_URL = environment.vscanAPIURL + "/login";
@@ -97,7 +98,7 @@ export class AuthService {
 		}
 	}
 	isUserRoot(): boolean {
-		return this.getUserTokenField("role") === "vulscanoroot";
+		return this.getUserTokenField("role") === ROOT_ROLE;
 	}
 
 	getStoreToken(): string {

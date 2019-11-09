@@ -1,0 +1,224 @@
+<div class="kt-portlet">
+	<div class="kt-portlet__head kt-portlet__head__custom">
+		<div class="kt-portlet__head-label">
+			<h3 class="kt-portlet__head-title">{{ getTitle() }}</h3>
+			<div class="dialog-close-button">
+				<button
+					class="close-icon"
+					mat-icon-button
+					color="warn"
+					(click)="onCloseCancelDialog()"
+				>
+					<mat-icon>close</mat-icon>
+				</button>
+			</div>
+		</div>
+	</div>
+	<form class="kt-form" [formGroup]="userForm">
+		<div class="kt-portlet__body">
+			<div class="form-group kt-form__group row">
+				<div class="col-lg-4 kt-margin-bottom-20-mobile">
+					<mat-form-field class="mat-form-field-fluid">
+						<input
+							matInput
+							placeholder="Enter user email"
+							formControlName="userEmail"
+						/>
+						<mat-error>Enter a valid email address </mat-error>
+						<mat-hint align="start"
+							>Please enter
+							<strong>Email Address</strong>
+						</mat-hint>
+					</mat-form-field>
+				</div>
+
+				<div
+					class="col-lg-4 kt-margin-bottom-20-mobile"
+					formGroupName="passwordGroup"
+				>
+					<mat-form-field class="mat-form-field-fluid">
+						<input
+							matInput
+							type="password"
+							placeholder="Enter Password"
+							formControlName="password"
+						/>
+						<mat-error>
+							{{
+								passwordValidationErrorMsg(
+									userForm.get("passwordGroup.password")
+								)
+							}}
+						</mat-error>
+
+						<mat-hint align="start"
+							>Please enter a
+							<strong>Password</strong>
+						</mat-hint>
+					</mat-form-field>
+				</div>
+				<div
+					class="col-lg-4 kt-margin-bottom-20-mobile"
+					formGroupName="passwordGroup"
+				>
+					<mat-form-field class="mat-form-field-fluid">
+						<input
+							matInput
+							type="password"
+							placeholder="Enter Confirm Password"
+							formControlName="confirmPassword"
+						/>
+						<mat-error>
+							{{
+								passwordValidationErrorMsg(
+									userForm.get(
+										"passwordGroup.confirmPassword"
+									)
+								)
+							}}
+						</mat-error>
+						<mat-hint align="start"
+							>Please enter a
+							<strong>Password</strong>
+						</mat-hint>
+					</mat-form-field>
+				</div>
+			</div>
+			<div class="kt-separator"></div>
+			<div class="form-group kt-form__group row">
+				<div class="col-lg-4 kt-margin-bottom-20-mobile">
+					<mat-form-field class="mat-form-field-fluid">
+						<input
+							matInput
+							required
+							placeholder="Enter user First Name"
+							formControlName="firstName"
+						/>
+						<mat-error
+							>Enter a valid last name between 3 and 30
+							characters</mat-error
+						>
+						<mat-hint align="start"
+							>Please enter
+							<strong>First Name</strong>
+						</mat-hint>
+					</mat-form-field>
+				</div>
+				<div class="col-lg-4 kt-margin-bottom-20-mobile">
+					<mat-form-field class="mat-form-field-fluid">
+						<input
+							matInput
+							required
+							placeholder="Enter User Last Name"
+							formControlName="lastName"
+						/>
+						<mat-error
+							>Enter a valid first name between 3 and 30
+							characters
+						</mat-error>
+						<mat-hint align="start"
+							>Please enter
+							<strong>Last Name</strong>
+						</mat-hint>
+					</mat-form-field>
+				</div>
+				<div class="col-lg-4 kt-margin-bottom-20-mobile">
+					<mat-form-field class="mat-form-field-fluid">
+						<input
+							matInput
+							placeholder="Enter User Middle Name"
+							formControlName="middleName"
+						/>
+						<mat-error
+							>Enter a valid middle name between 3 and 30
+							characters
+						</mat-error>
+						<mat-hint align="start"
+							>Please enter
+							<strong>Middle Name</strong>
+						</mat-hint>
+					</mat-form-field>
+				</div>
+			</div>
+			<div class="kt-separator"></div>
+			<div class="form-group kt-form__group row">
+				<div class="col-lg-4 kt-margin-bottom-20-mobile">
+					<mat-form-field class="mat-form-field-fluid">
+						<mat-label>Select User Role</mat-label>
+						<mat-select formControlName="role" required>
+							<mat-option [value]="rootRole"
+								>VSCAN Admin</mat-option
+							>
+							<mat-option [value]="userRole"
+								>Enterprise User</mat-option
+							>
+						</mat-select>
+						<mat-error
+							>Role is
+							<strong>required</strong>
+						</mat-error>
+						<mat-hint align="start"
+							>Please select
+							<strong>User Role</strong>
+						</mat-hint>
+					</mat-form-field>
+				</div>
+				<div class="col-lg-4 kt-margin-bottom-20-mobile">
+					<mat-form-field class="mat-form-field-fluid">
+						<mat-label>Select Enterprise ID</mat-label>
+						<mat-select formControlName="enterpriseID" required>
+							<mat-option
+								*ngFor="let enterprise of vscanEnterprises"
+								[value]="enterprise.enterpriseID"
+								>{{ enterprise.enterpriseID }} -
+								{{ enterprise.enterpriseName }}</mat-option
+							>
+						</mat-select>
+						<mat-error
+							>Enterprise ID is
+							<strong>required</strong>
+						</mat-error>
+						<mat-hint align="start"
+							>Please select
+							<strong>Enterprise ID</strong>
+						</mat-hint>
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="kt-portlet__foot kt-portlet__no-border kt-portlet__foot--fit"
+		>
+			<div class="kt-form__actions kt-form__actions--solid">
+				<div class="row text-right">
+					<div class="col-lg-12">
+						<button
+							type="button"
+							mat-raised-button
+							cdkFocusInitial
+							(click)="onCloseCancelDialog()"
+							matTooltip="Cancel changes"
+						>
+							Cancel</button
+						>&nbsp;
+						<button
+							type="button"
+							mat-raised-button
+							color="primary"
+							[mat-dialog-close]="userForm.getRawValue()"
+							matTooltip="Save changes"
+							[disabled]="
+								userForm.invalid ||
+								!userForm.dirty ||
+								userForm.get('passwordGroup').errors?.match
+							"
+						>
+							Save
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
