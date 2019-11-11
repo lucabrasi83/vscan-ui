@@ -75,16 +75,16 @@ const routes: Routes = [
 				component: VscanSshGatewaysComponent,
 				canActivate: [AuthGuard]
 			},
-			// {
-			// 	path: "error/unauthorized",
-			// 	component: ErrorPageComponent,
-			// 	data: {
-			// 		type: "error-v4",
-			// 		code: 401,
-			// 		title: "Unauthorized",
-			// 		desc: "Sorry, you don't have access to this resource."
-			// 	}
-			// },
+			{
+				path: "error/unauthorized",
+				component: ErrorPageComponent,
+				data: {
+					type: "error-v4",
+					code: 401,
+					title: "Unauthorized",
+					desc: "Sorry, you don't have access to this resource."
+				}
+			},
 			{ path: "error/:type", component: ErrorPageComponent },
 			{ path: "", redirectTo: "dashboard", pathMatch: "full" },
 			{ path: "**", redirectTo: "dashboard", pathMatch: "full" }

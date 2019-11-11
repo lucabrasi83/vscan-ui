@@ -22,6 +22,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
+import { EditEnterpriseComponent } from "./enterprises/edit-enterprise/edit-enterprise.component";
 
 const routes: Routes = [
 	{
@@ -38,7 +39,8 @@ const routes: Routes = [
 	declarations: [
 		VscanUsersComponent,
 		VscanEnterprisesComponent,
-		EditUsersComponent
+		EditUsersComponent,
+		EditEnterpriseComponent
 	],
 	imports: [
 		CommonModule,
@@ -67,6 +69,6 @@ const routes: Routes = [
 		MatOptionModule,
 		MatSelectModule
 	],
-	entryComponents: [EditUsersComponent]
+	entryComponents: [EditUsersComponent, EditEnterpriseComponent]
 })
 export class VscanAdminModule {}

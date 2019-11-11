@@ -1,0 +1,83 @@
+<div class="kt-portlet">
+	<div class="kt-portlet__head kt-portlet__head__custom">
+		<div class="kt-portlet__head-label">
+			<h3 class="kt-portlet__head-title">{{ getTitle() }}</h3>
+			<div class="dialog-close-button">
+				<button
+					class="close-icon"
+					mat-icon-button
+					color="warn"
+					(click)="onCloseCancelDialog()"
+				>
+					<mat-icon>close</mat-icon>
+				</button>
+			</div>
+		</div>
+	</div>
+	<form class="kt-form" [formGroup]="enterpriseForm">
+		<div class="kt-portlet__body">
+			<div class="form-group kt-form__group row">
+				<div class="col-lg-4 kt-margin-bottom-20-mobile">
+					<mat-form-field class="mat-form-field-fluid">
+						<input
+							matInput
+							placeholder="Enter Enterprise Trigram"
+							formControlName="enterpriseID"
+						/>
+						<mat-error>Enter a valid enterprise trigam </mat-error>
+						<mat-hint align="start"
+							>Please enter
+							<strong>Enterprise Trigram</strong>
+						</mat-hint>
+					</mat-form-field>
+				</div>
+
+				<div class="col-lg-4 kt-margin-bottom-20-mobile">
+					<mat-form-field class="mat-form-field-fluid">
+						<input
+							matInput
+							placeholder="Enter Enterprise Name"
+							formControlName="enterpriseName"
+						/>
+						<mat-error>Enter a valid enterprise name</mat-error>
+						<mat-hint align="start"
+							>Please enter
+							<strong>Enterprise Name</strong>
+						</mat-hint>
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+		<div
+			class="kt-portlet__foot kt-portlet__no-border kt-portlet__foot--fit"
+		>
+			<div class="kt-form__actions kt-form__actions--solid">
+				<div class="row text-right">
+					<div class="col-lg-12">
+						<button
+							type="button"
+							mat-raised-button
+							cdkFocusInitial
+							(click)="onCloseCancelDialog()"
+							matTooltip="Cancel changes"
+						>
+							Cancel</button
+						>&nbsp;
+						<button
+							type="button"
+							mat-raised-button
+							color="primary"
+							[mat-dialog-close]="enterpriseForm.getRawValue()"
+							matTooltip="Save changes"
+							[disabled]="
+								enterpriseForm.invalid || !enterpriseForm.dirty
+							"
+						>
+							Save
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

@@ -25,9 +25,16 @@ import {
 } from "./device.vulnerabilities.model";
 import { VscanJobs } from "./scan.jobs.model";
 import { UserCreate, UserUpdate, VscanUsersList } from "./users.model";
-import { EnterprisesListModel } from "./enterprises.model";
+import {
+	EnterpriseCreate,
+	EnterprisesListModel,
+	EnterpriseUpdate
+} from "./enterprises.model";
 
 const ALL_ENTERPRISES_URL = environment.vscanAPIURL + "/admin/enterprises/all";
+
+const ENTERPRISE_URL = environment.vscanAPIURL + "/admin/enterprise";
+
 const DEVICES_API_URL = environment.vscanAPIURL + "/devices/all";
 const ALL_USER_DEVICE_CREDENTIALS =
 	environment.vscanAPIURL + "/device-credentials/all";
@@ -363,6 +370,49 @@ export class VscanApiService {
 			.get<EnterprisesListModel>(ALL_ENTERPRISES_URL, {
 				headers: httpHeaders
 			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	createEnterprise(
+		req: EnterpriseCreate | EnterpriseUpdate
+	): Observable<any> {
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
+
+		return this.http
+			.post<any>(ENTERPRISE_URL, req, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	updateEnterprise(req: EnterpriseUpdate, ent: string): Observable<any> {
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
+
+		return this.http
+			.patch<any>(`${ENTERPRISE_URL}/${ent}`, req, {
+				headers: httpHeaders
+			})
+			.pipe(catchError(this.auth.handleError));
+	}
+
+	deleteEnterprise(ent: string): Observable<any> {
+		const httpHeaders = new HttpHeaders().set(
+			"Content-Type",
+			"application/json"
+		);
+
+		const httpOptions = {
+			headers: httpHeaders
+		};
+
+		return this.http
+			.request<any>("delete", `${ENTERPRISE_URL}/${ent}`, httpOptions)
 			.pipe(catchError(this.auth.handleError));
 	}
 

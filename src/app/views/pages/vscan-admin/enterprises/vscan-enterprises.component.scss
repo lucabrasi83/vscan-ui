@@ -1,0 +1,24 @@
+.mat-cell {
+	font-size: 12px;
+	font-weight: 300;
+}
+
+.enterprise-button:hover {
+	box-shadow: 0px 4px 8px;
+	cursor: default;
+}
+
+.enterprise-devices-button:hover {
+	box-shadow: 0px 4px 8px;
+	cursor: default;
+}
+
+.mat-cell:nth-child(1),
+.mat-header-cell:nth-child(1) {
+	flex: 0 0 25%;
+}
+
+.mat-cell:nth-child(2),
+.mat-header-cell:nth-child(2) {
+	flex: 0 0 40%;
+}

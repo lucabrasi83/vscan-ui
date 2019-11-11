@@ -1,0 +1,27 @@
+::ng-deep.mat-form-field-disabled .mat-form-field-underline {
+	background-image: linear-gradient(
+		to right,
+		rgba(216, 220, 230, 0.42)
+	) !important;
+	background-size: 1px 100% !important;
+	background-repeat: repeat-x !important;
+}
+.dialog-close-button {
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.close-icon {
+	transform: scale(1.2);
+	color: black;
+	border-radius: 50%;
+	background-color: rgba(178, 178, 178, 0.43);
+}
+
+.mat-option {
+	&.mat-active {
+		background: rgba(234, 121, 38, 0.15) !important;
+	}
+}

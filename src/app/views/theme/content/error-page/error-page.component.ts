@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 // RXJS
-import { Subscription } from "rxjs";
+import { fromEvent, Subscription } from "rxjs";
 // Layout
 import { LayoutConfigService } from "../../../../core/_base/layout";
 
@@ -180,6 +180,10 @@ export class ErrorPageComponent implements OnInit, OnDestroy {
 					this.image = "./assets/media/error/bg1.jpg";
 				}
 		}
+
+		fromEvent(window, "popstate").subscribe(e => {
+			this.layoutConfigService.reloadConfigs();
+		});
 	}
 
 	/**

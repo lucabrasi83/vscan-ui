@@ -13,3 +13,11 @@ export class VscanEnterprise {
 		this.enterpriseDevices = 0;
 	}
 }
+
+export interface EnterpriseCreate {
+	enterpriseID: string;
+	enterpriseName: string;
+}
+export interface EnterpriseUpdate {
+	enterpriseName: string;
+}

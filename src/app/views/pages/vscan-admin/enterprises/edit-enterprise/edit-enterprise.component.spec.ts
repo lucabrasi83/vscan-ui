@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { VscanEnterprisesComponent } from "./vscan-enterprises.component";
+import { EditEnterpriseComponent } from "./edit-enterprise.component";
 
-describe("EnterprisesComponent", () => {
-	let component: VscanEnterprisesComponent;
-	let fixture: ComponentFixture<VscanEnterprisesComponent>;
+describe("EditEnterpriseComponent", () => {
+	let component: EditEnterpriseComponent;
+	let fixture: ComponentFixture<EditEnterpriseComponent>;
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [VscanEnterprisesComponent]
+			declarations: [EditEnterpriseComponent]
 		}).compileComponents();
 	}));
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(VscanEnterprisesComponent);
+		fixture = TestBed.createComponent(EditEnterpriseComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

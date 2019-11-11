@@ -13,8 +13,7 @@ export class AdminLoadGuard implements CanLoad {
 		segments: UrlSegment[]
 	): Observable<boolean> | Promise<boolean> | boolean {
 		if (!this.auth.isUserRoot()) {
-			this.router.navigateByUrl("/dashboard");
-			return false;
+			return this.router.navigateByUrl("/error/unauthorized");
 		}
 		return true;
 	}
