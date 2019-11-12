@@ -138,12 +138,14 @@ export function jwtTokenGetter() {
 				whitelistedDomains: [
 					"localhost:4200",
 					"vscan.asdlab.net",
-					"vulscano.vsnl.co.in:8443"
+					"vulscano.vsnl.co.in:8443",
+					"vulscano.vsnl.co.in"
 				],
 				blacklistedRoutes: [
 					"http://localhost:4200/auth/login",
 					"https://vscan.asdlab.net/api/v1/login",
-					"https://vulscano.vsnl.co.in:8443/api/v1/login"
+					"https://vulscano.vsnl.co.in:8443/api/v1/login",
+					"https://vulscano.vsnl.co.in/api/v1/login"
 				]
 			}
 		})

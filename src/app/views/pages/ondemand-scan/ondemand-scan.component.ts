@@ -16,7 +16,7 @@ import {
 	Validators
 } from "@angular/forms";
 import { VscanSupportedOS } from "../../../core/vscan-api/supported.os.model";
-import { forkJoin, of, throwError } from "rxjs";
+import { BehaviorSubject, forkJoin, of, throwError } from "rxjs";
 import { catchError, finalize, tap } from "rxjs/operators";
 import { VscanApiService } from "../../../core/vscan-api/vscan-api.service";
 import { ToastNotifService } from "../../../core/_base/layout/services/toast-notif.service";
@@ -192,7 +192,7 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 
 	scanResults: OndemandScanResultsModel;
 
-	isScanning: boolean = true;
+	isScanning$ = new BehaviorSubject<boolean>(true);
 
 	constructor(
 		private _formBuilder: FormBuilder,
@@ -365,7 +365,7 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 					this.barButtonOptions.active = false;
 					this.barButtonOptions.text = "View Results";
 
-					this.isScanning = false;
+					this.isScanning$.next(false);
 				}),
 
 				catchError(err => {
@@ -382,11 +382,11 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 					this.barButtonOptions.disabled = true;
 					this.barButtonOptions.text = "No Results";
 
-					this.isScanning = false;
+					this.isScanning$.next(false);
 					return of(err);
 				}),
 				finalize(() => {
-					this.isScanning = false;
+					this.isScanning$.next(false);
 				})
 			)
 			.subscribe();
@@ -458,6 +458,7 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 			}
 		};
 
+		this.isScanning$.next(true);
 		this.hash = this.generateLogStreamHash();
 	}
 

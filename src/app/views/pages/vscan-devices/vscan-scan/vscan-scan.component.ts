@@ -22,7 +22,7 @@ import {
 	switchMap,
 	tap
 } from "rxjs/operators";
-import { forkJoin, of, throwError } from "rxjs";
+import { BehaviorSubject, forkJoin, of, throwError } from "rxjs";
 import { ToastNotifService } from "../../../../core/_base/layout/services/toast-notif.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatProgressButtonOptions } from "mat-progress-buttons";
@@ -64,7 +64,7 @@ export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 	// Declare Websocket Subject
 	webSocketSubject: WebSocketSubject<any>;
 
-	isScanning: boolean = true;
+	isScanning$ = new BehaviorSubject<boolean>(true);
 	isSearching = false;
 	filteredDevices: string[] = [];
 
@@ -343,7 +343,7 @@ export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 
 					this.barButtonOptions.active = false;
 					this.barButtonOptions.text = "View Results";
-					this.isScanning = false;
+					this.isScanning$.next(false);
 				}),
 
 				catchError(err => {
@@ -357,10 +357,10 @@ export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 					this.barButtonOptions.disabled = true;
 					this.barButtonOptions.text = "No Results";
 
-					this.isScanning = false;
+					this.isScanning$.next(false);
 					return of(err);
 				}),
-				finalize(() => (this.isScanning = false))
+				finalize(() => this.isScanning$.next(false))
 			)
 			.subscribe();
 	}

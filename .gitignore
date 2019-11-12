@@ -52,3 +52,7 @@ package-lock.json
 
 yarn-error.log
 yarn.lock
+
+# Certs
+vscan.key
+vscan.pem

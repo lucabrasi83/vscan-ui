@@ -282,18 +282,18 @@
 						>
 						<div style="position: relative;">
 							<ngb-progressbar
-								*ngIf="isScanning"
+								*ngIf="isScanning$ | async"
 								type="info"
 								[value]="100"
 								[striped]="true"
 								[animated]="true"
 							></ngb-progressbar>
 							<a
-								href="javascript:;"
+								href=""
 								class="kt-portlet__code-copy"
 								title="Copy Logs"
 								matTooltip="Copy Logs"
-								style="right:1%;top:2%;"
+								style="right:1%;top:2%;z-index: 9999;"
 								(click)="onCopyLogContent()"
 							>
 								<i class="la la-copy"></i>
