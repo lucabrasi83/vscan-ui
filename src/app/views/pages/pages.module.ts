@@ -52,6 +52,7 @@ import { NgbProgressbarModule } from "@ng-bootstrap/ng-bootstrap";
 import { JobLogsComponent } from "./vscan-jobs/job-logs/job-logs.component";
 import { MatBadgeModule } from "@angular/material/badge";
 import { JobDevicesComponent } from "./vscan-jobs/job-devices/job-devices.component";
+import { EditInventoryComponent } from "./vscan-inventory/edit-inventory/edit-inventory.component";
 
 @NgModule({
 	declarations: [
@@ -68,7 +69,8 @@ import { JobDevicesComponent } from "./vscan-jobs/job-devices/job-devices.compon
 		DeviceCredsEditComponent,
 		SshGwEditComponent,
 		JobLogsComponent,
-		JobDevicesComponent
+		JobDevicesComponent,
+		EditInventoryComponent
 	],
 	exports: [],
 	imports: [
