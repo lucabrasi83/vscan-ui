@@ -82,9 +82,19 @@
 												*ngFor="
 													let device of filteredDevices
 												"
-												[value]="device"
+												[value]="device.device"
 											>
-												<span>{{ device }}</span>
+												<span
+													><u>{{ device.device }}</u>
+													- OS Type:
+													<strong>{{
+														device.osType
+													}}</strong>
+													- Model:
+													<strong>{{
+														device.model
+													}}</strong></span
+												>
 											</mat-option>
 										</ng-container>
 									</mat-autocomplete>

@@ -46,6 +46,16 @@ export interface ScanSelectedDevicesData {
 	windowTitle: string;
 	selectedDevices: InventoryDeviceModel[];
 }
+
+export interface DeviceSearchResults {
+	devices: DeviceCacheObject[];
+}
+
+export interface DeviceCacheObject {
+	device: string;
+	osType: string;
+	model: string;
+}
 // Maximum Devices supported in one scan job
 export const MAX_DEVICES = 20;
 
@@ -66,7 +76,7 @@ export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	isScanning$ = new BehaviorSubject<boolean>(true);
 	isSearching = false;
-	filteredDevices: string[] = [];
+	filteredDevices: DeviceCacheObject[] = [];
 
 	devicesFormGroup: FormGroup;
 	logStreamFormGroup: FormGroup;
