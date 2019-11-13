@@ -22,6 +22,12 @@
 .mat-footer-row,
 .mat-header-row,
 .mat-row {
-	display: inline-flex;
-	min-width: 100%;
+	display: inline-flex !important;
+	min-width: 100% !important;
+	width: 100% !important;
+}
+
+.mat-table__wrapper .mat-table {
+	min-width: auto !important;
+	width: 100% !important;
 }
