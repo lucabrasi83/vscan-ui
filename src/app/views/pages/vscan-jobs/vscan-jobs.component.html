@@ -312,7 +312,7 @@
 						>
 						<mat-cell *matCellDef="let job">
 							<mat-chip-list>
-								<mat-chip style="font-size: 12px;">
+								<mat-chip style="font-size: calc(8px + 0.3vw);">
 									{{ job.startTime | date: "medium" }}
 								</mat-chip>
 							</mat-chip-list>
@@ -325,7 +325,7 @@
 						>
 						<mat-cell *matCellDef="let job">
 							<mat-chip-list>
-								<mat-chip style="font-size: 12px;">
+								<mat-chip style="font-size: calc(8px + 0.3vw);">
 									{{ job.endTime | date: "medium" }}
 								</mat-chip>
 							</mat-chip-list>

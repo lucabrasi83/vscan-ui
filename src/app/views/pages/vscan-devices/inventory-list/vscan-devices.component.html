@@ -398,7 +398,7 @@
 						>
 						<mat-cell *matCellDef="let device">
 							<mat-chip-list>
-								<mat-chip style="font-size: 12px;">
+								<mat-chip style="font-size: calc(8px + 0.3vw);">
 									{{
 										device.scanMeanTimeMilliseconds / 1000
 											| number: "1.0-0"
