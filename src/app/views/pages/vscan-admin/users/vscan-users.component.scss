@@ -1,11 +1,11 @@
 .mat-cell {
-	font-size: calc(8px + 0.3vw);
+	font-size: calc(6px + 0.3vw);
 	font-weight: 300;
 }
 
 .mat-cell:nth-child(2),
 .mat-header-cell:nth-child(2) {
-	flex: 0 0 20%;
+	flex: 0 0 23%;
 }
 
 .mat-cell:nth-child(3),

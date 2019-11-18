@@ -104,7 +104,7 @@
 								mat-raised-button
 								color="accent"
 								class="enterprise-button"
-								style="font-size: 12px;"
+								style="font-size: calc(6px + 0.3vw);"
 								>{{ ent.enterpriseID }}</a
 							>
 						</mat-cell>
@@ -117,7 +117,7 @@
 						>
 						<mat-cell *matCellDef="let ent">
 							<mat-chip-list>
-								<mat-chip style="font-size: calc(8px + 0.3vw);">
+								<mat-chip style="font-size: calc(6px + 0.3vw);">
 									{{ ent.enterpriseName }}
 								</mat-chip>
 							</mat-chip-list>
@@ -134,7 +134,7 @@
 								mat-raised-button
 								color="primary"
 								class="enterprise-devices-button"
-								style="font-size: 12px;"
+								style="font-size: calc(6px + 0.3vw);"
 								>{{ ent.enterpriseDevices }}</a
 							>
 						</mat-cell>

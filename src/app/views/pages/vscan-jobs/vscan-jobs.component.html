@@ -312,7 +312,7 @@
 						>
 						<mat-cell *matCellDef="let job">
 							<mat-chip-list>
-								<mat-chip style="font-size: calc(8px + 0.3vw);">
+								<mat-chip style="font-size: calc(6px + 0.2vw);">
 									{{ job.startTime | date: "medium" }}
 								</mat-chip>
 							</mat-chip-list>
@@ -325,7 +325,7 @@
 						>
 						<mat-cell *matCellDef="let job">
 							<mat-chip-list>
-								<mat-chip style="font-size: calc(8px + 0.3vw);">
+								<mat-chip style="font-size: calc(6px + 0.2vw);">
 									{{ job.endTime | date: "medium" }}
 								</mat-chip>
 							</mat-chip-list>
@@ -339,7 +339,7 @@
 						<mat-cell *matCellDef="let job">
 							<mat-chip-list>
 								<mat-chip
-									style="color: white;font-size:12px;"
+									style="color: white;font-size:calc(6px + 0.2vw);"
 									[ngStyle]="{
 										'background-color': getColorJobResult(
 											job.jobStatus
@@ -378,6 +378,7 @@
 								mat-raised-button
 								matTooltip="Click to view devices"
 								color="accent"
+								style="font-size: calc(6px + 0.3vw);"
 								(click)="onViewScannedDevices(job)"
 								[disabled]="!job.devicesScannedName?.length"
 							>

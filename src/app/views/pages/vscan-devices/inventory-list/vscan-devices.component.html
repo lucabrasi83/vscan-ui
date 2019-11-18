@@ -301,7 +301,7 @@
 								mat-raised-button
 								color="accent"
 								class="enterprise-button"
-								style="font-size: 12px;"
+								style="font-size: calc(6px + 0.3vw);"
 								>{{ device.enterpriseID }}</a
 							></mat-cell
 						>
@@ -318,7 +318,7 @@
 								}} kt-badge--{{
 									device.osType
 								}} kt-badge--wide kt-badge--elevate"
-								style="font-size: 12px;"
+								style="font-size: calc(6px + 0.3vw);"
 								>{{ device.osType }}</span
 							>
 						</mat-cell>
@@ -398,7 +398,7 @@
 						>
 						<mat-cell *matCellDef="let device">
 							<mat-chip-list>
-								<mat-chip style="font-size: calc(8px + 0.3vw);">
+								<mat-chip style="font-size: calc(6px + 0.3vw);">
 									{{
 										device.scanMeanTimeMilliseconds / 1000
 											| number: "1.0-0"
