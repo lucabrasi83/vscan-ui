@@ -65,7 +65,7 @@ import {
 // Config
 import { LayoutConfig } from "./core/_config/layout.config";
 // Highlight JS
-import { HIGHLIGHT_OPTIONS, HighlightLanguage } from "ngx-highlightjs";
+import { HIGHLIGHT_OPTIONS, HighlightModule } from "ngx-highlightjs";
 import * as typescript from "highlight.js/lib/languages/typescript";
 import * as scss from "highlight.js/lib/languages/scss";
 import * as xml from "highlight.js/lib/languages/xml";
@@ -90,7 +90,7 @@ export function initializeLayoutConfig(appConfig: LayoutConfigService) {
 	};
 }
 
-export function hljsLanguages(): HighlightLanguage[] {
+export function hljsLanguages(): HighlightModule[] {
 	return [
 		{ name: "typescript", func: typescript },
 		{ name: "scss", func: scss },
@@ -139,13 +139,17 @@ export function jwtTokenGetter() {
 					"localhost:4200",
 					"vscan.asdlab.net",
 					"vulscano.vsnl.co.in:8443",
-					"vulscano.vsnl.co.in"
+					"vulscano.vsnl.co.in",
+					"vscan-back.maleeja.com",
+					"vscan.maleeja.com"
 				],
 				blacklistedRoutes: [
 					"http://localhost:4200/auth/login",
 					"https://vscan.asdlab.net/api/v1/login",
 					"https://vulscano.vsnl.co.in:8443/api/v1/login",
-					"https://vulscano.vsnl.co.in/api/v1/login"
+					"https://vulscano.vsnl.co.in/api/v1/login",
+					"https://vscan.maleeja.com/api/v1/login",
+					"https://vscan-back.maleeja.com/api/v1/login"
 				]
 			}
 		})
