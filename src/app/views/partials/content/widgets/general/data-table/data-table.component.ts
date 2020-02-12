@@ -1,27 +1,40 @@
 // Angular
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { SelectionModel } from '@angular/cdk/collections';
-import { MatPaginator, MatSort } from '@angular/material';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { SelectionModel } from "@angular/cdk/collections";
+import { MatPaginator, MatSort } from "@angular/material";
 // RXJS
-import { tap } from 'rxjs/operators';
-import { merge } from 'rxjs';
+import { tap } from "rxjs/operators";
+import { merge } from "rxjs";
 // Crud
-import { QueryParamsModel } from '../../../../../../core/_base/crud';
+import { QueryParamsModel } from "../../../../../../core/_base/crud";
 // Layout
-import { DataTableItemModel, DataTableService } from '../../../../../../core/_base/layout';
-import { DataTableDataSource } from './data-table.data-source';
+import {
+	DataTableItemModel,
+	DataTableService
+} from "../../../../../../core/_base/layout";
+import { DataTableDataSource } from "./data-table.data-source";
 
 @Component({
-	selector: 'kt-data-table',
-	templateUrl: './data-table.component.html',
-	styleUrls: ['./data-table.component.scss']
+	selector: "kt-data-table",
+	templateUrl: "./data-table.component.html",
+	styleUrls: ["./data-table.component.scss"]
 })
 export class DataTableComponent implements OnInit {
 	// Public properties
 	dataSource: DataTableDataSource;
-	displayedColumns = ['id', 'cManufacture', 'cModel', 'cMileage', 'cColor', 'cPrice', 'cCondition', 'cStatus', 'actions' ];
-	@ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-	@ViewChild(MatSort, {static: true}) sort: MatSort;
+	displayedColumns = [
+		"id",
+		"cManufacture",
+		"cModel",
+		"cMileage",
+		"cColor",
+		"cPrice",
+		"cCondition",
+		"cStatus",
+		"actions"
+	];
+	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+	@ViewChild(MatSort, { static: true }) sort: MatSort;
 	selection = new SelectionModel<DataTableItemModel>(true, []);
 
 	/**
@@ -87,11 +100,11 @@ export class DataTableComponent implements OnInit {
 	getItemStatusString(status: number = 0): string {
 		switch (status) {
 			case 0:
-				return 'Selling';
+				return "Selling";
 			case 1:
-				return 'Sold';
+				return "Sold";
 		}
-		return '';
+		return "";
 	}
 
 	/**
@@ -102,11 +115,11 @@ export class DataTableComponent implements OnInit {
 	getItemCssClassByStatus(status: number = 0): string {
 		switch (status) {
 			case 0:
-				return 'success';
+				return "success";
 			case 1:
-				return 'info';
+				return "info";
 		}
-		return '';
+		return "";
 	}
 
 	/**
@@ -117,11 +130,11 @@ export class DataTableComponent implements OnInit {
 	getItemConditionString(condition: number = 0): string {
 		switch (condition) {
 			case 0:
-				return 'New';
+				return "New";
 			case 1:
-				return 'Used';
+				return "Used";
 		}
-		return '';
+		return "";
 	}
 
 	/**
@@ -132,10 +145,10 @@ export class DataTableComponent implements OnInit {
 	getItemCssClassByCondition(condition: number = 0): string {
 		switch (condition) {
 			case 0:
-				return 'success';
+				return "success";
 			case 1:
-				return 'info';
+				return "info";
 		}
-		return '';
+		return "";
 	}
 }

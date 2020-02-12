@@ -1,21 +1,21 @@
 // Angular
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { MatTabsModule } from '@angular/material';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { RouterModule } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import { MatTabsModule } from "@angular/material";
 // NgBootstrap
-import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTabsetModule } from "@ng-bootstrap/ng-bootstrap";
 // Perfect Scrollbar
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
 // Partials
-import { PartialsModule } from '../../../partials/partials.module';
+import { PartialsModule } from "../../../partials/partials.module";
 // Highlight JS
-import { HighlightModule } from 'ngx-highlightjs';
+import { HighlightModule } from "ngx-highlightjs";
 // CoreModule
-import { CoreModule } from '../../../../core/core.module';
+import { CoreModule } from "../../../../core/core.module";
 // Builder component
-import { BuilderComponent } from './builder.component';
+import { BuilderComponent } from "./builder.component";
 
 @NgModule({
 	imports: [
@@ -28,16 +28,15 @@ import { BuilderComponent } from './builder.component';
 		HighlightModule,
 		RouterModule.forChild([
 			{
-				path: '',
+				path: "",
 				component: BuilderComponent
 			}
 		]),
 
 		// ng-bootstrap modules
-		NgbTabsetModule,
+		NgbTabsetModule
 	],
 	providers: [],
 	declarations: [BuilderComponent]
 })
-export class BuilderModule {
-}
+export class BuilderModule {}

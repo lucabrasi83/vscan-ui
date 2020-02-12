@@ -1,15 +1,18 @@
 // Angular
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatProgressBarModule, MatProgressSpinnerModule } from '@angular/material';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import {
+	MatProgressBarModule,
+	MatProgressSpinnerModule
+} from "@angular/material";
 
 // Module
-import { CoreModule } from '../../../../../core/core.module';
+import { CoreModule } from "../../../../../core/core.module";
 // Portlet
-import { PortletComponent } from './portlet.component';
-import { PortletHeaderComponent } from './portlet-header.component';
-import { PortletBodyComponent } from './portlet-body.component';
-import { PortletFooterComponent } from './portlet-footer.component';
+import { PortletComponent } from "./portlet.component";
+import { PortletHeaderComponent } from "./portlet-header.component";
+import { PortletBodyComponent } from "./portlet-body.component";
+import { PortletFooterComponent } from "./portlet-footer.component";
 
 @NgModule({
 	imports: [
@@ -22,14 +25,13 @@ import { PortletFooterComponent } from './portlet-footer.component';
 		PortletComponent,
 		PortletHeaderComponent,
 		PortletBodyComponent,
-		PortletFooterComponent,
+		PortletFooterComponent
 	],
 	exports: [
 		PortletComponent,
 		PortletHeaderComponent,
 		PortletBodyComponent,
-		PortletFooterComponent,
+		PortletFooterComponent
 	]
 })
-export class PortletModule {
-}
+export class PortletModule {}
