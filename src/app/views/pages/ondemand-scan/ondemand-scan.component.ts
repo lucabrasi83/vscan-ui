@@ -156,7 +156,7 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 	supportedOS = VscanSupportedOS;
 
 	// Loading Template
-	@ViewChild("customLoadingTemplate", { static: false })
+	@ViewChild("customLoadingTemplate")
 	customLoadingTemplate: TemplateRef<any>;
 	loadingDialog = true;
 
@@ -167,11 +167,11 @@ export class OndemandScanComponent implements OnInit, OnDestroy {
 	enterpriseSSHGateway: EnterpriseSSHGateway[] = [];
 
 	// Log Stream View
-	@ViewChild("logStreamContent", { static: false })
+	@ViewChild("logStreamContent")
 	logStreamContent: ElementRef;
 
 	// Mat Stepper
-	@ViewChild("stepper", { static: false }) stepper: MatStepper;
+	@ViewChild("stepper") stepper: MatStepper;
 
 	// Progress Button options during scan request
 	barButtonOptions: MatProgressButtonOptions = {

@@ -7,7 +7,8 @@ import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { TranslateModule } from "@ngx-translate/core";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { GestureConfig, MatProgressSpinnerModule } from "@angular/material";
+import { GestureConfig } from "@angular/material/core";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { OverlayModule } from "@angular/cdk/overlay";
 // Angular in memory
 import { HttpClientInMemoryWebApiModule } from "angular-in-memory-web-api";

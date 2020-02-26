@@ -38,7 +38,7 @@ export class VscanEnterprisesComponent implements OnInit {
 	];
 
 	// Loading Template
-	@ViewChild("customLoadingTemplate", { static: false })
+	@ViewChild("customLoadingTemplate")
 	customLoadingTemplate: TemplateRef<any>;
 
 	entResult: VscanEnterprise[] = [];

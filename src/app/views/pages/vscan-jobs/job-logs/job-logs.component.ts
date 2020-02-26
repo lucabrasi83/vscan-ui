@@ -23,7 +23,7 @@ export class JobLogsComponent implements OnInit {
 	) {}
 
 	// Log Stream View
-	@ViewChild("logStreamContent", { static: false })
+	@ViewChild("logStreamContent")
 	logStreamContent: ElementRef;
 
 	ngOnInit() {}

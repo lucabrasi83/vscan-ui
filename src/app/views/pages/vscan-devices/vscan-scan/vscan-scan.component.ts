@@ -91,10 +91,10 @@ export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 	deviceSelectionChip: string[] = [];
 
 	// Chip Element
-	@ViewChild("chipList", { static: false }) chipList;
+	@ViewChild("chipList") chipList;
 
 	// Device Input Element
-	@ViewChild("deviceInput", { static: false }) deviceInput: ElementRef;
+	@ViewChild("deviceInput") deviceInput: ElementRef;
 
 	// Loading Template
 	loadingDialog = true;
@@ -109,7 +109,7 @@ export class VscanScanComponent implements OnInit, OnDestroy, AfterViewInit {
 	enterpriseSSHGateway: EnterpriseSSHGateway[] = [];
 
 	// Log Stream View
-	@ViewChild("logStreamContent", { static: false })
+	@ViewChild("logStreamContent")
 	logStreamContent: ElementRef;
 
 	// Scan Results

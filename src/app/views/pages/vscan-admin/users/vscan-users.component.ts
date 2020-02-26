@@ -40,7 +40,7 @@ export class VscanUsersComponent implements OnInit {
 	];
 
 	// Loading Template
-	@ViewChild("customLoadingTemplate", { static: false })
+	@ViewChild("customLoadingTemplate")
 	customLoadingTemplate: TemplateRef<any>;
 
 	userResults: VscanUsers[] = [];

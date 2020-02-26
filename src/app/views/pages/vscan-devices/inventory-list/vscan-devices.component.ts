@@ -58,11 +58,11 @@ export class VscanDevicesComponent implements OnInit, AfterViewInit, OnDestroy {
 	filterVulnerabilityStatus: string = "";
 
 	// Device Search Filter Input
-	@ViewChild("deviceSearchFilterInput", { static: false })
+	@ViewChild("deviceSearchFilterInput")
 	deviceSearchFilterInput: ElementRef<any>;
 
 	// Loading Template
-	@ViewChild("customLoadingTemplate", { static: false })
+	@ViewChild("customLoadingTemplate")
 	customLoadingTemplate: TemplateRef<any>;
 
 	// Selection

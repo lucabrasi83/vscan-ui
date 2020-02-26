@@ -51,7 +51,7 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 	private subscriptions: Subscription[] = [];
 
 	// Loading Template
-	@ViewChild("customLoadingTemplate", { static: false })
+	@ViewChild("customLoadingTemplate")
 	customLoadingTemplate: TemplateRef<any>;
 
 	// Selection
@@ -75,11 +75,11 @@ export class VscanJobsComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild("searchInputJobLogs", { static: true })
 	searchInputJobLogs: ElementRef;
 
-	@ViewChild("startDatePicker", { static: false })
+	@ViewChild("startDatePicker")
 	startDatePicker: MatDatepicker<string>;
 	filterStartDate: string;
 
-	@ViewChild("endDatePicker", { static: false })
+	@ViewChild("endDatePicker")
 	endDatePicker: MatDatepicker<string>;
 	filterEndDate: string;
 

@@ -37,7 +37,7 @@ export class VscanSshGatewaysComponent implements OnInit {
 	];
 
 	// Loading Template
-	@ViewChild("customLoadingTemplate", { static: false })
+	@ViewChild("customLoadingTemplate")
 	customLoadingTemplate: TemplateRef<any>;
 
 	sshgwsResults: EnterpriseSSHGateway[] = [];

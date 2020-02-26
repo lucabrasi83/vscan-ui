@@ -8,7 +8,7 @@ import { CountdownComponent } from "ngx-countdown";
 	styleUrls: ["./refresh-session.component.scss"]
 })
 export class RefreshSessionComponent implements OnInit {
-	@ViewChild("cd", { static: false }) private countdown: CountdownComponent;
+	@ViewChild("cd") private countdown: CountdownComponent;
 
 	constructor(
 		public dialogRef: MatDialogRef<RefreshSessionComponent>,

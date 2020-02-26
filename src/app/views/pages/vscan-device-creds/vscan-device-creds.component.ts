@@ -43,7 +43,7 @@ export class VscanDeviceCredsComponent implements OnInit, AfterViewInit {
 	];
 
 	// Loading Template
-	@ViewChild("customLoadingTemplate", { static: false })
+	@ViewChild("customLoadingTemplate")
 	customLoadingTemplate: TemplateRef<any>;
 
 	credentialsResults: DeviceCredential[] = [];

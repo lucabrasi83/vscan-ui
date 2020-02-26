@@ -5,7 +5,7 @@ import {
 	OnInit,
 	ChangeDetectionStrategy
 } from "@angular/core";
-import { MAT_SNACK_BAR_DATA } from "@angular/material";
+import { MAT_SNACK_BAR_DATA } from "@angular/material/snack-bar";
 // RxJS
 import { delay } from "rxjs/operators";
 import { of } from "rxjs";

@@ -5,12 +5,10 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 // Angular Material
-import {
-	MatButtonModule,
-	MatProgressBarModule,
-	MatTabsModule,
-	MatTooltipModule
-} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatTooltipModule } from "@angular/material/tooltip";
 // NgBootstrap
 import {
 	NgbProgressbarModule,
