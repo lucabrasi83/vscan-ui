@@ -2,7 +2,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 // Layout config
 import { LayoutConfigService } from "../../../../../core/_base/layout";
-
+import Chart from "chart.js";
 /**
  * Sample components with sample data
  */
