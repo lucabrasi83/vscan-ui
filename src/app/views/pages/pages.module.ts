@@ -29,7 +29,8 @@ import { DeviceVulnDetailsComponent } from "./vscan-devices/device-vuln-details/
 import { MatDialogModule } from "@angular/material/dialog";
 import { VscanScanComponent } from "./vscan-devices/vscan-scan/vscan-scan.component";
 import { MatStepperModule } from "@angular/material/stepper";
-import { MatProgressButtonsModule } from "mat-progress-buttons";
+// import { MatProgressButtonsModule } from "mat-progress-buttons";
+import { MatProgressButtonsModule } from "../mat-progress-buttons/mat-progress-buttons.module";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
 import { ScanResultsComponent } from "./vscan-devices/vscan-scan/scan-results/scan-results.component";

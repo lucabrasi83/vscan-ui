@@ -25,7 +25,7 @@ import {
 import { BehaviorSubject, forkJoin, of, throwError } from "rxjs";
 import { ToastNotifService } from "../../../../core/_base/layout/services/toast-notif.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MatProgressButtonOptions } from "mat-progress-buttons";
+import { MatProgressButtonOptions } from "../../../mat-progress-buttons/mat-progress-buttons.interface";
 import { HttpClient } from "@angular/common/http";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";

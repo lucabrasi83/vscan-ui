@@ -28,7 +28,7 @@ import { Md5 } from "ts-md5";
 import { AuthService } from "../../../core/auth/_services";
 import { ClipboardService } from "ngx-clipboard";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatProgressButtonOptions } from "mat-progress-buttons";
+import { MatProgressButtonOptions } from "../../mat-progress-buttons/mat-progress-buttons.interface";
 import { environment } from "../../../../environments/environment";
 import { webSocket } from "rxjs/webSocket";
 import { InventoryScanRequest } from "../../../core/vscan-api/inventory.scan.model";
