@@ -142,7 +142,8 @@ export function jwtTokenGetter() {
 					"vulscano.vsnl.co.in:8443",
 					"vulscano.vsnl.co.in",
 					"vscan-back.maleeja.com",
-					"vscan.maleeja.com"
+					"vscan.maleeja.com",
+					"vscan.vsnl.co.in"
 				],
 				blacklistedRoutes: [
 					"http://localhost:4200/auth/login",
@@ -150,7 +151,8 @@ export function jwtTokenGetter() {
 					"https://vulscano.vsnl.co.in:8443/api/v1/login",
 					"https://vulscano.vsnl.co.in/api/v1/login",
 					"https://vscan.maleeja.com/api/v1/login",
-					"https://vscan-back.maleeja.com/api/v1/login"
+					"https://vscan-back.maleeja.com/api/v1/login",
+					"https://vscan.vsnl.co.in/api/v1/login"
 				]
 			}
 		})
