@@ -28,7 +28,7 @@ import { NgxPermissionsModule } from "ngx-permissions";
 // NGRX
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
-import { StoreRouterConnectingModule } from "@ngrx/router-store";
+import { StoreRouterConnectingModule, DefaultRouterStateSerializer } from "@ngrx/router-store";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 // State
 import { metaReducers, reducers } from "./core/reducers";
@@ -124,7 +124,7 @@ export function jwtTokenGetter() {
 		OverlayModule,
 		StoreModule.forRoot(reducers, { metaReducers }),
 		EffectsModule.forRoot([]),
-		StoreRouterConnectingModule.forRoot({ stateKey: "router" }),
+		StoreRouterConnectingModule.forRoot({ serializer: DefaultRouterStateSerializer, stateKey: "router" }),
 		StoreDevtoolsModule.instrument(),
 		AuthModule.forRoot(),
 		TranslateModule.forRoot(),
