@@ -21,7 +21,7 @@ import { ToastNotifService } from "../../../../../core/_base/layout/services/toa
 import { AuthService } from "../../../../../core/auth/_services";
 
 const passwordComplexityPatter =
-	"^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*(){},<>?:;])[A-Za-z\\d!@#$%^&*(){},<>?:;]{10,20}$";
+	"^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@~`#$%^&*(){},<>?:;])[A-Za-z\\d!@~`#$%^&*(){},<>?:;]{10,20}$";
 
 function passwordMatcher(
 	c: AbstractControl
