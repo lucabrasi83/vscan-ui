@@ -1,7 +1,7 @@
 FROM node:13-alpine as builder
 WORKDIR /app
 COPY package.json /app/package.json
-RUN  npm install -g @angular/cli@9.1.1 && npm install
+RUN  npm install -g @angular/cli@9.1.4 && npm install
 COPY . /app/
 
 ## Build the angular app in production mode and store the artifacts in dist folder
